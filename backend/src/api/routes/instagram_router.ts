@@ -10,6 +10,14 @@ router
 	.get("/login", (_req, res) => {
 		res.redirect(OAuth2Client.code.getAuthorizationUri().toString(),);
 	})
+	// .get("/auth/callback", async (req, res) => {
+	// 	// Exchange the auth code for an access token
+	// 	const tokens = await OAuth2Client.code.getToken(req.originalUrl);
+		
+	// 	// Use the access token to make an authenticate API request
+	// 	const userResponse = await (`https://graph.instagram.com/${tokens.}?fields=id,username&access_token=${access-token}`)
+
+	// })
 //	.get("/PATH", (req,res) => {function})
 
 export default router;

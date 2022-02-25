@@ -6,7 +6,7 @@ export default new OAuth2Client({
     clientSecret: Deno.env.get("INSTAGRAM_CLIENT_SECRET") as string,
     redirectUri: "http://localhost:3000/api/v1/instagram/auth/callback",
     authorizationEndpointUri: "https://api.instagram.com/oauth/authorize?scope=user_profile,user_media",
-    tokenUri: "",
+    tokenUri: "https://api.instagram.com/oauth/access_token",
     defaults: {
         scope: "user_profile,user_media",
     }
