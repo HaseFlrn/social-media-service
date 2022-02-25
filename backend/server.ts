@@ -1,8 +1,14 @@
 import { opine } from "https://deno.land/x/opine@2.1.1/mod.ts";
 import { Request } from 'https://deno.land/x/request@1.3.2/mod.ts';
+import Router from "./src/api/routes/router.ts";
 
 const app = opine();
+const port = 3000
 
+app.use("/api/v1", Router);
+
+
+// Spengler example
 const pathToIndexHTMLFile = `${Deno.cwd().replace('backend','frontend/index.html') }`;
 
 app.get("/", function (_req, res) {
@@ -14,8 +20,6 @@ app.get("/getISSPosition", async function (_req, res) {
 
     res.send(`the ISS is above: ${JSON.stringify(result.iss_position)}`);
 });
-
-const port = 3000
 
 app.listen(
     port,

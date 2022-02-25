@@ -29,11 +29,12 @@ jobs:
           deno-version: v1.x
 
       # Uncomment this step to verify the use of 'deno fmt' on each commit.
-      # - name: Verify formatting
-      #   run: deno fmt --check
+      - name: Verify formatting
+         run: deno fmt --check
 
       - name: Run linter
         run: deno lint
 
-      - name: Run tests
-        run: deno test -A --unstable
+      # No tests yet possible -> uncomment then!
+      #- name: Run tests
+      #  run: deno test -A --unstable
