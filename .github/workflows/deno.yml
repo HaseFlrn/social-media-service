@@ -28,12 +28,12 @@ jobs:
         with:
           deno-version: v1.x
 
-      # Uncomment this step to verify the use of 'deno fmt' on each commit.
       - name: Verify formatting
         run: deno fmt --options-use-tabs --options-prose-wrap=preserve
 
+      # Running linter only on written files, not generated
       - name: Run linter
-        run: deno lint
+        run: deno lint backend frontend/app/src
 
       # No tests yet possible -> uncomment then!
       #- name: Run tests
