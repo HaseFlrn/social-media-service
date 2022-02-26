@@ -32,9 +32,8 @@ app.get("/getISSPosition", async (_req, res) => {
 
 app.listen({
 	port: port,
-	// TODO: create SSL Files => https://serverfault.com/questions/224122/what-is-crt-and-key-files-and-how-to-generate-them
 	certFile: "myCertFile.cert",
 	keyFile: "myKeyFile.key",
 	},
- 	() => console.log(`server has started on http://localhost:${port} 🚀 \napi has started on http://localhost:${port}/api/v1`),
+ 	() => console.log(`server has started on https://localhost:${port} 🚀 \napi has started on https://localhost:${port}/api/v1`),
 );
