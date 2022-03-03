@@ -38,6 +38,8 @@ Rückgabe:
 
 ## Youtube  
 
+[Vollständige API Reference](https://developers.google.com/youtube/v3/docs)
+
 `https://www.googleapis.com/youtube/v3/channels?access_token={access_token}&part=snippet&mine=true`
 
 Rückgabe: Channel Informationen
@@ -46,9 +48,13 @@ Rückgabe: Channel Informationen
 
 Rückgabe: Channel Branding Settings
 
-`https://www.googleapis.com/youtube/v3/activities?mine=true&access_token={access_token}&part=snippet`
+`https://www.googleapis.com/youtube/v3/activities?[mine=true or channelId={channelId} or home=true]&access_token={access_token}&part=snippet`
 
 Rückgabe: Activity Liste
+
+- mine=true => authenticated users activities
+- channelId => activities des Channels mit der ID channelId
+- home=true => activities of subscribed channels
 
 <img src="code.png" alt="example response" style="width:200px;"/>
 
