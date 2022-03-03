@@ -20,7 +20,7 @@ Rückgabe:
 - username: username
 - media: ein data Array mit den Ids zu den Medien
 
-`https://graph.instagram.com/{media_id}?fields=[id,caption,media_type,media_url,permalink,timestamp,username,children]
+`https://graph.instagram.com/{media_id}?fields=[id,caption,media_type,media_url,permalink,timestamp,username,children]`
 
 Rückgabe:
 
