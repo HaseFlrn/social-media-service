@@ -56,7 +56,7 @@ Rückgabe: Activity Liste
 - channelId => activities des Channels mit der ID channelId
 - home=true => activities of subscribed channels
 
-<img src="code.png" alt="example response" style="width:200px;"/>
+<img src="code.png" alt="example response" style="width:400px;"/>
 
 ## Scripts
 
