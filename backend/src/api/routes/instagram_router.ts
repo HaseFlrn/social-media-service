@@ -27,6 +27,9 @@ router
 		const access_token = instaAuthResJSON.access_token;
 		const user_id = instaAuthResJSON.user_id;
 
+		console.log(user_id);
+		console.log(access_token);
+
 		const instaResponse = await fetch(`https://graph.instagram.com/${user_id}?fields=id,username&access_token=${access_token}`)
 		const { username } = await instaResponse.json();
 

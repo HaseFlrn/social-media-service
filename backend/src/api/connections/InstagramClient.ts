@@ -8,6 +8,6 @@ export default new OAuth2Client({
     authorizationEndpointUri: "https://api.instagram.com/oauth/authorize?",
     tokenUri: "https://api.instagram.com/oauth/access_token",
     defaults: {
-        scope: "user_profile,user_media",
+        scope: "user_profile,user_media,pages_show_list,instagram_basic,pages_read_engagement",
     }
 })
