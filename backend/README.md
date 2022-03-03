@@ -7,6 +7,9 @@ Eine .env erstellen mit folgendem Inhalt:
 - PORT=[your Port]
 - INSTAGRAM_CLIENT_ID=[instagram-client-id aus Instagram-dev]
 - INSTAGRAM_CLIENT_SECRET=[instagram-client-secret aus Instagram-dev]
+- YOUTUBE_CLIENT_ID=[google-app id]
+- YOUTUBE_PROJECT_ID=[google-project id]
+- YOUTUBE_CLIENT_SECRET=[google-app secret]
 
 weitere Properties könnten folgen.
 
@@ -32,6 +35,24 @@ Rückgabe:
 - timestamp: timestamp zum Upload
 - username: username
 - children: NUR BEI CAROUSEL_ALBUM => ids der einzelnen Medien im Album
+
+## Youtube  
+
+`https://www.googleapis.com/youtube/v3/channels?access_token={access_token}&part=snippet&mine=true`
+
+Rückgabe: Channel Informationen
+
+`https://www.googleapis.com/youtube/v3/channels?contentdDetails&access_token={access_token}part=brandingSettings&mine=true`
+
+Rückgabe: Channel Branding Settings
+
+`https://www.googleapis.com/youtube/v3/activities?mine=true&access_token={access_token}&part=snippet`
+
+Rückgabe: Activity Liste
+
+Response e.g:
+
+![Example Output](code.png)
 
 ## Scripts
 

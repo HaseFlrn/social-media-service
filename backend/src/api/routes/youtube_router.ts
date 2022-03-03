@@ -4,7 +4,7 @@ import OAuth2Client from "../connections/YoutubeClient.ts";
 const router = Router();
 
 router
-	.get("/:token", (req, res) => {
+	.get("/v/:token", (req, res) => {
 		res.send(`Hello Youtube! ${req.params.token}`);
 	})
 	.get("/login", (_req, res) => {
@@ -14,7 +14,7 @@ router
 		const code = req.originalUrl;
 		const token = await OAuth2Client.code.getToken(code);
 		
-		res.redirect("https://localhost:3000/api/v1/youtube/" + token.accessToken)
+		res.redirect("https://localhost:3000/api/v1/youtube/v/" + token.accessToken)
 	})
 //.get("/PATH", (req,res) => {function})
 
