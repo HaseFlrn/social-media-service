@@ -50,9 +50,7 @@ Rückgabe: Channel Branding Settings
 
 Rückgabe: Activity Liste
 
-Response e.g:
-
-![Example Output](code.png)
+<img src="code.png" alt="example response" style="width:200px;"/>
 
 ## Scripts
 
