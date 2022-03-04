@@ -1,25 +1,20 @@
 <script>
-  import Home from "@/components/Home.svelte";
-  import { fade } from "svelte/transition";
+  import Router from "svelte-routing/Router.svelte";
+  import Route from "svelte-routing/Route.svelte";
+  import Link from "svelte-routing/Link.svelte";
+  import Home from "components/Home.svelte";
+  import Youtube from "components/Youtube.svelte";
 
-  let name = "World";
+  export let url = "";
 </script>
 
-<main transition:fade>
-  <Home {name} />
-</main>
-
-<style>
-  main {
-    text-align: center;
-    padding: 1em;
-    max-width: 240px;
-    margin: 0 auto;
-  }
-
-  @media (min-width: 640px) {
-    main {
-      max-width: none;
-    }
-  }
-</style>
+<Router {url}>
+  <!-- <nav>
+    <Link to="/">Home</Link>
+    <Link to="youtube">Youtube</Link>
+  </nav> -->
+  <div>
+    <Route path="youtube" component="{Youtube}"></Route>
+    <Route path="/"><Home /></Route>
+  </div>
+</Router>

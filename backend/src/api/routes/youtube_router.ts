@@ -11,10 +11,9 @@ router
 		res.redirect(OAuth2Client.code.getAuthorizationUri().toString());
 	})
 	.get("/auth/callback", async (req, res) => {
-		const code = req.originalUrl;
-		const token = await OAuth2Client.code.getToken(code);
+		const tokens = await OAuth2Client.code.getToken(req.originalUrl);
 		
-		res.redirect("https://localhost:3000/api/v1/youtube/v/" + token.accessToken)
+		res.redirect(`${Deno.env.get("FRONTEND_URL")}youtube?token=${tokens.accessToken}`);
 	})
 //.get("/PATH", (req,res) => {function})
 
