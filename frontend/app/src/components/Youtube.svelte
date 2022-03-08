@@ -10,6 +10,15 @@
     console.log(info);
     value = JSON.stringify(info.items[0]);
   }
+  async function getSubInfo() {
+    const res = await fetch(
+      `https://www.googleapis.com/youtube/v3/channels?part=contentDetails&mine=true&access_token=${token}`
+    );
+    const info = await res.json();
+    console.log(info);
+    value = JSON.stringify(info.items[0]);
+  }
+  
 </script>
 
 <h1>Text</h1>
