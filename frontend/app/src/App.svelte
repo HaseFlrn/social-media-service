@@ -9,12 +9,12 @@
 </script>
 
 <Router {url}>
-  <!-- <nav>
+  <nav>
     <Link to="/">Home</Link>
     <Link to="youtube">Youtube</Link>
-  </nav> -->
+  </nav>
   <div>
-    <Route path="youtube" component="{Youtube}"></Route>
+    <Route path="youtube" component={Youtube} />
     <Route path="/"><Home /></Route>
   </div>
 </Router>
