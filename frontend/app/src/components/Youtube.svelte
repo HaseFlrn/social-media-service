@@ -26,3 +26,7 @@
 <button on:click={getChannelInfo}>Get my channel information</button>
 <br />
 {value}
+
+<style>
+  
+</style>
