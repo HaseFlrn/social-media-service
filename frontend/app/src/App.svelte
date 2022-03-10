@@ -5,7 +5,7 @@
   import Home from "components/Home.svelte";
   import Youtube from "components/Youtube.svelte";
 
-  export let url = "social-media-service";
+  export let url = "/social-media-service";
 </script>
 
 <Router {url}>
