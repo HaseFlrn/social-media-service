@@ -25,12 +25,12 @@
     <Link to="{url}/dashboard">YoutubeDashboard</Link> 
   </nav>
   <div>
-    <Route path="{url}/*"><NotFound /></Route>
     <Route path="{url}/youtube" component={Youtube} />
     <Route path="{url}/mystats" component={MyStats} />
     <Route path="{url}/mysubs" component={MySubscriptions} />
     <Route path="{url}/trends" component={Trends} />
     <Route path="{url}/dashboard" component={Dashboard}/>
+    <Route path="{url}/*"><NotFound /></Route>
     <Route path="{url}/"><Home /></Route>
   </div>
 </Router>
