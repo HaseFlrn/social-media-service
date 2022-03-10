@@ -10,11 +10,11 @@
 
 <Router {url}>
   <nav>
-    <Link to="/">Home</Link>
-    <Link to="youtube">Youtube</Link>
+    <Link to="{url}/">Home</Link>
+    <Link to="{url}/youtube">Youtube</Link>
   </nav>
   <div>
-    <Route path="youtube" component={Youtube} />
-    <Route path="/"><Home /></Route>
+    <Route path="{url}/youtube" component={Youtube} />
+    <Route path="{url}/"><Home /></Route>
   </div>
 </Router>
