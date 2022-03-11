@@ -29,10 +29,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: site
-          path: |
-            frontend/app/dist
-            frontend/app/public/images
-            
+          path: frontend/app/dist        
 
   deploy:
 
