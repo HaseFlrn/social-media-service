@@ -30,8 +30,8 @@ jobs:
         with:
           name: site
           path: |
-            ./frontend/app/dist
-            ./frontend/app/public/images
+            frontend/app/dist
+            frontend/app/public/images
 
   deploy:
 
