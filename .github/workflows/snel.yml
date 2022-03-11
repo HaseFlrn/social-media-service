@@ -31,6 +31,12 @@ jobs:
           name: site
           path: ./frontend/app/dist
 
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: images
+          path: ./frontend/app/public/images
+
   deploy:
 
     needs: [build]
@@ -44,6 +50,12 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: site
+        
+      - name: Download Artifacts
+        uses: actions/download-artifact@v1
+        with:
+          name: images
+          path: ./images
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.4
