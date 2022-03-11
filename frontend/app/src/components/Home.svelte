@@ -1,7 +1,7 @@
 <script>
 </script>
 <div class="image">
-    <img  src="/images/YouTool.jpg" alt="Youtool Logo" width="600px">
+    <img  src="/images/YouToolBlank.png" alt="Youtool Logo" width="600px">
   </div>
 
   <h1>
