@@ -1,4 +1,4 @@
-export async function getChannelInformations(token:String) {
+export async function getChannelInformations(token: String) {
     const response = await fetch(`https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&mine=true&access_token=${token}`);
     const res = await response.json();
     return res; 
