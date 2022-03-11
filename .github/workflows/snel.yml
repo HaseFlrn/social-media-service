@@ -49,9 +49,8 @@ jobs:
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           branch: deploy
-          folder: "site"
+          folder: .
           clean-exclude: |
             vercel.json
             manifest.json
