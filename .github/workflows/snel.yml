@@ -29,7 +29,9 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: site
-          path: ./frontend/app/dist
+          path: |
+            ./frontend/app/dist
+            ./frontend/app/public/images
 
   deploy:
 
@@ -51,8 +53,4 @@ jobs:
         with:
           branch: deploy
           folder: site
-          clean-exclude: |
-            vercel.json
-            manifest.json
-
 
