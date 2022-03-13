@@ -91,9 +91,9 @@ Alle Scripts aus /backend starten!
 - getVideoQuantity(token) -> Gesamtanzahl an Videos auf eigenem Channel 
 - getSubscriberQuantity(token) -> Gesamtanzahl an Subscribern 
 - getAllTimeViews(token) -> Gesamtanzahl an Views auf alle Videos
-\
+
 - getLatestVideo(token) -> Liefert die VideoId des neuesten (zuletzt hochgeladenen) Videos
-\
+
 - getVideoViewsQuantity(token, videoId) -> Anzahl an Views auf ausgewähles Video
 - getVideoLikesQuantity(token, videoId) -> Anzahl an Likes auf ausgewähles Video
 - getVideoDislikesQuantity(token, videoId) -> Anzahl an Dislikes auf ausgewähles Video
