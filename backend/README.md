@@ -77,3 +77,24 @@ Alle Scripts aus /backend starten!
 ### ./bin/reload
 
 - holt neueste Updates für imports
+
+### Services
+General.ts:
+
+- getChannelInformations(token) holt sich die alle Channel Informationen des eigenen Channels. Alle weiteren Methoden rufen diese auf und filtern einzelne Daten aus der JSON raus und geben diese zurück
+- getChannelName(token) gibt den Namen des Channels zurück
+- getChannelDescription(token) gibt die Beschreibung des Channels zurück
+- getChannelPublishedAt(token) gibt das Datum zurück, an dem der Cahnnel ertellt wurde
+
+myStats.ts:
+
+- getVideoQuantity(token) -> Gesamtanzahl an Videos auf eigenem Channel 
+- getSubscriberQuantity(token) -> Gesamtanzahl an Subscribern 
+- getAllTimeViews(token) -> Gesamtanzahl an Views auf alle Videos
+
+- getLatestVideo(token) -> Liefert die VideoId des neuesten (zuletzt hochgeladenen) Videos
+
+- getVideoViewsQuantity(token, videoId) -> Anzahl an Views auf ausgewähles Video
+- getVideoLikesQuantity(token, videoId) -> Anzahl an Likes auf ausgewähles Video
+- getVideoDislikesQuantity(token, videoId) -> Anzahl an Dislikes auf ausgewähles Video
+- getVideoCommentQuantity(token, videoId) -> Anzahl an Kommentaren auf ausgewähles Video
