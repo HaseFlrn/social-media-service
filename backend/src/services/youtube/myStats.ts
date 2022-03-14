@@ -1,3 +1,4 @@
+// deno-lint-ignore-file
 import {getChannelInformations} from './general.ts';
  
 //----------------------------------------
@@ -46,7 +47,7 @@ export async function getLatestVideo(token:string) {
 //Get List with all Video ids
 export async function getAllVideos(token:string) {
     const res = await getVideos(token);
-    // deno-lint-ignore no-var no-array-constructor
+
     var videos = new Array();
 
     for (let i = 0; i < res.items.length; i++) {
@@ -101,11 +102,19 @@ export async function getPlaylistStatistics(token:string, playlistId:string) {
 export async function getAllPlaylists(token:string) {
     const res = await getPlaylists(token);
 
-    // deno-lint-ignore no-var no-array-constructor
-    var playlists = new Array();
+    let playlists = new Array();
 
     for (let i = 0; i < res.items.length; i++) {
         playlists.push(res.items[i].id)
     }
     return playlists; 
 }
+
+/*
+//Video Stats
+export async function getVideoViewsQuantity(token:string, videoId:string) {
+    const res = await getVideoStatistics(token, videoId);
+    const videoViews = res.items[0].statistics.viewCount;
+    return videoViews; 
+}
+*/
