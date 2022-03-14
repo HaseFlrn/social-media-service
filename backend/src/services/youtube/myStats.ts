@@ -43,7 +43,7 @@ export async function getLatestVideo(token:string) {
     return latestVideo; 
 }
 
-/*
+
 //Get List with all Video ids
 export async function getAllVideos(token:string) {
     const res = await getVideos(token);
@@ -56,7 +56,7 @@ export async function getAllVideos(token:string) {
     }
     return videos; 
 }
-*/
+
 
 //Video Stats
 export async function getVideoViewsQuantity(token:string, videoId:string) {
@@ -98,7 +98,7 @@ export async function getPlaylistStatistics(token:string, playlistId:string) {
     return res; 
 } 
 
-/*
+
 //Get List with all playlist ids
 export async function getAllPlaylists(token:string) {
     const res = await getPlaylists(token);
@@ -110,13 +110,30 @@ export async function getAllPlaylists(token:string) {
     }
     return playlists; 
 }
-*/
 
-/*
-//Video Stats
-export async function getVideoViewsQuantity(token:string, videoId:string) {
-    const res = await getVideoStatistics(token, videoId);
-    const videoViews = res.items[0].statistics.viewCount;
-    return videoViews; 
+
+
+//Playlist Stats
+export async function getPlaylistName(token:string, playlistId:string) {
+    const res = await getPlaylistStatistics(token, playlistId);
+    const playlistName = res.items[0].snippet.title;
+    return playlistName; 
 }
-*/
+
+export async function getPlaylistDescription(token:string, playlistId:string) {
+    const res = await getPlaylistStatistics(token, playlistId);
+    const playlistDescription = res.items[0].snippet.description;
+    return playlistDescription; 
+}
+
+export async function getPlaylistPublishedAt(token:string, playlistId:string) {
+    const res = await getPlaylistStatistics(token, playlistId);
+    const playlistPublishedAt = res.items[0].snippet.publishedAt;
+    return playlistPublishedAt; 
+}
+
+export async function getPlaylistVideoQuantity(token:string, playlistId:string) {
+    const res = await getPlaylistStatistics(token, playlistId);
+    const playlistVideoQuantity = res.items[0].contentDetails.itemCount;
+    return playlistVideoQuantity; 
+}
