@@ -43,6 +43,7 @@ export async function getLatestVideo(token:string) {
     return latestVideo; 
 }
 
+/*
 //Get List with all Video ids
 export async function getAllVideos(token:string) {
     const res = await getVideos(token);
@@ -55,7 +56,7 @@ export async function getAllVideos(token:string) {
     }
     return videos; 
 }
-
+*/
 
 //Video Stats
 export async function getVideoViewsQuantity(token:string, videoId:string) {
@@ -97,6 +98,7 @@ export async function getPlaylistStatistics(token:string, playlistId:string) {
     return res; 
 } 
 
+/*
 //Get List with all playlist ids
 export async function getAllPlaylists(token:string) {
     const res = await getPlaylists(token);
@@ -108,6 +110,7 @@ export async function getAllPlaylists(token:string) {
     }
     return playlists; 
 }
+*/
 
 /*
 //Video Stats
