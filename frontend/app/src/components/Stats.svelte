@@ -1,5 +1,5 @@
 <script>
-  import LayoutGrid from "/node_modules/@smui/layout-grid";
+  import LayoutGrid from "https://cdn.skypack.dev/@smui/layout-grid";
 </script>
 
 <main>
