@@ -5,7 +5,7 @@
   </div>
 
   <h1>
-    <a style="color:white" href="https://localhost:3000/api/v1/youtube/login">Get Youtube Key!</a></h1>
+    <a style="color:black" href="https://localhost:3000/api/v1/youtube/login">Get Youtube Key!</a></h1>
 
 
 <link
@@ -18,7 +18,7 @@
   :global(body) {
     margin: 10px;
     width: auto;
-    background-color: rgb(95, 93, 93);
+    background-color: whitesmoke;
   }
 
   .image {
@@ -27,7 +27,7 @@
     margin-bottom: 0px;
   }
   h1 {
-    color: white;
+    color: black;
     text-transform: uppercase;
     font-size: 4em;
     font-weight: 100;
