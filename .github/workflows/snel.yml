@@ -24,7 +24,10 @@ jobs:
         run: |
           deno run --allow-run --allow-read https://deno.land/x/snel/install.ts
           trex run build
-
+          
+      - name: List Dir
+        run: dir
+        
       - name: Upload Artifacts
         uses: actions/upload-artifact@v1
         with:
