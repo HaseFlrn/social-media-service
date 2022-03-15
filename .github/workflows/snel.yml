@@ -23,7 +23,7 @@ jobs:
         working-directory: ./frontend/app
         run: |
           deno run --allow-run --allow-read https://deno.land/x/snel/install.ts
-          trex run build
+          sudo trex run build
       
         
       - name: Upload Artifacts
