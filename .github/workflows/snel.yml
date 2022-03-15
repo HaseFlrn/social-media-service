@@ -25,7 +25,31 @@ jobs:
           deno run --allow-run --allow-read https://deno.land/x/snel/install.ts
           trex run build
           
-      - name: Dir
-        run: dir ./frontend
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: site
+          path: frontend/app/dist        
+
+  deploy:
+
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2.3.1
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v1
+        with:
+          name: site
         
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          branch: deploy
+          folder: site
+  
      
