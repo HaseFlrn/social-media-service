@@ -5,9 +5,7 @@ import { getSubsriptionInformations } from "../../services/youtube/aboService.ts
 const router = Router();
 
 router
-	.get("/v/:token", (req, res) => {
-		res.send(`Hello Youtube! ${req.params.token}`);
-	})
+	// Auth Process
 	.get("/login", (_req, res) => {
 		res.redirect(OAuth2Client.code.getAuthorizationUri().toString());
 	})
@@ -16,9 +14,16 @@ router
 		
 		res.redirect(`${Deno.env.get("FRONTEND_URL")}youtube?token=${tokens.accessToken}`);
 	})
+
+	// Channel stats API
+
+	// Trends API
+
+	// Subsrciption API
 	.get("/subInfo/:token", (req,res) => {
 		res.send(getSubsriptionInformations(req.params.token));
 	})
+	
 //.get("/PATH", (req,res) => {function})
 
 export default router;
