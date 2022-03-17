@@ -8,10 +8,13 @@ router
   .get("/", (_req, res) => {
     res.send("That's fuckin Obi-Wan-Kenobi!");
   })
-	.get("/subInfo/:token", function(req,res) {
-		res.send(getSubsriptionInformations(req.params.token));
+	.get("/subInfo/:token", (req,res) => {
+		console.log("subInfo called");
+    res.send(req.params.token);
+    //res.send(getSubsriptionInformations(req.params.token));
 	})
 	.get("/subscriptions", (req,res) => {
+    console.log("subscriptions called");
 		res.send(getAllSubscriptions(req.params.token));
 	})
 //.get("/PATH", (req,res) => {function})
