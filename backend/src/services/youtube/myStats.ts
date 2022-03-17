@@ -137,3 +137,52 @@ export async function getPlaylistVideoQuantity(token:string, playlistId:string) 
     const playlistVideoQuantity = res.items[0].contentDetails.itemCount;
     return playlistVideoQuantity; 
 }
+
+
+//----------------------------------------
+//----My Stats In Time Range--------------
+//----------------------------------------
+
+export async function getStatsInTimeRange(token:string, startDate:string, endDate: string) {
+    const response = await fetch(`https://youtubeanalytics.googleapis.com/v2/reports?endDate=${endDate}&ids=channel%3D%3DMINE&metrics=views%2Ccomments%2Clikes%2Cdislikes%2CestimatedMinutesWatched%2CaverageViewDuration&startDate=${startDate}&access_token=${token}`);
+    const res = await response.json();
+    return res; 
+}
+
+export async function getViewsInTimeRange(token:string, startDate:string, endDate: string) {
+    const res = await getStatsInTimeRange(token, startDate, endDate);
+    const viewsInTimeRange = res.rows[0];
+    return viewsInTimeRange; 
+}
+
+export async function getCommentsInTimeRange(token:string, startDate:string, endDate: string) {
+    const res = await getStatsInTimeRange(token, startDate, endDate);
+    const commentsInTimeRange = res.rows[1];
+    return commentsInTimeRange; 
+}
+
+export async function getLikesInTimeRange(token:string, startDate:string, endDate: string) {
+    const res = await getStatsInTimeRange(token, startDate, endDate);
+    const likesInTimeRange = res.rows[2];
+    return likesInTimeRange; 
+}
+
+export async function getDislikesInTimeRange(token:string, startDate:string, endDate: string) {
+    const res = await getStatsInTimeRange(token, startDate, endDate);
+    const dislikesInTimeRange = res.rows[3];
+    return dislikesInTimeRange; 
+}
+
+export async function getEstimatedMinutesWatchedInTimeRange(token:string, startDate:string, endDate: string) {
+    const res = await getStatsInTimeRange(token, startDate, endDate);
+    const estimatedMinutesWatchedInTimeRange = res.rows[4];
+    return estimatedMinutesWatchedInTimeRange; 
+}
+
+export async function getAverageViewDurationInTimeRange(token:string, startDate:string, endDate: string) {
+    const res = await getStatsInTimeRange(token, startDate, endDate);
+    const averageViewDurationInTimeRange = res.rows[5];
+    return averageViewDurationInTimeRange; 
+}
+
+
