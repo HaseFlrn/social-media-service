@@ -4,7 +4,7 @@ const router = Router();
 
 router
 .get("/", (_req, res) => {
-	res.send("Generrral Kenobi!");
+	res.send("Generral Kenobi!");
 })
 //.get("/PATH", (req,res) => {function})
 
