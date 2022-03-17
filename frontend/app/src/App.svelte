@@ -12,7 +12,7 @@
   import NotFound from "components/NotFound.svelte";
   import Dashboard from "components/Dashboard.svelte";
 
-  export let url = "/social-media-service";
+  export let url = "";
 </script>
 
 <Router {url}>
