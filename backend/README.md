@@ -79,30 +79,47 @@ Alle Scripts aus /backend starten!
 - holt neueste Updates für imports
 
 ## Services
-### General.ts:
+Folgend sind die verschiedenen Namen für die Url mit den entsprechenden Paramentern aufgelistet. Die Funktionen haben entsprechend den gleichen Namen nur mit "get" davor.
 
-- getChannelInformations(token) holt sich die alle Channel Informationen des eigenen Channels. Alle weiteren Methoden rufen diese auf und filtern einzelne Daten aus der JSON raus und geben diese zurück
-- getChannelName(token) gibt den Namen des Channels zurück
-- getChannelDescription(token) gibt die Beschreibung des Channels zurück
-- getChannelPublishedAt(token) gibt das Datum zurück, an dem der Cahnnel ertellt wurde
+### General.ts:
+Url zum Aufrufen: https://localhost:3000/api/v1/general/(Name der folgenden Funktion)/(Parameter den die Funktion braucht)
+</br>
+
+- getChannelInformations/(token) holt sich die alle Channel Informationen des eigenen Channels. Alle weiteren Methoden rufen diese auf und filtern einzelne Daten aus der JSON raus und geben diese zurück
+- getChannelName/(token) gibt den Namen des Channels zurück
+- getChannelDescription/(token) gibt die Beschreibung des Channels zurück
+- getChannelPublishedAt/(token) gibt das Datum zurück, an dem der Cahnnel ertellt wurde
 
 ### myStats.ts:
+Url zum Aufrufen: https://localhost:3000/api/v1/myStats/
 
-- getVideoQuantity(token) -> Gesamtanzahl an Videos auf eigenem Channel 
-- getSubscriberQuantity(token) -> Gesamtanzahl an Subscribern 
-- getAllTimeViews(token) -> Gesamtanzahl an Views auf alle Videos
+- videoQuantity/(token) -> Gesamtanzahl an Videos auf eigenem Channel 
+- subscriberQuantity/(token) -> Gesamtanzahl an Subscribern 
+- allTimeViews/(token) -> Gesamtanzahl an Views auf alle Videos
+</br>
+
+- latestVideo/(token) -> Liefert die VideoId des neuesten (zuletzt hochgeladenen) Videos
+- allVideos/(token) -> Liefert eine Liste mit den Id's aller Videos 
 <br/>
-- getLatestVideo(token) -> Liefert die VideoId des neuesten (zuletzt hochgeladenen) Videos
-- getAllVideos(token) -> Liefert eine Liste mit den Id's aller Videos 
+
+- videoViewsQuantity/(token)/(videoId) -> Anzahl an Views auf ausgewähles Video
+- videoLikesQuantity/(token)/(videoId) -> Anzahl an Likes auf ausgewähles Video
+- videoDislikesQuantity/(token)/(videoId) -> Anzahl an Dislikes auf ausgewähles Video
+- videoCommentQuantity/(token)/(videoId) -> Anzahl an Kommentaren auf ausgewähles Video
 <br/>
-- getVideoViewsQuantity(token, videoId) -> Anzahl an Views auf ausgewähles Video
-- getVideoLikesQuantity(token, videoId) -> Anzahl an Likes auf ausgewähles Video
-- getVideoDislikesQuantity(token, videoId) -> Anzahl an Dislikes auf ausgewähles Video
-- getVideoCommentQuantity(token, videoId) -> Anzahl an Kommentaren auf ausgewähles Video
+
+- allPlaylists/(token) -> Liefert eine Liste mit den Id's aller Playlists
 <br/>
-- getAllPlaylists(token) -> Liefert eine Liste mit den Id's aller Playlists
+
+- playlistName/(token)/(playlistId) -> Name der gewählten Playlist
+- playlistDescription/(token)/(playlistId) -> Beschreibung der gewählten Playlist
+- playlistPublishedAt/(token)/(playlistId) -> Veröffentlichungsdatum der gewählten Playlist
+- playlistVideoQuantity/(token)/(playlistId) -> Anzahl an Videos in der gewählten Playlist
 <br/>
-- getPlaylistName(token, playlistId) -> Name der gewählten Playlist
-- getPlaylistDescription(token, playlistId) -> Beschreibung der gewählten Playlist
-- getPlaylistPublishedAt(token, playlistId) -> Veröffentlichungsdatum der gewählten Playlist
-- getPlaylistVideoQuantity(token, playlistId) -> Anzahl an Videos in der gewählten Playlist
+
+- viewsInTimeRange/(token)/(startDate)/(endDate) -> Liefert die Anzahl der gemachten Views im angegebenen Zeitraum (Datumsformat: JJJJ-MM-DD)
+- commentsInTimeRange/(token)/(startDate)/(endDate) -> Anzahl neue Kommentare im Zeitraum
+- likesInTimeRange/(token)/(startDate)/(endDate) -> Anzahl neue Likes im Zeitraum
+- dislikesInTimeRanges/(token)/(startDate)/(endDate) -> Anzahl neue Dislikes im Zeitraum
+- estimatedMinutesWatchedInTimeRange/(token)/(startDate)/(endDate) -> Geschätzte geschaute Minuten im Zeitraum
+- averageViewDurationInTimeRange/(token)/(startDate)/(endDate) -> Durchschnittliche View Duration im Zeitraum
