@@ -1,10 +1,5 @@
 import { Router } from "https://deno.land/x/opine@2.1.1/mod.ts";
-import { getVideoQuantity, getSubscriberQuantity, getAllTimeViews } from "../../services/youtube/myStats.ts";
-import { getLatestVideo, getAllVideos } from "../../services/youtube/myStats.ts";
-import { getVideoViewsQuantity, getVideoLikesQuantity, getVideoDislikesQuantity, getVideoCommentQuantity } from "../../services/youtube/myStats.ts";
-import { getAllPlaylists, getPlaylistName, getPlaylistDescription, getPlaylistPublishedAt, getPlaylistVideoQuantity } from "../../services/youtube/myStats.ts";
-import { getViewsInTimeRange, getCommentsInTimeRange, getLikesInTimeRange, getDislikesInTimeRange, getEstimatedMinutesWatchedInTimeRange, getAverageViewDurationInTimeRange } from "../../services/youtube/myStats.ts";
-
+import myStats from "../../services/youtube/myStats.ts";
 
 const router = Router();
 
@@ -13,71 +8,31 @@ router
     res.send("This is myStatsRouter.ts");
   })
   //Get Channel Quantities
-  .get("/videoQuantity/:token", (req,res) => {
-    res.send(getVideoQuantity(req.params.token));
-  })
-  .get("/subscriberQuantity/:token", (req,res) => {
-    res.send(getSubscriberQuantity(req.params.token));
-  })
-  .get("/allTimeViews/:token", (req,res) => {
-    res.send(getAllTimeViews(req.params.token));
-  })
+  .get("/videoQuantity/:token", myStats.getVideoQuantity)
+  .get("/subscriberQuantity/:token", myStats.getSubscriberQuantity)
+  .get("/allTimeViews/:token", myStats.getAllTimeViews)
   //Get Video ID's
-  .get("/latestVideo/:token", (req,res) => {
-    res.send(getLatestVideo(req.params.token));
-  })
-  .get("/allVideos/:token", (req,res) => {
-    res.send(getAllVideos(req.params.token));
-  })
-  //Get Video Stats
-  .get("/videoViewsQuantity/:token/:videoId", (req,res) => {
-    res.send(getVideoViewsQuantity(req.params.token, req.params.videoId));
-  })
-  .get("/videoLikesQuantity/:token/:videoId", (req,res) => {
-    res.send(getVideoLikesQuantity(req.params.token, req.params.videoId));
-  })
-  .get("/videoDislikesQuantity/:token/:videoId", (req,res) => {
-    res.send(getVideoDislikesQuantity(req.params.token, req.params.videoId));
-  })
-  .get("/videoCommentQuantity/:token/:videoId", (req,res) => {
-    res.send(getVideoCommentQuantity (req.params.token, req.params.videoId));
-  })
+  .get("/latestVideo/:token", myStats.getLatestVideo)
+  .get("/allVideos/:token", myStats.getAllVideos)
+  // Get Video Stats
+  .get("/videoViewsQuantity/:token/:videoId", myStats.getVideoViewsQuantity)
+  .get("/videoLikesQuantity/:token/:videoId", myStats.getVideoLikesQuantity)
+  .get("/videoDislikesQuantity/:token/:videoId", myStats.getVideoDislikesQuantity)
+  .get("/videoCommentQuantity/:token/:videoId", myStats.getVideoCommentQuantity)
   //Get Playlist ID's
-  .get("/allPlaylists/:token", (req,res) => {
-    res.send(getAllPlaylists(req.params.token));
-  })
+  .get("/allPlaylists/:token", myStats.getAllPlaylists)
   //Get Playlist Stats
-  .get("/playlistName/:token/:playlistId", (req,res) => {
-    res.send(getPlaylistName(req.params.token, req.params.playlistId));
-  })
-  .get("/playlistDescription/:token/:playlistId", (req,res) => {
-    res.send(getPlaylistDescription(req.params.token, req.params.playlistId));
-  })
-  .get("/playlistPublishedAt/:token/:playlistId", (req,res) => {
-    res.send(getPlaylistPublishedAt(req.params.token, req.params.playlistId));
-  })
-  .get("/playlistVideoQuantity/:token/:playlistId", (req,res) => {
-    res.send(getPlaylistVideoQuantity (req.params.token, req.params.playlistId));
-  })
+  .get("/playlistName/:token/:playlistId", myStats.getPlaylistName)
+  .get("/playlistDescription/:token/:playlistId", myStats.getPlaylistDescription)
+  .get("/playlistPublishedAt/:token/:playlistId", myStats.getPlaylistPublishedAt)
+  .get("/playlistVideoQuantity/:token/:playlistId", myStats.getPlaylistVideoQuantity)
   // Channel Stats in Time Range
-  .get("/viewsInTimeRange/:token/:startDate/endDate", (req,res) => {
-    res.send(getViewsInTimeRange(req.params.token, req.params.startDate, req.params.endDate));
-  })
-  .get("/commentsInTimeRange/:token/:startDate/endDate", (req,res) => {
-    res.send(getCommentsInTimeRange(req.params.token, req.params.startDate, req.params.endDate));
-  })
-  .get("/likesInTimeRange/:token/:startDate/endDate", (req,res) => {
-    res.send(getLikesInTimeRange(req.params.token, req.params.startDate, req.params.endDate));
-  })
-  .get("/dislikesInTimeRange/:token/:startDate/endDate", (req,res) => {
-    res.send(getDislikesInTimeRange(req.params.token, req.params.startDate, req.params.endDate));
-  })
-  .get("/estimatedMinutesWatchedInTimeRange/:token/:startDate/endDate", (req,res) => {
-    res.send(getEstimatedMinutesWatchedInTimeRange(req.params.token, req.params.startDate, req.params.endDate));
-  })
-  .get("/averageViewDurationInTimeRange/:token/:startDate/endDate", (req,res) => {
-    res.send(getAverageViewDurationInTimeRange(req.params.token, req.params.startDate, req.params.endDate));
-  })
+  .get("/viewsInTimeRange/:token/:startDate/:endDate", myStats.getViewsInTimeRange)
+  .get("/commentsInTimeRange/:token/:startDate/:endDate", myStats.getCommentsInTimeRange)
+  .get("/dislikesInTimeRanges/:token/:startDate/:endDate", myStats.getDislikesInTimeRanges)
+  .get("/likesInTimeRange/:token/:startDate/:endDate", myStats.getLikesInTimeRange)
+  .get("/estimatedMinutesWatchedInTimeRange/:token/:startDate/:endDate", myStats.getEstimatedMinutesWatchedInTimeRange)
+  .get("/averageViewDurationInTimeRange/:token/:startDate/:endDate", myStats.getAverageViewDurationInTimeRange)
 //.get("/PATH", (req,res) => {function})
 
 export default router;
