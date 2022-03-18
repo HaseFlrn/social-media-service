@@ -2,8 +2,8 @@
   import {onMount} from 'svelte';
 
   function createChart() {
-    const barChart = document.getElementById('myChart');
-    const myChart = new Chart(barChart, {
+    const barChart = document.getElementById('likesChart');
+    const likesChart = new Chart(barChart, {
       type: 'bar',
       data: {
           labels: ['January', 'February', 'March', 'April', 'May', 'June'],
@@ -37,8 +37,8 @@
           }
       }
   });
-  const lineChart = document.getElementById('myLineChart');
-    const myLineChart = new Chart(lineChart, {
+  const lineChart = document.getElementById('viewChart');
+    const viewChart = new Chart(lineChart, {
       type: 'line',
       data: {
           labels: ['January', 'February', 'March', 'April', 'May', 'June'],
@@ -51,6 +51,24 @@
               borderWidth: 5   
           }]
       },
+  });
+  const polarChart = document.getElementById('demographyChart');
+    const demographyChart = new Chart(polarChart, {
+      type: 'polarArea',
+      data: {
+        labels: ['Germany', 'Austria', 'Swiss', 'UK', 'USA', 'Denmark'],
+        datasets: [{
+          label: 'Filler Chart',
+          data: [11, 16, 7, 3, 14],
+          backgroundColor: [
+      'rgb(255, 99, 132)',
+      'rgb(75, 192, 192)',
+      'rgb(255, 205, 86)',
+      'rgb(201, 203, 207)',
+      'rgb(54, 162, 235)'
+      ]
+      }]
+    },
   })
 }
   onMount(createChart);
@@ -75,16 +93,30 @@
   </div>
 
   <h1>Views</h1>
-  <canvas id="myLineChart" />
+  <div class="test">
+  <canvas id="viewChart" />
+  </div>
   <h1>Likes</h1>
   <h1>Uploads</h1>
-  <canvas id="myChart" />
+  <div class="test">
+  <canvas id="likesChart" />
+  </div>
   <h1>Comments</h1>
+  <h1>Demography</h1>
+  <div class="test">
+  <canvas id="demographyChart" />
+  </div>
 
 </main>
 
 <style>
 
+  .test {
+    position: relative;
+    height: 70%;
+    width: 70%;
+    padding-left: 230px;
+  }
   h1 {
     font-size: 50px;
     color:#eb7d00;
@@ -96,6 +128,7 @@
   grid-gap: 20px;
   background-color: #eb7d00;
   padding: 20px;
+  border-radius: 10px;
 }
 
 .grid-container > div {
@@ -103,7 +136,8 @@
   grid-template-rows: auto auto;
   background-color: #fdf3e7;
   text-align: center;
-  padding: 20px 0;
+  padding: 20px;
+  border-radius: 10px;
   font-size: 30px;
 }
 
