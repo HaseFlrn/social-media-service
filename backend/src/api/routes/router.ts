@@ -1,5 +1,6 @@
 import { Router } from "https://deno.land/x/opine@2.1.1/mod.ts";
 import OAuth2Client from "../connections/YoutubeClient.ts";
+import GeneralRouter from "./generalRouter.ts";
 import StatsRouter from "./myStatsRouter.ts";
 import TrendsRouter from "./trendsRouter.ts";
 import SubsRouter from "./subscriptionRouter.ts";
@@ -20,6 +21,7 @@ router
     const tokens = await OAuth2Client.code.getToken(req.originalUrl);
     res.redirect(`${Deno.env.get("FRONTEND_URL")}youtube?token=${tokens.accessToken}`);
   });
+router.use("/general", GeneralRouter);
 router.use("/myStats", StatsRouter);
 router.use("/trends", TrendsRouter);
 router.use("/mySubs", SubsRouter);
