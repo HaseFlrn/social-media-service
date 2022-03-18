@@ -1,6 +1,6 @@
 import { Router } from "https://deno.land/x/opine@2.1.1/mod.ts";
 import { getSubsriptionInformations } from "../../services/youtube/aboService.ts";
-import { getAllSubscriptions } from "../../services/youtube/mySubscriptions.ts";
+import subController from "../../services/youtube/subController.ts";
 
 const router = Router();
 
@@ -13,10 +13,7 @@ router
     res.send(req.params.token);
     //res.send(getSubsriptionInformations(req.params.token));
 	})
-	.get("/subscriptions", (req,res) => {
-    console.log("subscriptions called");
-		res.send(getAllSubscriptions(req.params.token));
-	})
+	.get("/subs/:token", subController.getAllSubscriptions)
 //.get("/PATH", (req,res) => {function})
 
 export default router;
