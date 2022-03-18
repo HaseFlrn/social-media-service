@@ -8,15 +8,12 @@ router
     res.send("This is generalRouter.ts");
   })
   .get("/channelName/:token", (req,res) => {
-    console.log(getChannelName(req.params.token))
     res.send(getChannelName(req.params.token));
   })
   .get("/channelDescription/:token", (req,res) => {
-    console.log(getChannelDescription(req.params.token))
     res.send(getChannelDescription(req.params.token));
   })
   .get("/channelPublishedAt/:token", (req,res) => {
-    console.log(getChannelDescription(req.params.token))
     res.send(getChannelPublishedAt(req.params.token));
    })
 //.get("/PATH", (req,res) => {function})
