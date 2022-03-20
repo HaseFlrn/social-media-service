@@ -33,6 +33,20 @@ export default class subController {
       res.setStatus(500).json(err);
     }
   }
+
+  static async getChannelStats(req: OpineRequest, res: OpineResponse) {
+    try{
+      //Total Videos, Wie lange Kanal existiert, 
+      const url = ``;
+      const response = await fetch(url);
+      const data = response.json();
+
+      res.send(data);
+    } catch( err ) {
+      console.log("an error occurreddd\n" + err );
+      res.setStatus(500).json(err);
+    }
+  }
   
   //---------------------------------------------------
   //--------Subscriped Channel Information-------------
