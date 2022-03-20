@@ -36,12 +36,32 @@ export default class subController {
 
   static async getChannelStats(req: OpineRequest, res: OpineResponse) {
     try{
-      //Total Videos, Wie lange Kanal existiert, 
-      const url = ``;
-      const response = await fetch(url);
-      const data = response.json();
+      //permission given for: id, statistics, contentDetails(different to subs api), contentOwnerDetails, localizations(no output), snippet(same as subs api), status, topicDetails
+      //https://www.googleapis.com/youtube/v3/channels
+      if(!req.query.channelId) {
+        return res.setStatus(501).json({ err: "channelId missing" });
+      }
+      const channelResponse = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=id,statistics,status,topicDetails&id=${req.query.channelId}&access_token=${req.params.token}`);
+      const channelData = await channelResponse.json();
 
-      res.send(data);
+      const topics = channelData.items[0].topicDetails;
+      const topicNames: string[] = [];
+
+      topics.topicCategories.forEach((e: string) => {
+        const parts: string[] = e.split('/');
+        topicNames.push(parts[parts.length-1]);
+      });
+
+      const returnData = {
+        channelId: channelData.items[0].id,
+        videoCnt: channelData.items[0].statistics.videoCount,
+        viewCnt: channelData.items[0].statistics.viewCount,
+        subscriberCnt: channelData.items[0].statistics.subscriberCount,
+        forKids: channelData.items[0].status.madeForKids,
+        topics: topicNames
+      };
+
+      res.send(returnData);
     } catch( err ) {
       console.log("an error occurreddd\n" + err );
       res.setStatus(500).json(err);
