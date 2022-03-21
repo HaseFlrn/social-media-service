@@ -134,9 +134,9 @@ Url zum Aufrufen: https://localhost:3000/api/v1/myStats/
 - playlistVideoQuantity/(token)/(playlistId) -> Anzahl an Videos in der gewählten Playlist
 <br/>
 
-- viewsInTimeRange/(token)/(startDate)/(endDate) -> Liefert die Anzahl der gemachten Views im angegebenen Zeitraum (Datumsformat: JJJJ-MM-DD)
-- commentsInTimeRange/(token)/(startDate)/(endDate) -> Anzahl neue Kommentare im Zeitraum
-- likesInTimeRange/(token)/(startDate)/(endDate) -> Anzahl neue Likes im Zeitraum
-- dislikesInTimeRanges/(token)/(startDate)/(endDate) -> Anzahl neue Dislikes im Zeitraum
-- estimatedMinutesWatchedInTimeRange/(token)/(startDate)/(endDate) -> Geschätzte geschaute Minuten im Zeitraum
-- averageViewDurationInTimeRange/(token)/(startDate)/(endDate) -> Durchschnittliche View Duration im Zeitraum
+- viewsInMonthForCurrentYear/(token) -> Liefert ein Array mit der Anzahl der gemachten Views des jeweiligen Monats. Index 0 ist Januar, usw. Das Array endet im aktuellen Monat und gibt die Views bis zum aktuellen Datum an
+- commentsInMonthForCurrentYear/(token) -> Gleich wie Views nur mit Kommentaren
+- likesInMonthForCurrentYear/(token) -> Gleich wie Views nur mit Likes
+- dislikesInMonthForCurrentYear/(token) -> Gleich wie Views nur mit Dislikes
+- estimatedMinutesWatchedInMonthForCurrentYear/(token) -> Gleich wie Views nur mit Geschätzte geschaute Minuten
+- averageViewDurationInMonthForCurrentYear/(token) -> Gleich wie Views nur mit Durchschnittliche View Duration

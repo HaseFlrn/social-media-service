@@ -1,4 +1,5 @@
 import { OpineResponse, OpineRequest } from "https://deno.land/x/opine@2.1.1/mod.ts";
+import startAndenddateForEveryMonth from './startAndenddateForEveryMonth.json' assert { type: "json" };
 
 async function getChannelInformations(token:string) {
     const response = await fetch(`https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&mine=true&access_token=${token}`);
@@ -36,6 +37,35 @@ export async function getStatsInTimeRange(token:string, startDate:string, endDat
     return res; 
 }
 
+//----------------------------------------
+//----My Stats In Time Range--------------
+//----------------------------------------
+async function getValueInTimeRange(req: OpineRequest, arrayIndex:number, startDate:string, endDate:string) {
+    const data = await getStatsInTimeRange(req.params.token, startDate, endDate);
+    const value = data.rows[0][arrayIndex];
+    return value;
+}
+
+async function getStetsPerMonthForCurrentYear(req: OpineRequest, res: OpineResponse, arrayindex:number) {
+
+    const currentYear = (new Date()).getFullYear()
+    //starts with 0
+    const currentMonth = (new Date()).getMonth()
+    const currentDay = (new Date()).getDate()
+
+    const valuePerMonth = [];
+
+    for (let i = 0; i < currentMonth; i++) {
+        const tempStartDate = currentYear + "-" + startAndenddateForEveryMonth[i].startdate
+        const tempEndDate = currentYear + "-" + startAndenddateForEveryMonth[i].enddate
+        valuePerMonth.push(await getValueInTimeRange(req, arrayindex, tempStartDate, tempEndDate))
+      }
+    const startDateCurrentMonth = currentYear + "-" + startAndenddateForEveryMonth[currentMonth].startdate
+    const endDateCurrentMonth = currentYear + "-" + (('0' + (currentMonth + 1)).slice(-2)) + "-" + currentDay
+    valuePerMonth.push(await getValueInTimeRange(req, arrayindex, startDateCurrentMonth, endDateCurrentMonth))
+
+    res.send(valuePerMonth)
+}
 
 export default class myStats{
     //----------------------------------------
@@ -142,38 +172,29 @@ export default class myStats{
         res.send(playlistVideoQuantity);
     }
 
+
     //----------------------------------------
-    //----My Stats In Time Range--------------
+    //-------My Stats Per Month---------------
     //----------------------------------------
 
-    static async getViewsInTimeRange(req: OpineRequest, res: OpineResponse) {
-        const data = await getStatsInTimeRange(req.params.token, req.params.startDate, req.params.endDate);
-        const viewsInTimeRange = data.rows[0][0];
-        res.send(viewsInTimeRange);
+    static getViewsInMonthForCurrentYear(req: OpineRequest, res: OpineResponse){
+        getStetsPerMonthForCurrentYear(req, res, 0)
     }
-    static async getCommentsInTimeRange(req: OpineRequest, res: OpineResponse) {
-        const data = await getStatsInTimeRange(req.params.token, req.params.startDate, req.params.endDate);
-        const commentsInTimeRange = data.rows[0][1];
-        res.send(commentsInTimeRange);
+    static getCommentsInMonthForCurrentYear(req: OpineRequest, res: OpineResponse){
+        getStetsPerMonthForCurrentYear(req, res, 1)
     }
-    static async getLikesInTimeRange(req: OpineRequest, res: OpineResponse) {
-        const data = await getStatsInTimeRange(req.params.token, req.params.startDate, req.params.endDate);
-        const likesInTimeRange = data.rows[0][2];
-        res.send(likesInTimeRange);
+    static getLikesInMonthForCurrentYear(req: OpineRequest, res: OpineResponse){
+        getStetsPerMonthForCurrentYear(req, res, 2)
     }
-    static async getDislikesInTimeRanges(req: OpineRequest, res: OpineResponse) {
-        const data = await getStatsInTimeRange(req.params.token, req.params.startDate, req.params.endDate);
-        const dislikesInTimeRange = data.rows[0][3];
-        res.send(dislikesInTimeRange);
+    static getDislikesInMonthForCurrentYear(req: OpineRequest, res: OpineResponse){
+        getStetsPerMonthForCurrentYear(req, res, 3)
     }
-    static async getEstimatedMinutesWatchedInTimeRange(req: OpineRequest, res: OpineResponse) {
-        const data = await getStatsInTimeRange(req.params.token, req.params.startDate, req.params.endDate);
-        const estimatedMinutesWatchedInTimeRange = data.rows[0][4];
-        res.send(estimatedMinutesWatchedInTimeRange);
+    static getEstimatedMinutesWatchedInMonthForCurrentYear(req: OpineRequest, res: OpineResponse){
+        getStetsPerMonthForCurrentYear(req, res, 4)
     }
-    static async getAverageViewDurationInTimeRange(req: OpineRequest, res: OpineResponse) {
-        const data = await getStatsInTimeRange(req.params.token, req.params.startDate, req.params.endDate);
-        const averageViewDurationInTimeRange = data.rows[0][5];
-        res.send(averageViewDurationInTimeRange);
+    static getAverageViewDurationInMonthForCurrentYear(req: OpineRequest, res: OpineResponse){
+        getStetsPerMonthForCurrentYear(req, res, 5)
     }
+
 }
+
