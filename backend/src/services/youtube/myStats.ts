@@ -1,35 +1,34 @@
 import { OpineResponse, OpineRequest } from "https://deno.land/x/opine@2.1.1/mod.ts";
 import startAndenddateForEveryMonth from './startAndenddateForEveryMonth.json' assert { type: "json" };
 
-async function getChannelInformations(token:string) {
-    const response = await fetch(`https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&mine=true&access_token=${token}`);
-    const res = await response.json();
-    return res; 
-}
- 
-async function getVideos(token:string) {
-    const response = await fetch(`https://youtube.googleapis.com/youtube/v3/activities?part=snippet%2CcontentDetails&maxResults=25&mine=true&access_token=${token}`);
-    const res = await response.json();
-    return res; 
+async function runRequest(req: OpineRequest, requestName:string) {
+
+    let url = ``;
+
+    switch (requestName) {
+        case "ChannelInformations":
+            url = `https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&mine=true&access_token=${req.params.token}`
+            break;
+        case "Videos":
+            url = `https://youtube.googleapis.com/youtube/v3/activities?part=snippet%2CcontentDetails&maxResults=25&mine=true&access_token=${req.params.token}`
+            break;
+        case "VideoStatistics":
+            url = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${req.params.videoId}&access_token=${req.params.token}`
+            break;
+        case "Playlists":
+            url = `https://youtube.googleapis.com/youtube/v3/playlists?part=snippet%2CcontentDetails&mine=true&access_token=${req.params.token}`
+            break;
+        case "PlaylistStatistics":
+            url = `https://youtube.googleapis.com/youtube/v3/playlists?part=snippet%2CcontentDetails&id=${req.params.playlistId}&access_token=${req.params.token}`
+            break;
+        default:
+            break;
+    }
+    const response = await fetch(url);
+    const result = await response.json();
+    return result; 
 }
 
-async function getVideoStatistics(token:string, videoId:string) {
-    const response = await fetch(`https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${videoId}&access_token=${token}`);
-    const res = await response.json();
-    return res; 
-}
-
-export async function getPlaylists(token:string) {
-    const response = await fetch(`https://youtube.googleapis.com/youtube/v3/playlists?part=snippet%2CcontentDetails&mine=true&access_token=${token}`);
-    const res = await response.json();
-    return res; 
-} 
-
-export async function getPlaylistStatistics(token:string, playlistId:string) {
-    const response = await fetch(`https://youtube.googleapis.com/youtube/v3/playlists?part=snippet%2CcontentDetails&id=${playlistId}&access_token=${token}`);
-    const res = await response.json();
-    return res; 
-} 
 
 export async function getStatsInTimeRange(token:string, startDate:string, endDate: string) {
     const response = await fetch(`https://youtubeanalytics.googleapis.com/v2/reports?endDate=${endDate}&ids=channel%3D%3DMINE&metrics=views%2Ccomments%2Clikes%2Cdislikes%2CestimatedMinutesWatched%2CaverageViewDuration&startDate=${startDate}&access_token=${token}`);
@@ -73,17 +72,17 @@ export default class myStats{
     //----------------------------------------
 
     static async getVideoQuantity(req: OpineRequest, res: OpineResponse) {
-        const data = await getChannelInformations(req.params.token);
+        const data = await runRequest(req, "ChannelInformations");
         const videoQuantity = data.items[0].statistics.videoCount;
         res.send(videoQuantity);
     }
     static async getSubscriberQuantity(req: OpineRequest, res: OpineResponse) {
-        const data = await getChannelInformations(req.params.token);
+        const data = await runRequest(req, "ChannelInformations");
         const subscriberQuantity = data.items[0].statistics.subscriberCount;
         res.send(subscriberQuantity);
     }
     static async getAllTimeViews(req: OpineRequest, res: OpineResponse) {
-        const data = await getChannelInformations(req.params.token);
+        const data = await runRequest(req, "ChannelInformations");
         const allTimeViews = data.items[0].statistics.viewCount;
         res.send(allTimeViews);
     }
@@ -94,13 +93,13 @@ export default class myStats{
 
     //Get Latest Video Id
     static async getLatestVideo(req: OpineRequest, res: OpineResponse) {
-        const data = await getVideos(req.params.token);
+        const data = await runRequest(req, "Videos");
         const latestVideo = data.items[0].contentDetails.upload.videoId;
         res.send(latestVideo);
     }
 
     static async getAllVideos(req: OpineRequest, res: OpineResponse) {
-        const data = await getVideos(req.params.token);
+        const data = await runRequest(req, "Videos");
 
         const videos = [];
 
@@ -113,22 +112,22 @@ export default class myStats{
 
     //Video Stats
     static async getVideoViewsQuantity(req: OpineRequest, res: OpineResponse) {
-        const data = await getVideoStatistics(req.params.token, req.params.videoId);
+        const data = await runRequest(req, "VideoStatistics");
         const videoViews = data.items[0].statistics.viewCount;
         res.send(videoViews);
     }
     static async getVideoLikesQuantity(req: OpineRequest, res: OpineResponse) {
-        const data = await getVideoStatistics(req.params.token, req.params.videoId);
+        const data = await runRequest(req, "VideoStatistics");
         const videoLikes = data.items[0].statistics.likeCount;
         res.send(videoLikes);
     }
     static async getVideoDislikesQuantity(req: OpineRequest, res: OpineResponse) {
-        const data = await getVideoStatistics(req.params.token, req.params.videoId);
+        const data = await runRequest(req, "VideoStatistics");
         const videoDislikes = data.items[0].statistics.dislikeCount;
         res.send(videoDislikes);
     }
     static async getVideoCommentQuantity(req: OpineRequest, res: OpineResponse) {
-        const data = await getVideoStatistics(req.params.token, req.params.videoId);
+        const data = await runRequest(req, "VideoStatistics");
         const videoComments = data.items[0].statistics.commentCount;
         res.send(videoComments);
     }
@@ -139,7 +138,7 @@ export default class myStats{
 
     //Get List with all playlist ids
     static async getAllPlaylists(req: OpineRequest, res: OpineResponse) {
-        const data = await getPlaylists(req.params.token);
+        const data = await runRequest(req, "Playlists");
 
         const playlists = [];
 
@@ -152,22 +151,22 @@ export default class myStats{
 
     //Playlist Stats
     static async getPlaylistName(req: OpineRequest, res: OpineResponse) {
-        const data = await getPlaylistStatistics(req.params.token, req.params.playlistId);
+        const data = await runRequest(req, "PlaylistStatistics");
         const playlistName = data.items[0].snippet.title;
         res.send(playlistName);
     }
     static async getPlaylistDescription(req: OpineRequest, res: OpineResponse) {
-        const data = await getPlaylistStatistics(req.params.token, req.params.playlistId);
+        const data = await runRequest(req, "PlaylistStatistics");
         const playlistDescription = data.items[0].snippet.description;
         res.send(playlistDescription);
     }
     static async getPlaylistPublishedAt(req: OpineRequest, res: OpineResponse) {
-        const data = await getPlaylistStatistics(req.params.token, req.params.playlistId);
+        const data = await runRequest(req, "PlaylistStatistics");
         const playlistPublishedAt = data.items[0].snippet.publishedAt;
         res.send(playlistPublishedAt);
     }
     static async getPlaylistVideoQuantity(req: OpineRequest, res: OpineResponse) {
-        const data = await getPlaylistStatistics(req.params.token, req.params.playlistId);
+        const data = await runRequest(req, "PlaylistStatistics");
         const playlistVideoQuantity = data.items[0].contentDetails.itemCount;
         res.send(playlistVideoQuantity);
     }
