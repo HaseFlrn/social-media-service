@@ -8,6 +8,7 @@ router
     res.send("That's fuckin Obi-Wan-Kenobi!");
   })
 	.get("/subs/:token", subController.getAllSubscriptions)
+  .get("/stats/:token", subController.getChannelStats)
 //.get("/PATH", (req,res) => {function})
 
 export default router;
