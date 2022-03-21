@@ -58,6 +58,23 @@ Rückgabe: Activity Liste
 
 <img src="code.png" alt="example response" style="width:400px;"/>
 
+### [Youtube Search API](https://developers.google.com/youtube/v3/docs/search/list)
+- Basis URL: https://www.googleapis.com/youtube/v3/search
+- Queries:
+    - Required:
+        - access_token={OAuth Token}
+    - Optional:
+        - part=snippet --> Genauere Angaben zu den Videos
+        - forMine=true --> zeigt nur Videos vom authentifizierten User
+        - channelId={channelId} --> Nur videos von bestimmten Channel werden angezeigt
+        - type={video,...} --> Nur anzeige dieses Uploadtypes
+
+### Youtube Report API
+
+### Youtube Channel API
+
+### Youtube Subscriptions API
+
 ## Scripts
 
 Alle Scripts aus /backend starten!
