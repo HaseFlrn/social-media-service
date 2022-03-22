@@ -66,6 +66,29 @@ async function getStetsPerMonthForCurrentYear(req: OpineRequest, res: OpineRespo
     res.send(valuePerMonth)
 }
 
+ async function getStetsPerDayLastThirtyDays(req: OpineRequest, res: OpineResponse, arrayindex:number) {
+
+    const valuePerDay = [];
+
+    for (let i = 30; i > 0; i--){
+        const currentDate1 = new Date()
+        const currentDate2 = new Date()
+
+        currentDate1.setDate(currentDate1.getDate()-i);
+        const tempEnddate = currentDate1.getFullYear() + "-" + ('0' + (currentDate1.getMonth() + 1)).slice(-2) + "-" + ('0' + currentDate1.getDate()).slice(-2);
+
+        currentDate2.setDate(currentDate2.getDate()-i-1);
+        const tempStartdate = currentDate2.getFullYear() + "-" + ('0' + (currentDate2.getMonth() + 1)).slice(-2) + "-" + ('0' + currentDate2.getDate()).slice(-2);
+
+        console.log(tempStartdate)
+        console.log(tempEnddate)
+
+        valuePerDay.push(await getValueInTimeRange(req, arrayindex, tempStartdate, tempEnddate))
+        
+    }
+    res.send(valuePerDay)
+}
+
 export default class myStats{
     //----------------------------------------
     //----------Channel Stats-----------------
@@ -193,6 +216,29 @@ export default class myStats{
     }
     static getAverageViewDurationInMonthForCurrentYear(req: OpineRequest, res: OpineResponse){
         getStetsPerMonthForCurrentYear(req, res, 5)
+    }
+
+    //----------------------------------------
+    //-------My Stats Per Month---------------
+    //----------------------------------------
+
+    static getViewsPerDayLastThirtyDays(req: OpineRequest, res: OpineResponse){
+        getStetsPerDayLastThirtyDays(req, res, 0)
+    }
+    static getCommentsPerDayLastThirtyDays(req: OpineRequest, res: OpineResponse){
+        getStetsPerDayLastThirtyDays(req, res, 1)
+    }
+    static getLikesPerDayLastThirtyDays(req: OpineRequest, res: OpineResponse){
+        getStetsPerDayLastThirtyDays(req, res, 2)
+    }
+    static getDislikesPerDayLastThirtyDays(req: OpineRequest, res: OpineResponse){
+        getStetsPerDayLastThirtyDays(req, res, 3)
+    }
+    static getEstimatedMinutesWatchedPerDayLastThirtyDays(req: OpineRequest, res: OpineResponse){
+        getStetsPerDayLastThirtyDays(req, res, 4)
+    }
+    static getAverageViewDurationPerDayLastThirtyDays(req: OpineRequest, res: OpineResponse){
+        getStetsPerDayLastThirtyDays(req, res, 5)
     }
 
 }

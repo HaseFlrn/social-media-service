@@ -33,6 +33,9 @@ router
   .get("/dislikesInMonthForCurrentYear/:token", myStats.getDislikesInMonthForCurrentYear)
   .get("/estimatedMinutesWatchedInMonthForCurrentYear/:token", myStats.getEstimatedMinutesWatchedInMonthForCurrentYear)
   .get("/averageViewDurationInMonthForCurrentYear/:token", myStats.getAverageViewDurationInMonthForCurrentYear)
+  // Channel Stats per Day last 30 days
+  .get("/test/:token", myStats.getViewsPerDayLastThirtyDays)
+
 //.get("/PATH", (req,res) => {function})
 
 export default router;
