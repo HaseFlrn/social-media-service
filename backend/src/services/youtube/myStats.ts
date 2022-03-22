@@ -41,7 +41,13 @@ export async function getStatsInTimeRange(token:string, startDate:string, endDat
 //----------------------------------------
 async function getValueInTimeRange(req: OpineRequest, arrayIndex:number, startDate:string, endDate:string) {
     const data = await getStatsInTimeRange(req.params.token, startDate, endDate);
-    const value = data.rows[0][arrayIndex];
+    let value
+    try {
+        value = data.rows[0][arrayIndex];
+    } catch (error) {
+        console.log(error)
+    }
+    
     return value;
 }
 
@@ -71,21 +77,17 @@ async function getStetsPerMonthForCurrentYear(req: OpineRequest, res: OpineRespo
     const valuePerDay = [];
 
     for (let i = 30; i > 0; i--){
-        const currentDate1 = new Date()
-        const currentDate2 = new Date()
+        const currentDate = new Date()
 
-        currentDate1.setDate(currentDate1.getDate()-i);
-        const tempEnddate = currentDate1.getFullYear() + "-" + ('0' + (currentDate1.getMonth() + 1)).slice(-2) + "-" + ('0' + currentDate1.getDate()).slice(-2);
+        currentDate.setDate(currentDate.getDate()-i);
+        const tempStartAndEnddate = currentDate.getFullYear() + "-" + ('0' + (currentDate.getMonth() + 1)).slice(-2) + "-" + ('0' + currentDate.getDate()).slice(-2);
 
-        currentDate2.setDate(currentDate2.getDate()-i-1);
-        const tempStartdate = currentDate2.getFullYear() + "-" + ('0' + (currentDate2.getMonth() + 1)).slice(-2) + "-" + ('0' + currentDate2.getDate()).slice(-2);
+        console.log(tempStartAndEnddate)
 
-        console.log(tempStartdate)
-        console.log(tempEnddate)
-
-        valuePerDay.push(await getValueInTimeRange(req, arrayindex, tempStartdate, tempEnddate))
+        valuePerDay.push([tempStartAndEnddate, await getValueInTimeRange(req, arrayindex, tempStartAndEnddate, tempStartAndEnddate)])
         
     }
+
     res.send(valuePerDay)
 }
 

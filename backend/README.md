@@ -140,3 +140,11 @@ Url zum Aufrufen: https://localhost:3000/api/v1/myStats/
 - dislikesInMonthForCurrentYear/(token) -> Gleich wie Views nur mit Dislikes
 - estimatedMinutesWatchedInMonthForCurrentYear/(token) -> Gleich wie Views nur mit Geschätzte geschaute Minuten
 - averageViewDurationInMonthForCurrentYear/(token) -> Gleich wie Views nur mit Durchschnittliche View Duration
+<br/>
+
+- viewsPerDayLastThirtyDays/(token) -> Liefert ein Array, in welchem sich für jeden tag der letzen 30 Tage ein weiteres array befindet. index 0 ist dabei das entspechende Datum un index 1 die Anzahl der gemachten Views an dem Tag (Arrayausschnitt: [["2022-02-20",0],["2022-02-21",0], ..)
+- commentsPerDayLastThirtyDays/(token) -> Gleich wie Views nur mit Kommentaren
+- likesPerDayLastThirtyDays/(token) -> Gleich wie Views nur mit Likes
+- dislikesPerDayLastThirtyDays/(token) -> Gleich wie Views nur mit Dislikes
+- estimatedMinutesWatchedPerDayLastThirtyDays/(token) -> Gleich wie Views nur mit Geschätzte geschaute Minuten
+- averageViewDurationPerDayLastThirtyDays/(token) -> Gleich wie Views nur mit Durchschnittliche View Duration
