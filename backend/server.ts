@@ -14,8 +14,8 @@ app.use("/api/v1", Router);
 
 app.listen({
 	port: port,
-	certFile: "myCertFile.cert",
-	keyFile: "myKeyFile.key",
+	certFile: "./myCertFile.cert",
+	keyFile: "./myKeyFile.key",
 	},
  	() => console.log(`server has started on https://localhost:${port} 🚀 \napi has started on https://localhost:${port}/api/v1`),
 );
