@@ -148,3 +148,6 @@ Url zum Aufrufen: https://localhost:3000/api/v1/myStats/
 - dislikesPerDayLastThirtyDays/(token) -> Gleich wie Views nur mit Dislikes
 - estimatedMinutesWatchedPerDayLastThirtyDays/(token) -> Gleich wie Views nur mit Geschätzte geschaute Minuten
 - averageViewDurationPerDayLastThirtyDays/(token) -> Gleich wie Views nur mit Durchschnittliche View Duration
+<br/>
+
+- statsPercountry/(token) -> Liefert ein Array, in welchem sich für jedes Land ein weiteres Array befindet. Index 0 ist dabei das entspechende Land, Index 1: views, Index 2: estimatedMinutesWatched, Index 3: averageViewDuration, Index 4: averageViewPercentage, Index 5: subscribersGained   (Arrayausschnitt: [["DE",11,3,16,109.35,0]]) 

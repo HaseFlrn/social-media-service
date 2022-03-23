@@ -40,6 +40,8 @@ router
   .get("/dislikesPerDayLastThirtyDays/:token", myStats.getDislikesPerDayLastThirtyDays)
   .get("/estimatedMinutesWatchedPerDayLastThirtyDays/:token", myStats.getEstimatedMinutesWatchedPerDayLastThirtyDays)
   .get("/averageViewDurationPerDayLastThirtyDays/:token", myStats.getAverageViewDurationPerDayLastThirtyDays)
+  // Channel Stats per Country
+  .get("/statsPercountry/:token", myStats.getStatsPercountry)
 //.get("/PATH", (req,res) => {function})
 
 export default router;
