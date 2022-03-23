@@ -11,11 +11,14 @@ if(Number.isNaN(port)){
 
 app.use("/api/v1", Router);
 
+const certFile = "myCertFile.cert";
+const keyFile = "myKeyFile.key";
+
 
 app.listen({
 	port: port,
-	certFile: "./myCertFile.cert",
-	keyFile: "./myKeyFile.key",
+	certFile: certFile!,
+	keyFile: keyFile!,
 	},
  	() => console.log(`server has started on https://localhost:${port} 🚀 \napi has started on https://localhost:${port}/api/v1`),
 );
