@@ -142,7 +142,7 @@ Url zum Aufrufen: https://localhost:3000/api/v1/myStats/
 - averageViewDurationInMonthForCurrentYear/(token) -> Gleich wie Views nur mit Durchschnittliche View Duration
 <br/>
 
-- viewsPerDayLastThirtyDays/(token) -> Liefert ein Array, in welchem sich für jeden tag der letzen 30 Tage ein weiteres array befindet. index 0 ist dabei das entspechende Datum un index 1 die Anzahl der gemachten Views an dem Tag (Arrayausschnitt: [["2022-02-20",0],["2022-02-21",0], ..)
+- viewsPerDayLastThirtyDays/(token) -> Liefert ein Array, in welchem sich für jeden tag der letzen 30 Tage ein weiteres array befindet. index 0 ist dabei das entspechende Datum un index 1 die Anzahl der gemachten Views an dem Tag (Arrayausschnitt: [["2022-02-20",0],["2022-02-21",0], ..) Wichtig: Die letzten zwei Tage sind null, dort liefert die Api kein Ergebnis
 - commentsPerDayLastThirtyDays/(token) -> Gleich wie Views nur mit Kommentaren
 - likesPerDayLastThirtyDays/(token) -> Gleich wie Views nur mit Likes
 - dislikesPerDayLastThirtyDays/(token) -> Gleich wie Views nur mit Dislikes
