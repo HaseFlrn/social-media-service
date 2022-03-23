@@ -1,0 +1,50 @@
+[
+    {
+        "startdate": "01-01",
+        "enddate": "01-31"    
+    },
+    {
+        "startdate": "02-01",
+        "enddate": "02-28"    
+    },
+    {
+        "startdate": "03-01",
+        "enddate": "03-31"    
+    },
+    {
+        "startdate": "04-01",
+        "enddate": "04-30"    
+    },
+    {
+        "startdate": "05-01",
+        "enddate": "05-31"    
+    },
+    {
+        "startdate": "06-01",
+        "enddate": "06-30"    
+    },
+    {
+        "startdate": "07-01",
+        "enddate": "07-31"    
+    },
+    {
+        "startdate": "08-01",
+        "enddate": "08-31"    
+    },
+    {
+        "startdate": "09-01",
+        "enddate": "09-30"    
+    },
+    {
+        "startdate": "10-01",
+        "enddate": "10-31"    
+    },
+    {
+        "startdate": "11-01",
+        "enddate": "11-30"
+    },
+    {
+        "startdate": "12-01",
+        "enddate": "12-31"    
+    }
+]

@@ -58,6 +58,23 @@ Rückgabe: Activity Liste
 
 <img src="code.png" alt="example response" style="width:400px;"/>
 
+### [Youtube Search API](https://developers.google.com/youtube/v3/docs/search/list)
+- Basis URL: https://www.googleapis.com/youtube/v3/search
+- Queries:
+    - Required:
+        - access_token={OAuth Token}
+    - Optional:
+        - part=snippet --> Genauere Angaben zu den Videos
+        - forMine=true --> zeigt nur Videos vom authentifizierten User
+        - channelId={channelId} --> Nur videos von bestimmten Channel werden angezeigt
+        - type={video,...} --> Nur anzeige dieses Uploadtypes
+
+### Youtube Report API
+
+### Youtube Channel API
+
+### Youtube Subscriptions API
+
 ## Scripts
 
 Alle Scripts aus /backend starten!
@@ -117,9 +134,17 @@ Url zum Aufrufen: https://localhost:3000/api/v1/myStats/
 - playlistVideoQuantity/(token)/(playlistId) -> Anzahl an Videos in der gewählten Playlist
 <br/>
 
-- viewsInTimeRange/(token)/(startDate)/(endDate) -> Liefert die Anzahl der gemachten Views im angegebenen Zeitraum (Datumsformat: JJJJ-MM-DD)
-- commentsInTimeRange/(token)/(startDate)/(endDate) -> Anzahl neue Kommentare im Zeitraum
-- likesInTimeRange/(token)/(startDate)/(endDate) -> Anzahl neue Likes im Zeitraum
-- dislikesInTimeRanges/(token)/(startDate)/(endDate) -> Anzahl neue Dislikes im Zeitraum
-- estimatedMinutesWatchedInTimeRange/(token)/(startDate)/(endDate) -> Geschätzte geschaute Minuten im Zeitraum
-- averageViewDurationInTimeRange/(token)/(startDate)/(endDate) -> Durchschnittliche View Duration im Zeitraum
+- viewsInMonthForCurrentYear/(token) -> Liefert ein Array mit der Anzahl der gemachten Views des jeweiligen Monats. Index 0 ist Januar, usw. Das Array endet im aktuellen Monat und gibt die Views bis zum aktuellen Datum an
+- commentsInMonthForCurrentYear/(token) -> Gleich wie Views nur mit Kommentaren
+- likesInMonthForCurrentYear/(token) -> Gleich wie Views nur mit Likes
+- dislikesInMonthForCurrentYear/(token) -> Gleich wie Views nur mit Dislikes
+- estimatedMinutesWatchedInMonthForCurrentYear/(token) -> Gleich wie Views nur mit Geschätzte geschaute Minuten
+- averageViewDurationInMonthForCurrentYear/(token) -> Gleich wie Views nur mit Durchschnittliche View Duration
+<br/>
+
+- viewsPerDayLastThirtyDays/(token) -> Liefert ein Array, in welchem sich für jeden tag der letzen 30 Tage ein weiteres array befindet. index 0 ist dabei das entspechende Datum un index 1 die Anzahl der gemachten Views an dem Tag (Arrayausschnitt: [["2022-02-20",0],["2022-02-21",0], ..)
+- commentsPerDayLastThirtyDays/(token) -> Gleich wie Views nur mit Kommentaren
+- likesPerDayLastThirtyDays/(token) -> Gleich wie Views nur mit Likes
+- dislikesPerDayLastThirtyDays/(token) -> Gleich wie Views nur mit Dislikes
+- estimatedMinutesWatchedPerDayLastThirtyDays/(token) -> Gleich wie Views nur mit Geschätzte geschaute Minuten
+- averageViewDurationPerDayLastThirtyDays/(token) -> Gleich wie Views nur mit Durchschnittliche View Duration
