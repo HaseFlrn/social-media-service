@@ -1,0 +1,19 @@
+root@localhost:~/social-media-service/backend# error: TS2345 [ERROR]: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+          await server.listenAndServeTls(options.certFile, options.keyFile);
+                                         ~~~~~~~~~~~~~~~~
+    at https://deno.land/x/opine@2.1.1/src/application.ts:586:42
+
+Wegen:
+
+const certFile = "myCertFile.cert";
+const keyFile = "myKeyFile.key";
+
+
+app.listen({
+	port: port,
+	certFile: certFile!,
+	keyFile: keyFile!,
+	},
+	() => console.log(`server has started on https://localhost:${port} 🚀 \napi has started on https://localhost:${port}/api/v1`),
+);

@@ -20,5 +20,5 @@ app.listen({
 	certFile: certFile!,
 	keyFile: keyFile!,
 	},
- 	() => console.log(`server has started on https://localhost:${port} 🚀 \napi has started on https://localhost:${port}/api/v1`),
+	() => console.log(`server has started on https://localhost:${port} 🚀 \napi has started on https://localhost:${port}/api/v1`),
 );
