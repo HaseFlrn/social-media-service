@@ -279,7 +279,6 @@ export default class myStats{
     //----------------------------------------
     //--------Stats per country---------------
     //----------------------------------------
-
     static async getUploadedVideosPerMonth({params, response}: {params: {token: string}, response: any}){
         const currentYear = (new Date()).getFullYear()
         const valuePerMonth: number[] = [0,0,0,0,0,0,0,0,0,0,0,0];
