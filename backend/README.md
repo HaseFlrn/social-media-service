@@ -113,7 +113,7 @@ Alle Scripts aus /backend starten!
 Folgend sind die verschiedenen Namen für die Url mit den entsprechenden Paramentern aufgelistet. Die Funktionen haben entsprechend den gleichen Namen nur mit "get" davor.
 
 ### General.ts:
-Url zum Aufrufen: https://localhost:3000/api/v1/general/(Name der folgenden Funktion)/(Parameter den die Funktion braucht)
+Url zum Aufrufen: https://170.187.186.86:3000/api/v1/general/(Name der folgenden Funktion)/(Parameter den die Funktion braucht)
 </br>
 
 - getChannelInformations/(token) holt sich die alle Channel Informationen des eigenen Channels. Alle weiteren Methoden rufen diese auf und filtern einzelne Daten aus der JSON raus und geben diese zurück
@@ -122,7 +122,7 @@ Url zum Aufrufen: https://localhost:3000/api/v1/general/(Name der folgenden Funk
 - getChannelPublishedAt/(token) gibt das Datum zurück, an dem der Cahnnel ertellt wurde
 
 ### myStats.ts:
-Url zum Aufrufen: https://localhost:3000/api/v1/myStats/
+Url zum Aufrufen: https://170.187.186.86:3000/api/v1/myStats/
 
 - videoQuantity/(token) -> Gesamtanzahl an Videos auf eigenem Channel 
 - subscriberQuantity/(token) -> Gesamtanzahl an Subscribern 
@@ -164,7 +164,7 @@ Url zum Aufrufen: https://localhost:3000/api/v1/myStats/
 - averageViewDurationPerDayLastThirtyDays/(token) -> Gleich wie Views nur mit Durchschnittliche View Duration
 <br/>
 
-- statsPercountry/(token) -> Liefert ein Array, in welchem sich für jedes Land ein weiteres Array befindet. Index 0 ist dabei das entspechende Land, Index 1: views, Index 2: estimatedMinutesWatched, Index 3: averageViewDuration, Index 4: averageViewPercentage, Index 5: subscribersGained   (Arrayausschnitt: [["DE",11,3,16,109.35,0]]) 
+- statsPercountry/(token) -> Liefert ein Array, in welchem sich für jedes Land ein weiteres Array befindet. Index 0 ist dabei das entspechende Land, Index 1: views, Index 2: estimatedMinutesWatched, Index 3: averageViewDuration, Index 4: averageViewPercentage, Index 5: subscribersGained (Arrayausschnitt: [["DE",11,3,16,109.35,0]]) 
 <br/>
 
 - uploadedVideosPerMonth/(token) -> Liefert ein Array, in welchem sich für jeden Monat des aktuellen Jahrs die Anzahl an hochgeladenen Videos befindet 
