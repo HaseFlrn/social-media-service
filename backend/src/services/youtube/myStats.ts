@@ -382,39 +382,44 @@ export default class myStats{
             const currentYear = (new Date()).getFullYear()
             const videoCountPerMonth: number[] = [0,0,0,0,0,0,0,0,0,0,0,0];
 
-            const countryResponse = await fetch(`${myStats.videosUrl}?part=snippet%2CcontentDetails&maxResults=1000&mine=true&access_token=${res.token}`);
-            const data = await countryResponse.json();
+            const response = await fetch(`${myStats.videosUrl}?part=snippet%2CcontentDetails&maxResults=1000&mine=true&access_token=${res.token}`);
+            const data = await response.json();
             
-            for (let i = 0; i < data.items.length; i++) {
-                //get publishedAt from Video
-                const publishedAt = data.items[i].snippet.publishedAt
-        
-                //check in with month the video has been published and ++ array
-                for (let j = 1; j < 13; j++) {
-                    const startsWith = currentYear + "-" + ('0' + (j)).slice(-2)
-                    if (publishedAt.startsWith(startsWith)){
-                        videoCountPerMonth[j - 1] = videoCountPerMonth[j - 1] + 1;
-                    }
-                }        
-            }
+            if(data.items){
+                for (let i = 0; i < data.items.length; i++) {
+                    //get publishedAt from Video
+                    const publishedAt = data.items[i].snippet.publishedAt
+            
+                    //check in with month the video has been published and ++ array
+                    for (let j = 1; j < 13; j++) {
+                        const startsWith = currentYear + "-" + ('0' + (j)).slice(-2)
+                        if (publishedAt.startsWith(startsWith)){
+                            videoCountPerMonth[j - 1] = videoCountPerMonth[j - 1] + 1;
+                        }
+                    }        
+                }
 
-            const finalResult = { 
-                January: videoCountPerMonth[0],
-                February: videoCountPerMonth[1],
-                March: videoCountPerMonth[2],
-                April: videoCountPerMonth[3],
-                May: videoCountPerMonth[4],
-                June: videoCountPerMonth[5],
-                July: videoCountPerMonth[6],
-                August: videoCountPerMonth[7],
-                September: videoCountPerMonth[8],
-                October: videoCountPerMonth[9],
-                November: videoCountPerMonth[10],
-                December: videoCountPerMonth[11]
-            };
-                
-        res.status = 200;
-        res.body = {data: finalResult};
+                const returnData = { 
+                    january: videoCountPerMonth[0],
+                    february: videoCountPerMonth[1],
+                    march: videoCountPerMonth[2],
+                    april: videoCountPerMonth[3],
+                    may: videoCountPerMonth[4],
+                    june: videoCountPerMonth[5],
+                    july: videoCountPerMonth[6],
+                    august: videoCountPerMonth[7],
+                    september: videoCountPerMonth[8],
+                    october: videoCountPerMonth[9],
+                    november: videoCountPerMonth[10],
+                    december: videoCountPerMonth[11]
+                };
+                    
+                res.status = 200;
+                res.body = {data: returnData};
+            }else{
+                res.status = 200;
+                res.body = [];
+            }
         } catch (err) {
           console.log(err);
           res.status = 502;
