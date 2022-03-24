@@ -1,4 +1,4 @@
-import { Router } from "../../../deps.ts";
+import { Router, config } from "../../../deps.ts";
 import OAuth2Client from "../connections/YoutubeClient.ts";
 import GeneralRouter from "./generalRouter.ts";
 import StatsRouter from "./myStatsRouter.ts";
@@ -7,6 +7,7 @@ import StatsRouter from "./myStatsRouter.ts";
 
 const router = new Router();
 
+const { FRONTEND_URL } = config();
 
 router
   .get("/", ({response}) => {
@@ -19,7 +20,7 @@ router
   })
   .get("/auth/callback", async ({request, response}) => {
     const tokens = await OAuth2Client.code.getToken(request.url);
-    response.redirect(`${Deno.env.get("FRONTEND_URL")}youtube?token=${tokens.accessToken}`);
+    response.redirect(`${FRONTEND_URL}?token=${tokens.accessToken}`);
   });
  router.use("/general", GeneralRouter.routes(), GeneralRouter.allowedMethods());
  router.use("/myStats", StatsRouter.routes(), StatsRouter.allowedMethods());
