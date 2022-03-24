@@ -40,9 +40,7 @@ export async function getStatsInTimeRange({params, response}: {params: {token: s
         const res = await response.json();
     return res; 
     } catch (error) {
-        console.log("an error occurreddd\n" + error);
-        response.status = 500;
-        response.body = {msg: error.toString()};
+        console.log(error);
     }
 
 }
@@ -83,9 +81,7 @@ async function getStetsPerMonthForCurrentYear({params, response}: {params: {toke
     
         response.body = {data: valuePerMonth}
     } catch (error) {
-        console.log("an error occurreddd\n" + error);
-        //response.status = 500;
-        response.body = {msg: error.toString()};
+        console.log(error);
     }
 
 }
