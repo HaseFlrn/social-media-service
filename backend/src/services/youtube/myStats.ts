@@ -84,7 +84,7 @@ async function getStetsPerMonthForCurrentYear({params, response}: {params: {toke
         response.body = {data: valuePerMonth}
     } catch (error) {
         console.log("an error occurreddd\n" + error);
-        response.status = 500;
+        //response.status = 500;
         response.body = {msg: error.toString()};
     }
 
