@@ -8,16 +8,13 @@ router
   .get("/", ({response}: {response: any}) => {
     response.body = "This is myStatsRouter.ts";
   })
-  //Get Channel Quantities
+  // Channel Quantities
   .get("/channelStats/:token", myStats.getChannelStats)
   //Get Video ID's
   .get("/latestVideo/:token", myStats.getLatestVideo)
   .get("/allVideos/:token", myStats.getAllVideos)
-  // Get Video Stats
-  .get("/videoViewsQuantity/:token/:videoId", myStats.getVideoViewsQuantity)
-  .get("/videoLikesQuantity/:token/:videoId", myStats.getVideoLikesQuantity)
-  .get("/videoDislikesQuantity/:token/:videoId", myStats.getVideoDislikesQuantity)
-  .get("/videoCommentQuantity/:token/:videoId", myStats.getVideoCommentQuantity)
+  // Video Stats
+  .get("/videoStats/:token/:videoId", myStats.getVideoStats)
   //Get Playlist ID's
   .get("/allPlaylists/:token", myStats.getAllPlaylists)
   //Get Playlist Stats

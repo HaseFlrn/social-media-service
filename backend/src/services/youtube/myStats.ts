@@ -119,7 +119,8 @@ export default class myStats{
     //?part=snippet%2CcontentDetails%2Cstatistics&mine=true&access_token=${params.token}`
     static videosUrl = `https://youtube.googleapis.com/youtube/v3/activities`
     //?part=snippet%2CcontentDetails&maxResults=25&mine=true&access_token=${params.token}`
-    //static VideoStatisticsUrl = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${params.videoId}&access_token=${params.token}`
+    static VideoStatisticsUrl = `https://youtube.googleapis.com/youtube/v3/videos`
+    //?part=snippet%2CcontentDetails%2Cstatistics&id=${params.videoId}&access_token=${params.token}`
     static playlistsUrl = `https://youtube.googleapis.com/youtube/v3/playlists`
     //?part=snippet%2CcontentDetails&mine=true&access_token=${params.token}`
     //static playlistStatisticsUrl = `https://youtube.googleapis.com/youtube/v3/playlists?part=snippet%2CcontentDetails&id=${params.playlistId}&access_token=${params.token}`
@@ -161,6 +162,40 @@ export default class myStats{
       }
 
     //----------------------------------------
+    //----------Video Stats-----------------
+    //----------------------------------------
+
+    // deno-lint-ignore no-explicit-any
+    static async getVideoStats(ctx: any) {
+        // 
+        const req = helpers.getQuery(ctx, { mergeParams: true });
+        const res = ctx.response;
+        if(!req.token) {
+          res.status = 401
+          res.body = { err: 'Unauthorized: token missing' }
+        }
+
+        try{
+            const countryResponse = await fetch(`${myStats.VideoStatisticsUrl}?part=snippet%2CcontentDetails%2Cstatistics&id=${res.videoId}&access_token=${res.token}`);
+            const data = await countryResponse.json();
+            
+            const finalResult= { 
+                viewCount: data.items[0].statistics.viewCount,
+                likeCount: data.items[0].statistics.likeCount,
+                dislikeCount: data.items[0].statistics.dislikeCount,
+                commentCount: data.items[0].statistics.commentCount
+            };
+                
+        res.status = 200;
+        res.body = finalResult;
+        } catch (err) {
+          console.log(err);
+          res.status = 502;
+          res.body = { err: '502: Bad Gateway'}
+        }
+      }  
+
+    //----------------------------------------
     //----------Video Stats-------------------
     //----------------------------------------
 
@@ -187,31 +222,6 @@ export default class myStats{
         response.body = {data: videos};
     }
 
-    //Video Stats
-    // deno-lint-ignore no-explicit-any
-    static async getVideoViewsQuantity({params, response}: {params: {token: string, videoId: string}, response: any}) {
-        const data = await runRequest(params, "VideoStatistics");
-        const videoViews = data.items[0].statistics.viewCount;
-        response.body = {data: videoViews};
-    }
-    // deno-lint-ignore no-explicit-any
-    static async getVideoLikesQuantity({params, response}: {params: {token: string, videoId: string}, response: any}) {
-        const data = await runRequest(params, "VideoStatistics");
-        const videoLikes = data.items[0].statistics.likeCount;
-        response.body = {data: videoLikes};
-    }
-    // deno-lint-ignore no-explicit-any
-    static async getVideoDislikesQuantity({params, response}: {params: {token: string, videoId: string}, response: any}) {
-        const data = await runRequest(params, "VideoStatistics");
-        const videoDislikes = data.items[0].statistics.dislikeCount;
-        response.body = {data: videoDislikes};
-    }
-    // deno-lint-ignore no-explicit-any
-    static async getVideoCommentQuantity({params, response}: {params: {token: string, videoId: string}, response: any}) {
-        const data = await runRequest(params, "VideoStatistics");
-        const videoComments = data.items[0].statistics.commentCount;
-        response.body = {data: videoComments};
-    }
 
     //----------------------------------------
     //----------Playlist Stats-------------------
