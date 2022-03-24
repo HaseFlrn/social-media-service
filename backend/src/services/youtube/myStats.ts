@@ -308,40 +308,67 @@ export default class myStats{
 
 
     //----------------------------------------
+    //-----Uploaded Videos per Month----------
+    //----------------------------------------
+
+    // deno-lint-ignore no-explicit-any
+    static async getUploadedVideosPerMonth(ctx: any) {
+        // 
+        const req = helpers.getQuery(ctx, { mergeParams: true });
+        const res = ctx.response;
+        if(!req.token) {
+          res.status = 401
+          res.body = { err: 'Unauthorized: token missing' }
+        }
+
+        try{
+            const currentYear = (new Date()).getFullYear()
+            const videoCountPerMonth: number[] = [0,0,0,0,0,0,0,0,0,0,0,0];
+
+            const countryResponse = await fetch(`${myStats.videosUrl}?part=snippet%2CcontentDetails&maxResults=1000&mine=true&access_token=${res.token}`);
+            const data = await countryResponse.json();
+            
+            for (let i = 0; i < data.items.length; i++) {
+                //get publishedAt from Video
+                const publishedAt = data.items[i].snippet.publishedAt
+        
+                //check in with month the video has been published and ++ array
+                for (let j = 1; j < 13; j++) {
+                    const startsWith = currentYear + "-" + ('0' + (j)).slice(-2)
+                    if (publishedAt.startsWith(startsWith)){
+                        videoCountPerMonth[j - 1] = videoCountPerMonth[j - 1] + 1;
+                    }
+                }        
+            }
+
+            const finalResult= { 
+                January: videoCountPerMonth[0],
+                February: videoCountPerMonth[1],
+                March: videoCountPerMonth[2],
+                April: videoCountPerMonth[3],
+                May: videoCountPerMonth[4],
+                June: videoCountPerMonth[5],
+                July: videoCountPerMonth[6],
+                August: videoCountPerMonth[7],
+                September: videoCountPerMonth[8],
+                October: videoCountPerMonth[9],
+                November: videoCountPerMonth[10],
+                December: videoCountPerMonth[11]
+            };
+                
+        res.status = 200;
+        res.body = finalResult;
+        } catch (err) {
+          console.log(err);
+          res.status = 502;
+          res.body = { err: '502: Bad Gateway'}
+        }
+      }
+
+    //----------------------------------------
     //--------Stats per country---------------
     //----------------------------------------
-    static async getUploadedVideosPerMonth({params, response}: {params: {token: string}, response: any}){
-        const currentYear = (new Date()).getFullYear()
-        const valuePerMonth: number[] = [0,0,0,0,0,0,0,0,0,0,0,0];
     
-        //get all videos
-        const data = await runRequest(params, "Videos");
-        for (let i = 0; i < data.items.length; i++) {
-            //get publishedAt from Video
-            const publishedAt = data.items[i].snippet.publishedAt
-    
-            //check in with month the video has been published and ++ array
-            for (let j = 1; j < 13; j++) {
-                const startsWith = currentYear + "-" + ('0' + (j)).slice(-2)
-
-                if (publishedAt.startsWith(startsWith)){
-                    valuePerMonth[j - 1] = valuePerMonth[j - 1] + 1;
-                }
-            }        
-        }
-        response.body = {data: valuePerMonth};
-    }
-    /*
-    // deno-lint-ignore no-explicit-any
-    static async getStatsPercountry({params, response}: {params: {token: string}, response: any}){
-        const data = await runRequest(params, "Country");
-        const countryStats = data.rows;
-        response.body = {data: countryStats};
-    }
-    */
-
-
-    /*
     // deno-lint-ignore no-explicit-any
     static async getStatsPerCountry(ctx: any) {
         // 
@@ -373,7 +400,7 @@ export default class myStats{
                     estimatedMinutesWatched: data.rows[i][2],
                     averageViewDuration: data.rows[i][3],
                     averageViewPercentage: data.rows[i][4],
-                    subscribersGained : data.rows[i][5],
+                    subscribersGained : data.rows[i][5]
                 }
                 finalResult.countryStats.push(tempCountryStats);       
             } 
@@ -386,10 +413,9 @@ export default class myStats{
           res.body = { err: '502: Bad Gateway'}
         }
       }
-*/
       
 }
-/*
+
 export interface ICountryStats {
     country: string,
     views: number,
@@ -398,4 +424,3 @@ export interface ICountryStats {
     averageViewPercentage: number,
     subscribersGained : number,
   }
-*/
