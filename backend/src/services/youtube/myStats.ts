@@ -345,55 +345,31 @@ export default class myStats{
     //----------------------------------------
 
 
-        // deno-lint-ignore no-explicit-any
-        static async getChannelStatsPerMonth(ctx: any) {
-            // 
-            const req = helpers.getQuery(ctx, { mergeParams: true });
-            const res = ctx.response;
-            if(!req.playlistId) {
-                res.status = 400;
-                res.body = { err: "Bad Request: channelId missing" };
-            }
-            if(!req.token) {
-                res.status = 401;
-                res.body = { err: 'Unauthorized: token missing' };
-            }
+    // deno-lint-ignore no-explicit-any
+    static async getChannelStatsPerMonth(ctx: any) {
+        // 
+        const req = helpers.getQuery(ctx, { mergeParams: true });
+        const res = ctx.response;
+        if(!req.token) {
+            res.status = 401;
+            res.body = { err: 'Unauthorized: token missing' };
+        }
     
-            try{
-                
-                const currentYear = (new Date()).getFullYear()
-                //starts with 0
-                const currentMonth = (new Date()).getMonth()
-                const currentDay = (new Date()).getDate()
-                
-                const valuePerMonth = [{},{},{},{},{},{},{},{},{},{},{},{}]
-                
+        try{
+            
+            const currentYear = (new Date()).getFullYear()
+            //starts with 0
+            const currentMonth = (new Date()).getMonth()
+            const currentDay = (new Date()).getDate()
+            
+            const valuePerMonth = [{},{},{},{},{},{},{},{},{},{},{},{}]
+            
 
-                for (let i = 0; i < currentMonth; i++) {
-                    const tempStartDate = currentYear + "-" + startAndenddateForEveryMonth[i].startdate
-                    const tempEndDate = currentYear + "-" + startAndenddateForEveryMonth[i].enddate
+            for (let i = 0; i < currentMonth; i++) {
+                const tempStartDate = currentYear + "-" + startAndenddateForEveryMonth[i].startdate
+                const tempEndDate = currentYear + "-" + startAndenddateForEveryMonth[i].enddate
 
-                    const response = await fetch(`${myStats.reportsUrl}?endDate=${tempEndDate}&ids=channel%3D%3DMINE&metrics=views%2Ccomments%2Clikes%2Cdislikes%2CestimatedMinutesWatched%2CaverageViewDuration&startDate=${tempStartDate}&access_token=${req.token}`);
-                    const data = await response.json();
-
-                    if(data.rows[0]){
-                        const oneMonthStats= { 
-                            views: data.rows[0][0],
-                            comments: data.rows[0][1],
-                            likes: data.rows[0][2],
-                            dislikes: data.rows[0][3],
-                            estimatedMinutesWatched: data.rows[0][4],
-                            averageViewDuration: data.rows[0][5]
-                        };
-                        valuePerMonth[i] = oneMonthStats;
-                    }
-
-                    
-                }
-                const startDateCurrentMonth = currentYear + "-" + startAndenddateForEveryMonth[currentMonth].startdate
-                const endDateCurrentMonth = currentYear + "-" + (('0' + (currentMonth + 1)).slice(-2)) + "-" + currentDay
-
-                const response = await fetch(`${myStats.reportsUrl}?endDate=${endDateCurrentMonth}&ids=channel%3D%3DMINE&metrics=views%2Ccomments%2Clikes%2Cdislikes%2CestimatedMinutesWatched%2CaverageViewDuration&startDate=${startDateCurrentMonth}&access_token=${req.token}`);
+                const response = await fetch(`${myStats.reportsUrl}?endDate=${tempEndDate}&ids=channel%3D%3DMINE&metrics=views%2Ccomments%2Clikes%2Cdislikes%2CestimatedMinutesWatched%2CaverageViewDuration&startDate=${tempStartDate}&access_token=${req.token}`);
                 const data = await response.json();
 
                 if(data.rows[0]){
@@ -405,32 +381,52 @@ export default class myStats{
                         estimatedMinutesWatched: data.rows[0][4],
                         averageViewDuration: data.rows[0][5]
                     };
-                    valuePerMonth[currentMonth] = oneMonthStats;
+                    valuePerMonth[i] = oneMonthStats;
                 }
-                    
-            
-                const finalResult = { 
-                    january: valuePerMonth[0],
-                    february: valuePerMonth[1],
-                    march: valuePerMonth[2],
-                    april: valuePerMonth[3],
-                    may: valuePerMonth[4],
-                    june: valuePerMonth[5],
-                    july: valuePerMonth[6],
-                    august: valuePerMonth[7],
-                    september: valuePerMonth[8],
-                    october: valuePerMonth[9],
-                    november: valuePerMonth[10],
-                    december: valuePerMonth[11]
-                };
 
-                res.status = 200;
-                res.body = finalResult;
-            } catch (err) {
-              console.log(err);
-              res.status = 502;
-              res.body = { err: '502: Bad Gateway'}
+                
             }
+            const startDateCurrentMonth = currentYear + "-" + startAndenddateForEveryMonth[currentMonth].startdate
+            const endDateCurrentMonth = currentYear + "-" + (('0' + (currentMonth + 1)).slice(-2)) + "-" + currentDay
+
+            const response = await fetch(`${myStats.reportsUrl}?endDate=${endDateCurrentMonth}&ids=channel%3D%3DMINE&metrics=views%2Ccomments%2Clikes%2Cdislikes%2CestimatedMinutesWatched%2CaverageViewDuration&startDate=${startDateCurrentMonth}&access_token=${req.token}`);
+            const data = await response.json();
+
+            if(data.rows[0]){
+                const oneMonthStats= { 
+                    views: data.rows[0][0],
+                    comments: data.rows[0][1],
+                    likes: data.rows[0][2],
+                    dislikes: data.rows[0][3],
+                    estimatedMinutesWatched: data.rows[0][4],
+                    averageViewDuration: data.rows[0][5]
+                };
+                valuePerMonth[currentMonth] = oneMonthStats;
+            }
+                
+        
+            const finalResult = { 
+                january: valuePerMonth[0],
+                february: valuePerMonth[1],
+                march: valuePerMonth[2],
+                april: valuePerMonth[3],
+                may: valuePerMonth[4],
+                june: valuePerMonth[5],
+                july: valuePerMonth[6],
+                august: valuePerMonth[7],
+                september: valuePerMonth[8],
+                october: valuePerMonth[9],
+                november: valuePerMonth[10],
+                december: valuePerMonth[11]
+            };
+
+            res.status = 200;
+            res.body = finalResult;
+        } catch (err) {
+            console.log(err);
+            res.status = 502;
+            res.body = { err: '502: Bad Gateway'}
+        }
         } 
 // deno-lint-ignore no-explicit-any 
     static getViewsInMonthForCurrentYear({params, response}: {params: {token: string}, response: any}){
