@@ -48,6 +48,7 @@ export async function getStatsInTimeRange({params, response}: {params: {token: s
 //----------------------------------------
 //----My Stats In Time Range--------------
 //----------------------------------------
+/*
 // deno-lint-ignore no-explicit-any
 async function getValueInTimeRange({params, response}: {params: {token: string}, response: any}, arrayIndex:number, startDate:string, endDate:string) {
     const data = await getStatsInTimeRange({params, response}, startDate, endDate);
@@ -59,7 +60,7 @@ async function getValueInTimeRange({params, response}: {params: {token: string},
         console.log(error);
     }   
 }
-/*
+
 // deno-lint-ignore no-explicit-any
 async function getStetsPerMonthForCurrentYear({params, response}: {params: {token: string}, response: any}, arrayindex:number) {
 
@@ -88,7 +89,7 @@ async function getStetsPerMonthForCurrentYear({params, response}: {params: {toke
     }
 
 }
-*/
+
 // deno-lint-ignore no-explicit-any
  async function getStetsPerDayLastThirtyDays({params, response}: {params: {token: string}, response: any}, arrayindex:number) {
 
@@ -108,7 +109,7 @@ async function getStetsPerMonthForCurrentYear({params, response}: {params: {toke
 
     response.body = {data: valuePerDay}
 }
-
+*/
 
 export default class myStats{
     //----------------------------------------
@@ -266,27 +267,27 @@ export default class myStats{
 
     // deno-lint-ignore no-explicit-any
     static getViewsPerDayLastThirtyDays({params, response}: {params: {token: string}, response: any}){
-        getStetsPerDayLastThirtyDays({params, response}, 0)
+        //getStetsPerDayLastThirtyDays({params, response}, 0)
     }
     // deno-lint-ignore no-explicit-any
     static getCommentsPerDayLastThirtyDays({params, response}: {params: {token: string}, response: any}){
-        getStetsPerDayLastThirtyDays({params, response}, 1)
+        //getStetsPerDayLastThirtyDays({params, response}, 1)
     }
     // deno-lint-ignore no-explicit-any
     static getLikesPerDayLastThirtyDays({params, response}: {params: {token: string}, response: any}){
-        getStetsPerDayLastThirtyDays({params, response}, 2)
+        //getStetsPerDayLastThirtyDays({params, response}, 2)
     }
     // deno-lint-ignore no-explicit-any
     static getDislikesPerDayLastThirtyDays({params, response}: {params: {token: string}, response: any}){
-        getStetsPerDayLastThirtyDays({params, response}, 3)
+        //getStetsPerDayLastThirtyDays({params, response}, 3)
     }
     // deno-lint-ignore no-explicit-any
     static getEstimatedMinutesWatchedPerDayLastThirtyDays({params, response}: {params: {token: string}, response: any}){
-        getStetsPerDayLastThirtyDays({params, response}, 4)
+        //getStetsPerDayLastThirtyDays({params, response}, 4)
     }
     // deno-lint-ignore no-explicit-any
     static getAverageViewDurationPerDayLastThirtyDays({params, response}: {params: {token: string}, response: any}){
-        getStetsPerDayLastThirtyDays({params, response}, 5)
+        //getStetsPerDayLastThirtyDays({params, response}, 5)
     }
 
 
