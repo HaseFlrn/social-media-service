@@ -382,6 +382,9 @@ export default class myStats{
             const currentYear = (new Date()).getFullYear()
             const videoCountPerMonth: number[] = [0,0,0,0,0,0,0,0,0,0,0,0];
 
+            const url = `${myStats.videosUrl}?part=snippet%2CcontentDetails&maxResults=1000&mine=true&access_token=${res.token}`
+            console.log(url)
+
             const response = await fetch(`${myStats.videosUrl}?part=snippet%2CcontentDetails&maxResults=1000&mine=true&access_token=${res.token}`);
             const data = await response.json();
             
@@ -418,7 +421,7 @@ export default class myStats{
                 res.body = {data: returnData};
             }else{
                 res.status = 200;
-                res.body = {data: data.items[0].id};
+                res.body = [];
             }
         } catch (err) {
           console.log(err);
