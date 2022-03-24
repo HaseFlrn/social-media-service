@@ -3,7 +3,7 @@ import OAuth2Client from "../connections/YoutubeClient.ts";
 import GeneralRouter from "./generalRouter.ts";
 import StatsRouter from "./myStatsRouter.ts";
 // import TrendsRouter from "./trendsRouter.ts";
-// import SubsRouter from "./subscriptionRouter.ts";
+ import SubsRouter from "./subscriptionRouter.ts";
 
 const router = new Router();
 
@@ -24,6 +24,6 @@ router
  router.use("/general", GeneralRouter.routes(), GeneralRouter.allowedMethods());
  router.use("/myStats", StatsRouter.routes(), StatsRouter.allowedMethods());
 // router.use("/trends", TrendsRouter.routes(), TrendsRouter.allowedMethods());
-// router.use("/mySubs", SubsRouter.routes(), SubsRouter.allowedMethods());
+ router.use("/mySubs", SubsRouter.routes(), SubsRouter.allowedMethods());
 
 export default router;

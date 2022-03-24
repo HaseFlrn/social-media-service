@@ -1,15 +1,15 @@
-import { OpineResponse, OpineRequest } from "https://deno.land/x/opine@2.1.1/mod.ts";
-
+import { helpers } from "../../../deps.ts"
 
 export default class subController {
   //---------------------------------------------------
   //------------general for Subscribers----------------
   //---------------------------------------------------
 
-  static async getAllSubscriptions(req: OpineRequest, res: OpineResponse) {
+  // deno-lint-ignore no-explicit-any
+  static async getAllSubscriptions({params, response}: {params: {token: string}, response: any}) {
     //returns all channels, that the current Channels subscribes
     try{
-      const url = `https://www.googleapis.com/youtube/v3/subscriptions?part=snippet&mine=true&access_token=${req.params.token}`;
+      const url = `https://www.googleapis.com/youtube/v3/subscriptions?part=snippet&mine=true&access_token=${params.token}`;
       let finalResult = { 
         channelCount: 0,
         channels: [] 
@@ -18,7 +18,7 @@ export default class subController {
       do {
         const response = await fetch((pageToken == '') ? url : (url + '&page_token=' + pageToken));
         const data = await response.json();
-
+        
         finalResult = {
           channelCount: finalResult.channelCount + data.items.length,
           channels: finalResult.channels.concat(data.items),
@@ -27,44 +27,58 @@ export default class subController {
         pageToken = data.nextPageToken;
       } while(pageToken) 
 
-      res.json(finalResult);
+      response.body = finalResult;
     } catch (err) {
       console.log("an error occurreddd\n" + err );
-      res.setStatus(500).json(err);
+      response.status = 500;
+      response.body = {msg: err.toString()};
     }
   }
 
-  static async getChannelStats(req: OpineRequest, res: OpineResponse) {
+  // deno-lint-ignore no-explicit-any
+  static async getChannelStats(ctx: any) {
+    
+    const  response  = ctx.response;
+    const  params  = ctx.params;
+
     try{
       //permission given for: id, statistics, contentDetails(different to subs api), contentOwnerDetails, localizations(no output), snippet(same as subs api), status, topicDetails
       //https://www.googleapis.com/youtube/v3/channels
-      if(!req.query.channelId) {
-        return res.setStatus(501).json({ err: "channelId missing" });
+      if(!helpers.getQuery(ctx, {mergeParams: true}).channelId) {
+        response.status = 501; 
+        response.body = { err: "channelId missing" };
+      } else {
+        const { channelId } = helpers.getQuery(ctx);
+        const channelResponse = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=id,statistics,status,topicDetails&id=${channelId}&access_token=${params.token}`);
+        const channelData = await channelResponse.json();
+        if (channelData.items){
+        const topics = channelData.items[0].topicDetails;
+        const topicNames: string[] = [];
+  
+        topics.topicCategories.forEach((e: string) => {
+          const parts: string[] = e.split('/');
+          topicNames.push(parts[parts.length-1]);
+        });
+  
+        const returnData = {
+          channelId: channelData.items[0].id,
+          videoCnt: channelData.items[0].statistics.videoCount,
+          viewCnt: channelData.items[0].statistics.viewCount,
+          subscriberCnt: channelData.items[0].statistics.subscriberCount,
+          forKids: channelData.items[0].status.madeForKids,
+          topics: topicNames
+        };
+  
+        response.body = {data: returnData};
+      } else {
+        response.status = 200;
+        response.body = [];
       }
-      const channelResponse = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=id,statistics,status,topicDetails&id=${req.query.channelId}&access_token=${req.params.token}`);
-      const channelData = await channelResponse.json();
-
-      const topics = channelData.items[0].topicDetails;
-      const topicNames: string[] = [];
-
-      topics.topicCategories.forEach((e: string) => {
-        const parts: string[] = e.split('/');
-        topicNames.push(parts[parts.length-1]);
-      });
-
-      const returnData = {
-        channelId: channelData.items[0].id,
-        videoCnt: channelData.items[0].statistics.videoCount,
-        viewCnt: channelData.items[0].statistics.viewCount,
-        subscriberCnt: channelData.items[0].statistics.subscriberCount,
-        forKids: channelData.items[0].status.madeForKids,
-        topics: topicNames
-      };
-
-      res.send(returnData);
+      }
     } catch( err ) {
       console.log("an error occurreddd\n" + err );
-      res.setStatus(500).json(err);
+      response.status = 500;
+      response.body = { msg: err.toString()}
     }
   }
   
