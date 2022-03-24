@@ -125,9 +125,8 @@ export default class myStats{
     //?part=snippet%2CcontentDetails&mine=true&access_token=${params.token}`
     static playlistStatisticsUrl = `https://youtube.googleapis.com/youtube/v3/playlists`
     //?part=snippet%2CcontentDetails&id=${params.playlistId}&access_token=${params.token}`
-    static countryUrl = `https://youtubeanalytics.googleapis.com/v2/reports`
+    static reportsUrl = `https://youtubeanalytics.googleapis.com/v2/reports`
     //?dimensions=country&endDate=${currentDate}&ids=channel%3D%3DMINE&metrics=views%2CestimatedMinutesWatched%2CaverageViewDuration%2CaverageViewPercentage%2CsubscribersGained&sort=-estimatedMinutesWatched&startDate=2014-05-01&access_token=${params.token}`
-   
 
     //----------------------------------------
     //----------Channel Stats-----------------
@@ -167,6 +166,49 @@ export default class myStats{
         }
       }
 
+
+    //----------------------------------------
+    //----------Video ID's-----------------
+    //----------------------------------------
+
+    // deno-lint-ignore no-explicit-any
+    static async getVideoIds(ctx: any) {
+        // 
+        const req = helpers.getQuery(ctx, { mergeParams: true });
+        const res = ctx.response;
+        if(!req.token) {
+          res.status = 401
+          res.body = { err: 'Unauthorized: token missing' }
+        }
+
+        try{
+            const countryResponse = await fetch(`${myStats.videosUrl}?part=snippet%2CcontentDetails&maxResults=1000&mine=true&access_token=${req.token}`);
+            const data = await countryResponse.json();
+            
+            if(data.items){
+                const finalResult: {latestVideo: String, allVideos: String[]} = { 
+                    latestVideo: data.items[0].contentDetails.upload.videoId,
+                    allVideos: [],
+                };
+
+                for (let i = 0; i < data.items.length; i++) {
+                    finalResult.allVideos.push(data.items[i].contentDetails.upload.videoId) 
+                }
+
+                res.status = 200;
+                res.body = finalResult;
+            }else{
+                res.status = 200;
+                res.body = [];
+            }
+        } catch (err) {
+          console.log(err);
+          res.status = 502;
+          res.body = { err: '502: Bad Gateway'}
+        }
+      }  
+
+
     //----------------------------------------
     //----------Video Stats-----------------
     //----------------------------------------
@@ -197,48 +239,6 @@ export default class myStats{
                     commentCount: data.items[0].statistics.commentCount
                 };
                     
-                res.status = 200;
-                res.body = finalResult;
-            }else{
-                res.status = 200;
-                res.body = [];
-            }
-        } catch (err) {
-          console.log(err);
-          res.status = 502;
-          res.body = { err: '502: Bad Gateway'}
-        }
-      }  
-
-
-    //----------------------------------------
-    //----------Video ID's-----------------
-    //----------------------------------------
-
-    // deno-lint-ignore no-explicit-any
-    static async getVideoIds(ctx: any) {
-        // 
-        const req = helpers.getQuery(ctx, { mergeParams: true });
-        const res = ctx.response;
-        if(!req.token) {
-          res.status = 401
-          res.body = { err: 'Unauthorized: token missing' }
-        }
-
-        try{
-            const countryResponse = await fetch(`${myStats.videosUrl}?part=snippet%2CcontentDetails&maxResults=1000&mine=true&access_token=${req.token}`);
-            const data = await countryResponse.json();
-            
-            if(data.items){
-                const finalResult: {latestVideo: String, allVideos: String[]} = { 
-                    latestVideo: data.items[0].contentDetails.upload.videoId,
-                    allVideos: [],
-                };
-
-                for (let i = 0; i < data.items.length; i++) {
-                    finalResult.allVideos.push(data.items[i].contentDetails.upload.videoId) 
-                }
-
                 res.status = 200;
                 res.body = finalResult;
             }else{
@@ -336,12 +336,102 @@ export default class myStats{
           res.status = 502;
           res.body = { err: '502: Bad Gateway'}
         }
-      } 
+    } 
 
+
+    
     //----------------------------------------
     //-------My Stats Per Month---------------
     //----------------------------------------
 
+
+        // deno-lint-ignore no-explicit-any
+        static async getChannelStatsPerMonth(ctx: any) {
+            // 
+            const req = helpers.getQuery(ctx, { mergeParams: true });
+            const res = ctx.response;
+            if(!req.playlistId) {
+                res.status = 400;
+                res.body = { err: "Bad Request: channelId missing" };
+            }
+            if(!req.token) {
+                res.status = 401;
+                res.body = { err: 'Unauthorized: token missing' };
+            }
+    
+            try{
+                
+                const currentYear = (new Date()).getFullYear()
+                //starts with 0
+                const currentMonth = (new Date()).getMonth()
+                const currentDay = (new Date()).getDate()
+                
+                const valuePerMonth = [{},{},{},{},{},{},{},{},{},{},{},{}]
+                
+
+                for (let i = 0; i < currentMonth; i++) {
+                    const tempStartDate = currentYear + "-" + startAndenddateForEveryMonth[i].startdate
+                    const tempEndDate = currentYear + "-" + startAndenddateForEveryMonth[i].enddate
+
+                    const response = await fetch(`${myStats.reportsUrl}?endDate=${tempEndDate}&ids=channel%3D%3DMINE&metrics=views%2Ccomments%2Clikes%2Cdislikes%2CestimatedMinutesWatched%2CaverageViewDuration&startDate=${tempStartDate}&access_token=${req.token}`);
+                    const data = await response.json();
+
+                    if(data.rows[0]){
+                        const oneMonthStats= { 
+                            views: data.rows[0][0],
+                            comments: data.rows[0][1],
+                            likes: data.rows[0][2],
+                            dislikes: data.rows[0][3],
+                            estimatedMinutesWatched: data.rows[0][4],
+                            averageViewDuration: data.rows[0][5]
+                        };
+                        valuePerMonth[i] = oneMonthStats;
+                    }
+
+                    
+                }
+                const startDateCurrentMonth = currentYear + "-" + startAndenddateForEveryMonth[currentMonth].startdate
+                const endDateCurrentMonth = currentYear + "-" + (('0' + (currentMonth + 1)).slice(-2)) + "-" + currentDay
+
+                const response = await fetch(`${myStats.reportsUrl}?endDate=${endDateCurrentMonth}&ids=channel%3D%3DMINE&metrics=views%2Ccomments%2Clikes%2Cdislikes%2CestimatedMinutesWatched%2CaverageViewDuration&startDate=${startDateCurrentMonth}&access_token=${req.token}`);
+                const data = await response.json();
+
+                if(data.rows[0]){
+                    const oneMonthStats= { 
+                        views: data.rows[0][0],
+                        comments: data.rows[0][1],
+                        likes: data.rows[0][2],
+                        dislikes: data.rows[0][3],
+                        estimatedMinutesWatched: data.rows[0][4],
+                        averageViewDuration: data.rows[0][5]
+                    };
+                    valuePerMonth[currentMonth] = oneMonthStats;
+                }
+                    
+            
+                const finalResult = { 
+                    january: valuePerMonth[0],
+                    february: valuePerMonth[1],
+                    march: valuePerMonth[2],
+                    april: valuePerMonth[3],
+                    may: valuePerMonth[4],
+                    june: valuePerMonth[5],
+                    july: valuePerMonth[6],
+                    august: valuePerMonth[7],
+                    september: valuePerMonth[8],
+                    october: valuePerMonth[9],
+                    november: valuePerMonth[10],
+                    december: valuePerMonth[11]
+                };
+
+                res.status = 200;
+                res.body = finalResult;
+            } catch (err) {
+              console.log(err);
+              res.status = 502;
+              res.body = { err: '502: Bad Gateway'}
+            }
+        } 
 // deno-lint-ignore no-explicit-any 
     static getViewsInMonthForCurrentYear({params, response}: {params: {token: string}, response: any}){
         //getStetsPerMonthForCurrentYear({params, response}, 0)
@@ -479,7 +569,7 @@ export default class myStats{
             const tempDate = new Date();
             const currentDate = tempDate.getFullYear() + "-" + ('0' + (tempDate.getMonth() + 1)).slice(-2) + "-" + ('0' + tempDate.getDate()).slice(-2);
 
-            const url = `${myStats.countryUrl}?dimensions=country&endDate=${currentDate}&ids=channel%3D%3DMINE&metrics=views%2CestimatedMinutesWatched%2CaverageViewDuration%2CaverageViewPercentage%2CsubscribersGained&sort=-estimatedMinutesWatched&startDate=2014-05-01&access_token=${req.token}`;
+            const url = `${myStats.reportsUrl}?dimensions=country&endDate=${currentDate}&ids=channel%3D%3DMINE&metrics=views%2CestimatedMinutesWatched%2CaverageViewDuration%2CaverageViewPercentage%2CsubscribersGained&sort=-estimatedMinutesWatched&startDate=2014-05-01&access_token=${req.token}`;
     
             const finalResult: {countryStats: ICountryStats[]} = { 
                 countryStats: []

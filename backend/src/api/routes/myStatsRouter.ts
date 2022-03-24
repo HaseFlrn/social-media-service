@@ -19,12 +19,7 @@ router
   // Playlist Infos
   .get("/playlistInfos/:token/:playlistId", myStats.getPlaylistInfos)
   // Channel Stats per Month in current Year
-  .get("/viewsInMonthForCurrentYear/:token", myStats.getViewsInMonthForCurrentYear)
-  .get("/commentsInMonthForCurrentYear/:token", myStats.getCommentsInMonthForCurrentYear)
-  .get("/likesInMonthForCurrentYear/:token", myStats.getLikesInMonthForCurrentYear)
-  .get("/dislikesInMonthForCurrentYear/:token", myStats.getDislikesInMonthForCurrentYear)
-  .get("/estimatedMinutesWatchedInMonthForCurrentYear/:token", myStats.getEstimatedMinutesWatchedInMonthForCurrentYear)
-  .get("/averageViewDurationInMonthForCurrentYear/:token", myStats.getAverageViewDurationInMonthForCurrentYear)
+  .get("/channelStatsPerMonth/:token", myStats.getChannelStatsPerMonth)
   // Channel Stats per Day last 30 days
   .get("/viewsPerDayLastThirtyDays/:token", myStats.getViewsPerDayLastThirtyDays)
   .get("/commentsPerDayLastThirtyDays/:token", myStats.getCommentsPerDayLastThirtyDays)
