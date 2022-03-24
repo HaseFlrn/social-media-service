@@ -384,7 +384,7 @@ export default class myStats{
 
             const url = `${myStats.videosUrl}?part=snippet%2CcontentDetails&maxResults=1000&mine=true&access_token=${res.token}`
 
-            const response = await fetch(`${myStats.videosUrl}?part=snippet%2CcontentDetails&maxResults=1000&mine=true&access_token=${res.token}`);
+            const response = await fetch(url);
             const data = await response.json();
             
             if(data.items){
