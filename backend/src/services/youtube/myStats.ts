@@ -269,7 +269,7 @@ export default class myStats{
             
             const valuePerMonth = [{},{},{},{},{},{},{},{},{},{},{},{}]
             
-            for (let i = 0; i < currentMonth; i++) {
+            for (let i = 0; i <= currentMonth; i++) {
                 const tempStartDate = currentYear + "-" + startAndenddateForEveryMonth[i].startdate
                 const tempEndDate = currentYear + "-" + startAndenddateForEveryMonth[i].enddate
 
@@ -291,7 +291,7 @@ export default class myStats{
 
                 
             }
-            
+            /*
             const startDateCurrentMonth = currentYear + "-" + startAndenddateForEveryMonth[currentMonth].startdate
             const endDateCurrentMonth = currentYear + "-" + (('0' + (currentMonth + 1)).slice(-2)) + "-" + currentDay
 
@@ -309,7 +309,7 @@ export default class myStats{
                 };
                 valuePerMonth[currentMonth] = oneMonthStats;
             }
-                           
+               */            
 
             const finalResult = { 
                 january: valuePerMonth[0],
