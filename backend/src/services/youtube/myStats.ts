@@ -418,7 +418,7 @@ export default class myStats{
                 res.body = {data: returnData};
             }else{
                 res.status = 200;
-                res.body = [];
+                res.body = {data: data.items};
             }
         } catch (err) {
           console.log(err);
