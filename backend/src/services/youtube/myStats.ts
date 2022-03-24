@@ -342,7 +342,7 @@ export default class myStats{
 
 
     // deno-lint-ignore no-explicit-any
-    static async getStatsPercountry(ctx: any) {
+    static async getStatsPerCountry(ctx: any) {
         // 
         const req = helpers.getQuery(ctx, { mergeParams: true });
         const res = ctx.response;
