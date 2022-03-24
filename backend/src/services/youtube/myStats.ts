@@ -237,27 +237,27 @@ export default class myStats{
     //----------------------------------------
 // deno-lint-ignore no-explicit-any 
     static getViewsInMonthForCurrentYear({params, response}: {params: {token: string}, response: any}){
-        getStetsPerMonthForCurrentYear({params, response}, 0)
+        //getStetsPerMonthForCurrentYear({params, response}, 0)
     }
     // deno-lint-ignore no-explicit-any
     static getCommentsInMonthForCurrentYear({params, response}: {params: {token: string}, response: any}){
-        getStetsPerMonthForCurrentYear({params, response}, 1)
+        //getStetsPerMonthForCurrentYear({params, response}, 1)
     }
     // deno-lint-ignore no-explicit-any
     static getLikesInMonthForCurrentYear({params, response}: {params: {token: string}, response: any}){
-        getStetsPerMonthForCurrentYear({params, response}, 2)
+        //getStetsPerMonthForCurrentYear({params, response}, 2)
     }
     // deno-lint-ignore no-explicit-any
     static getDislikesInMonthForCurrentYear({params, response}: {params: {token: string}, response: any}){
-        getStetsPerMonthForCurrentYear({params, response}, 3)
+        //getStetsPerMonthForCurrentYear({params, response}, 3)
     }
     // deno-lint-ignore no-explicit-any
     static getEstimatedMinutesWatchedInMonthForCurrentYear({params, response}: {params: {token: string}, response: any}){
-        getStetsPerMonthForCurrentYear({params, response}, 4)
+        //getStetsPerMonthForCurrentYear({params, response}, 4)
     }
     // deno-lint-ignore no-explicit-any
     static getAverageViewDurationInMonthForCurrentYear({params, response}: {params: {token: string}, response: any}){
-        getStetsPerMonthForCurrentYear({params, response}, 5)
+        //getStetsPerMonthForCurrentYear({params, response}, 5)
     }
 
     //----------------------------------------
