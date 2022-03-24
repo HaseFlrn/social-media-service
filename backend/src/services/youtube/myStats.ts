@@ -56,23 +56,30 @@ async function getValueInTimeRange(params: {token: string}, arrayIndex:number, s
 // deno-lint-ignore no-explicit-any
 async function getStetsPerMonthForCurrentYear({params, response}: {params: {token: string}, response: any}, arrayindex:number) {
 
-    const currentYear = (new Date()).getFullYear()
-    //starts with 0
-    const currentMonth = (new Date()).getMonth()
-    const currentDay = (new Date()).getDate()
+    try {
+        const currentYear = (new Date()).getFullYear()
+        //starts with 0
+        const currentMonth = (new Date()).getMonth()
+        const currentDay = (new Date()).getDate()
+    
+        const valuePerMonth = [];
+    
+        for (let i = 0; i < currentMonth; i++) {
+            const tempStartDate = currentYear + "-" + startAndenddateForEveryMonth[i].startdate
+            const tempEndDate = currentYear + "-" + startAndenddateForEveryMonth[i].enddate
+            valuePerMonth.push(await getValueInTimeRange(params, arrayindex, tempStartDate, tempEndDate))
+          }
+        const startDateCurrentMonth = currentYear + "-" + startAndenddateForEveryMonth[currentMonth].startdate
+        const endDateCurrentMonth = currentYear + "-" + (('0' + (currentMonth + 1)).slice(-2)) + "-" + currentDay
+        valuePerMonth.push(await getValueInTimeRange(params, arrayindex, startDateCurrentMonth, endDateCurrentMonth))
+    
+        response.body = {data: valuePerMonth}
+    } catch (error) {
+        console.log("an error occurreddd\n" + error);
+        response.status = 500;
+        response.body = {msg: error.toString()};
+    }
 
-    const valuePerMonth = [];
-
-    for (let i = 0; i < currentMonth; i++) {
-        const tempStartDate = currentYear + "-" + startAndenddateForEveryMonth[i].startdate
-        const tempEndDate = currentYear + "-" + startAndenddateForEveryMonth[i].enddate
-        valuePerMonth.push(await getValueInTimeRange(params, arrayindex, tempStartDate, tempEndDate))
-      }
-    const startDateCurrentMonth = currentYear + "-" + startAndenddateForEveryMonth[currentMonth].startdate
-    const endDateCurrentMonth = currentYear + "-" + (('0' + (currentMonth + 1)).slice(-2)) + "-" + currentDay
-    valuePerMonth.push(await getValueInTimeRange(params, arrayindex, startDateCurrentMonth, endDateCurrentMonth))
-
-    response.body = {data: valuePerMonth}
 }
 // deno-lint-ignore no-explicit-any
  async function getStetsPerDayLastThirtyDays({params, response}: {params: {token: string}, response: any}, arrayindex:number) {
