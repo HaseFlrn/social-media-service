@@ -1,15 +1,20 @@
-import { opine } from "https://deno.land/x/opine@2.1.1/mod.ts";
-import Router from "./src/api/routes/router.ts";
-import "https://deno.land/x/dotenv@v3.2.0/load.ts";
+import { Application, Router, oakCors, config } from "./deps.ts";
 
-const app = opine();
-const port = parseInt(Deno.env.get("PORT") as string);
+import Routes from "./src/api/routes/router.ts";
+
+const { PORT } = config();
+const port = parseInt(PORT);
+const app = new Application();
+const router = new Router();
 
 if(Number.isNaN(port)){
 	Deno.exit(1);
 }
 
-app.use("/api/v1", Router);
+app.use( oakCors( { origin: "*" } ) );
+router.use("/api/v1", Routes.routes(), Routes.allowedMethods());
+app.use(router.routes());
+app.use(router.allowedMethods());
 
 const certFile = "myCertFile.cert";
 const keyFile = "myKeyFile.key";
@@ -17,8 +22,7 @@ const keyFile = "myKeyFile.key";
 
 app.listen({
 	port: port,
-	certFile: certFile!,
-	keyFile: keyFile!,
-	},
-	() => console.log(`server has started on https://localhost:${port} 🚀 \napi has started on https://localhost:${port}/api/v1`),
+	certFile: certFile,
+	keyFile: keyFile,
+	}
 );
