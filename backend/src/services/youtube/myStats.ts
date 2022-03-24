@@ -264,17 +264,17 @@ export default class myStats{
         }
 
         try{
-            const countryResponse = await fetch(`${myStats.videosUrl}?part=snippet%2CcontentDetails&mine=true&access_token=${req.token}`);
+            const countryResponse = await fetch(`${myStats.playlistsUrl}?part=snippet%2CcontentDetails&mine=true&access_token=${req.token}`);
             const data = await countryResponse.json();
             
             if(data.items){
-                const finalResult: {latestVideo: String, allVideos: String[]} = { 
-                    latestVideo: data.items[0].id,
-                    allVideos: [],
+                const finalResult: {latestPlaylist: String, allplaylist: String[]} = { 
+                    latestPlaylist: data.items[0].id,
+                    allplaylist: [],
                 };
 
                 for (let i = 0; i < data.items.length; i++) {
-                    finalResult.allVideos.push(data.items[i].id) 
+                    finalResult.allplaylist.push(data.items[i].id) 
                 }
 
                 res.status = 200;
