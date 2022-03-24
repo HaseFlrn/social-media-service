@@ -1,97 +1,8 @@
 import startAndenddateForEveryMonth from './startAndenddateForEveryMonth.json' assert { type: "json" };
 import { helpers } from "../../../deps.ts";
 
-async function runRequest(params: { token: string, videoId?: string, playlistId?: string }, requestName: string) {
 
-    const tempDate = new Date();
-    const currentDate = tempDate.getFullYear() + "-" + ('0' + (tempDate.getMonth() + 1)).slice(-2) + "-" + ('0' + tempDate.getDate()).slice(-2);
-
-    let url = ``;
-   switch (requestName) {
-        case "ChannelInformations":
-            url = `https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&mine=true&access_token=${params.token}`
-            break;
-        case "Videos":
-            url = `https://youtube.googleapis.com/youtube/v3/activities?part=snippet%2CcontentDetails&maxResults=25&mine=true&access_token=${params.token}`
-            break;
-        case "VideoStatistics":
-            url = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${params.videoId}&access_token=${params.token}`
-            break;
-        case "Playlists":
-            url = `https://youtube.googleapis.com/youtube/v3/playlists?part=snippet%2CcontentDetails&mine=true&access_token=${params.token}`
-            break;
-        case "PlaylistStatistics":
-            url = `https://youtube.googleapis.com/youtube/v3/playlists?part=snippet%2CcontentDetails&id=${params.playlistId}&access_token=${params.token}`
-            break;
-        case "Country":
-            url = `https://youtubeanalytics.googleapis.com/v2/reports?dimensions=country&endDate=${currentDate}&ids=channel%3D%3DMINE&metrics=views%2CestimatedMinutesWatched%2CaverageViewDuration%2CaverageViewPercentage%2CsubscribersGained&sort=-estimatedMinutesWatched&startDate=2014-05-01&access_token=${params.token}`
-            break;
-        default:
-            break;
-    }
-    const response = await fetch(url);
-    const result = await response.json();
-    return result; 
-}
-
-
-// deno-lint-ignore no-explicit-any
-export async function getStatsInTimeRange({params, response}: {params: {token: string}, response: any}, startDate:string, endDate: string) {
-    try {
-        const response = await fetch(`https://youtubeanalytics.googleapis.com/v2/reports?endDate=${endDate}&ids=channel%3D%3DMINE&metrics=views%2Ccomments%2Clikes%2Cdislikes%2CestimatedMinutesWatched%2CaverageViewDuration&startDate=${startDate}&access_token=${params.token}`);
-        const res = await response.json();
-    return res; 
-    } catch (error) {
-        console.log(error);
-    }
-
-}
-
-//----------------------------------------
-//----My Stats In Time Range--------------
-//----------------------------------------
 /*
-// deno-lint-ignore no-explicit-any
-async function getValueInTimeRange({params, response}: {params: {token: string}, response: any}, arrayIndex:number, startDate:string, endDate:string) {
-    const data = await getStatsInTimeRange({params, response}, startDate, endDate);
-    let value
-    try {
-        value = data.rows[0][arrayIndex];
-        return value;
-    } catch (error) {
-        console.log(error);
-    }   
-}
-
-// deno-lint-ignore no-explicit-any
-async function getStetsPerMonthForCurrentYear({params, response}: {params: {token: string}, response: any}, arrayindex:number) {
-
-    try {
-        const currentYear = (new Date()).getFullYear()
-        //starts with 0
-        const currentMonth = (new Date()).getMonth()
-        const currentDay = (new Date()).getDate()
-    
-        const valuePerMonth = [];
-    
-        for (let i = 0; i < currentMonth; i++) {
-            const tempStartDate = currentYear + "-" + startAndenddateForEveryMonth[i].startdate
-            const tempEndDate = currentYear + "-" + startAndenddateForEveryMonth[i].enddate
-            valuePerMonth.push(await getValueInTimeRange({params, response}, arrayindex, tempStartDate, tempEndDate))
-          }
-        const startDateCurrentMonth = currentYear + "-" + startAndenddateForEveryMonth[currentMonth].startdate
-        const endDateCurrentMonth = currentYear + "-" + (('0' + (currentMonth + 1)).slice(-2)) + "-" + currentDay
-        valuePerMonth.push(await getValueInTimeRange({params, response}, arrayindex, startDateCurrentMonth, endDateCurrentMonth))
-        const res = JSON.stringify(valuePerMonth);
-
-        response.status = 200;
-        response.body = {data: res};
-    } catch (error) {
-        console.log(error);
-    }
-
-}
-
 // deno-lint-ignore no-explicit-any
  async function getStetsPerDayLastThirtyDays({params, response}: {params: {token: string}, response: any}, arrayindex:number) {
 
@@ -116,17 +27,11 @@ async function getStetsPerMonthForCurrentYear({params, response}: {params: {toke
 export default class myStats{
 
     static channelInformationsUrl = `https://youtube.googleapis.com/youtube/v3/channels`
-    //?part=snippet%2CcontentDetails%2Cstatistics&mine=true&access_token=${params.token}`
     static videosUrl = `https://youtube.googleapis.com/youtube/v3/activities`
-    //?part=snippet%2CcontentDetails&maxResults=25&mine=true&access_token=${params.token}`
     static videoStatisticsUrl = `https://youtube.googleapis.com/youtube/v3/videos`
-    //?part=snippet%2CcontentDetails%2Cstatistics&id=${params.videoId}&access_token=${params.token}`
     static playlistsUrl = `https://youtube.googleapis.com/youtube/v3/playlists`
-    //?part=snippet%2CcontentDetails&mine=true&access_token=${params.token}`
     static playlistStatisticsUrl = `https://youtube.googleapis.com/youtube/v3/playlists`
-    //?part=snippet%2CcontentDetails&id=${params.playlistId}&access_token=${params.token}`
     static reportsUrl = `https://youtubeanalytics.googleapis.com/v2/reports`
-    //?dimensions=country&endDate=${currentDate}&ids=channel%3D%3DMINE&metrics=views%2CestimatedMinutesWatched%2CaverageViewDuration%2CaverageViewPercentage%2CsubscribersGained&sort=-estimatedMinutesWatched&startDate=2014-05-01&access_token=${params.token}`
 
     //----------------------------------------
     //----------Channel Stats-----------------
@@ -364,12 +269,12 @@ export default class myStats{
             
             const valuePerMonth = [{},{},{},{},{},{},{},{},{},{},{},{}]
             
-
             for (let i = 0; i < currentMonth; i++) {
                 const tempStartDate = currentYear + "-" + startAndenddateForEveryMonth[i].startdate
                 const tempEndDate = currentYear + "-" + startAndenddateForEveryMonth[i].enddate
 
-                const response = await fetch(`${myStats.reportsUrl}?endDate=${tempEndDate}&ids=channel%3D%3DMINE&metrics=views%2Ccomments%2Clikes%2Cdislikes%2CestimatedMinutesWatched%2CaverageViewDuration&startDate=${tempStartDate}&access_token=${req.token}`);
+                const url = `${myStats.reportsUrl}?endDate=${tempEndDate}&ids=channel%3D%3DMINE&metrics=views%2Ccomments%2Clikes%2Cdislikes%2CestimatedMinutesWatched%2CaverageViewDuration&startDate=${tempStartDate}&access_token=${req.token}`
+                const response = await fetch(url);
                 const data = await response.json();
 
                 if(data.rows[0]){
@@ -407,6 +312,10 @@ export default class myStats{
             */                
         
             const finalResult = { 
+                hello: "hi"
+            };
+/*
+            const finalResult = { 
                 january: valuePerMonth[0],
                 february: valuePerMonth[1],
                 march: valuePerMonth[2],
@@ -420,7 +329,7 @@ export default class myStats{
                 november: valuePerMonth[10],
                 december: valuePerMonth[11]
             };
-
+*/
             res.status = 200;
             res.body = finalResult;
         } catch (err) {
@@ -429,33 +338,10 @@ export default class myStats{
             res.body = { err: '502: Bad Gateway'}
         }
         } 
-// deno-lint-ignore no-explicit-any 
-    static getViewsInMonthForCurrentYear({params, response}: {params: {token: string}, response: any}){
-        //getStetsPerMonthForCurrentYear({params, response}, 0)
-    }
-    // deno-lint-ignore no-explicit-any
-    static getCommentsInMonthForCurrentYear({params, response}: {params: {token: string}, response: any}){
-        //getStetsPerMonthForCurrentYear({params, response}, 1)
-    }
-    // deno-lint-ignore no-explicit-any
-    static getLikesInMonthForCurrentYear({params, response}: {params: {token: string}, response: any}){
-        //getStetsPerMonthForCurrentYear({params, response}, 2)
-    }
-    // deno-lint-ignore no-explicit-any
-    static getDislikesInMonthForCurrentYear({params, response}: {params: {token: string}, response: any}){
-        //getStetsPerMonthForCurrentYear({params, response}, 3)
-    }
-    // deno-lint-ignore no-explicit-any
-    static getEstimatedMinutesWatchedInMonthForCurrentYear({params, response}: {params: {token: string}, response: any}){
-        //getStetsPerMonthForCurrentYear({params, response}, 4)
-    }
-    // deno-lint-ignore no-explicit-any
-    static getAverageViewDurationInMonthForCurrentYear({params, response}: {params: {token: string}, response: any}){
-        //getStetsPerMonthForCurrentYear({params, response}, 5)
-    }
+
 
     //----------------------------------------
-    //-------My Stats Per Month---------------
+    //-------My Stats Per Day---------------
     //----------------------------------------
 
     // deno-lint-ignore no-explicit-any
