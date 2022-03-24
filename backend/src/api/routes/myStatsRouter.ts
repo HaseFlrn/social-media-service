@@ -1,11 +1,12 @@
-import { Router } from "https://deno.land/x/opine@2.1.1/mod.ts";
+import { Router } from "../../../deps.ts";
 import myStats from "../../services/youtube/myStats.ts";
 
-const router = Router();
+const router = new Router();
 
 router
-  .get("/", (_req, res) => {
-    res.send("This is myStatsRouter.ts");
+// deno-lint-ignore no-explicit-any
+  .get("/", ({response}: {response: any}) => {
+    response.body = "This is myStatsRouter.ts";
   })
   //Get Channel Quantities
   .get("/videoQuantity/:token", myStats.getVideoQuantity)

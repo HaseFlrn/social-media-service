@@ -1,7 +1,6 @@
-import { OpineResponse, OpineRequest } from "https://deno.land/x/opine@2.1.1/mod.ts";
 import startAndenddateForEveryMonth from './startAndenddateForEveryMonth.json' assert { type: "json" };
 
-async function runRequest(req: OpineRequest, requestName:string) {
+async function runRequest(params: { token: string, videoId?: string, playlistId?: string }, requestName: string) {
 
     const tempDate = new Date();
     const currentDate = tempDate.getFullYear() + "-" + ('0' + (tempDate.getMonth() + 1)).slice(-2) + "-" + ('0' + tempDate.getDate()).slice(-2);
@@ -9,19 +8,19 @@ async function runRequest(req: OpineRequest, requestName:string) {
     let url = ``;
    switch (requestName) {
         case "ChannelInformations":
-            url = `https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&mine=true&access_token=${req.params.token}`
+            url = `https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&mine=true&access_token=${params.token}`
             break;
         case "Videos":
-            url = `https://youtube.googleapis.com/youtube/v3/activities?part=snippet%2CcontentDetails&maxResults=25&mine=true&access_token=${req.params.token}`
+            url = `https://youtube.googleapis.com/youtube/v3/activities?part=snippet%2CcontentDetails&maxResults=25&mine=true&access_token=${params.token}`
             break;
         case "VideoStatistics":
-            url = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${req.params.videoId}&access_token=${req.params.token}`
+            url = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${params.videoId}&access_token=${params.token}`
             break;
         case "Playlists":
-            url = `https://youtube.googleapis.com/youtube/v3/playlists?part=snippet%2CcontentDetails&mine=true&access_token=${req.params.token}`
+            url = `https://youtube.googleapis.com/youtube/v3/playlists?part=snippet%2CcontentDetails&mine=true&access_token=${params.token}`
             break;
         case "PlaylistStatistics":
-            url = `https://youtube.googleapis.com/youtube/v3/playlists?part=snippet%2CcontentDetails&id=${req.params.playlistId}&access_token=${req.params.token}`
+            url = `https://youtube.googleapis.com/youtube/v3/playlists?part=snippet%2CcontentDetails&id=${params.playlistId}&access_token=${params.token}`
             break;
         case "Country":
             url = `https://youtubeanalytics.googleapis.com/v2/reports?dimensions=country&endDate=${currentDate}&ids=channel%3D%3DMINE&metrics=views%2CestimatedMinutesWatched%2CaverageViewDuration%2CaverageViewPercentage%2CsubscribersGained&sort=-estimatedMinutesWatched&startDate=2014-05-01&access_token=${req.params.token}`
@@ -44,8 +43,8 @@ export async function getStatsInTimeRange(token:string, startDate:string, endDat
 //----------------------------------------
 //----My Stats In Time Range--------------
 //----------------------------------------
-async function getValueInTimeRange(req: OpineRequest, arrayIndex:number, startDate:string, endDate:string) {
-    const data = await getStatsInTimeRange(req.params.token, startDate, endDate);
+async function getValueInTimeRange(params: {token: string}, arrayIndex:number, startDate:string, endDate:string) {
+    const data = await getStatsInTimeRange(params.token, startDate, endDate);
     let value
     try {
         value = data.rows[0][arrayIndex];
@@ -55,8 +54,8 @@ async function getValueInTimeRange(req: OpineRequest, arrayIndex:number, startDa
     
     return value;
 }
-
-async function getStetsPerMonthForCurrentYear(req: OpineRequest, res: OpineResponse, arrayindex:number) {
+// deno-lint-ignore no-explicit-any
+async function getStetsPerMonthForCurrentYear({params, response}: {params: {token: string}, response: any}, arrayindex:number) {
 
     const currentYear = (new Date()).getFullYear()
     //starts with 0
@@ -68,16 +67,16 @@ async function getStetsPerMonthForCurrentYear(req: OpineRequest, res: OpineRespo
     for (let i = 0; i < currentMonth; i++) {
         const tempStartDate = currentYear + "-" + startAndenddateForEveryMonth[i].startdate
         const tempEndDate = currentYear + "-" + startAndenddateForEveryMonth[i].enddate
-        valuePerMonth.push(await getValueInTimeRange(req, arrayindex, tempStartDate, tempEndDate))
+        valuePerMonth.push(await getValueInTimeRange(params, arrayindex, tempStartDate, tempEndDate))
       }
     const startDateCurrentMonth = currentYear + "-" + startAndenddateForEveryMonth[currentMonth].startdate
     const endDateCurrentMonth = currentYear + "-" + (('0' + (currentMonth + 1)).slice(-2)) + "-" + currentDay
-    valuePerMonth.push(await getValueInTimeRange(req, arrayindex, startDateCurrentMonth, endDateCurrentMonth))
+    valuePerMonth.push(await getValueInTimeRange(params, arrayindex, startDateCurrentMonth, endDateCurrentMonth))
 
-    res.send(valuePerMonth)
+    response.body = {data: valuePerMonth}
 }
-
- async function getStetsPerDayLastThirtyDays(req: OpineRequest, res: OpineResponse, arrayindex:number) {
+// deno-lint-ignore no-explicit-any
+ async function getStetsPerDayLastThirtyDays({params, response}: {params: {token: string}, response: any}, arrayindex:number) {
 
     const valuePerDay = [];
 
@@ -89,11 +88,11 @@ async function getStetsPerMonthForCurrentYear(req: OpineRequest, res: OpineRespo
 
         console.log(tempStartAndEnddate)
 
-        valuePerDay.push([tempStartAndEnddate, await getValueInTimeRange(req, arrayindex, tempStartAndEnddate, tempStartAndEnddate)])
+        valuePerDay.push([tempStartAndEnddate, await getValueInTimeRange(params, arrayindex, tempStartAndEnddate, tempStartAndEnddate)])
         
     }
 
-    res.send(valuePerDay)
+    response.body = {data: valuePerDay}
 }
 
 export default class myStats{
@@ -101,20 +100,23 @@ export default class myStats{
     //----------Channel Stats-----------------
     //----------------------------------------
 
-    static async getVideoQuantity(req: OpineRequest, res: OpineResponse) {
-        const data = await runRequest(req, "ChannelInformations");
+    // deno-lint-ignore no-explicit-any
+    static async getVideoQuantity({params, response}: {params: {token: string}, response: any}) {
+        const data = await runRequest(params, "ChannelInformations");
         const videoQuantity = data.items[0].statistics.videoCount;
-        res.send(videoQuantity);
+        response.body = {data: videoQuantity};
     }
-    static async getSubscriberQuantity(req: OpineRequest, res: OpineResponse) {
-        const data = await runRequest(req, "ChannelInformations");
+    // deno-lint-ignore no-explicit-any
+    static async getSubscriberQuantity({request, response}: {request: any, response: any}) {
+        const data = await runRequest(request, "ChannelInformations");
         const subscriberQuantity = data.items[0].statistics.subscriberCount;
-        res.send(subscriberQuantity);
+        response.body = {data: subscriberQuantity};
     }
-    static async getAllTimeViews(req: OpineRequest, res: OpineResponse) {
-        const data = await runRequest(req, "ChannelInformations");
+    // deno-lint-ignore no-explicit-any
+    static async getAllTimeViews({request, response}: {request: any, response: any}) {
+        const data = await runRequest(request, "ChannelInformations");
         const allTimeViews = data.items[0].statistics.viewCount;
-        res.send(allTimeViews);
+        response.body = {data: allTimeViews};
     }
 
     //----------------------------------------
@@ -122,44 +124,52 @@ export default class myStats{
     //----------------------------------------
 
     //Get Latest Video Id
-    static async getLatestVideo(req: OpineRequest, res: OpineResponse) {
-        const data = await runRequest(req, "Videos");
+    // deno-lint-ignore no-explicit-any
+    static async getLatestVideo({params, response}: {params: {token: string}, response: any}) {
+        const data = await runRequest(params, "Videos");
         const latestVideo = data.items[0].contentDetails.upload.videoId;
-        res.send(latestVideo);
+        response.body = {data: latestVideo};
     }
 
-    static async getAllVideos(req: OpineRequest, res: OpineResponse) {
-        const data = await runRequest(req, "Videos");
+    // deno-lint-ignore no-explicit-any
+    static async getAllVideos({params, response}: {params: {token: string}, response: any}) {
+        const data = await runRequest(params, "Videos");
 
         const videos = [];
-
-        for (let i = 0; i < data.items.length; i++) {
-            videos.push(data.items[i].contentDetails.upload.videoId)
-            
-        }
-        res.send(videos);
+        
+           
+            for (let i = 0; i < data.items.length; i++) {
+                videos.push(data.items[i].contentDetails.upload.videoId)
+                
+            }
+        
+        response.body = {data: videos};
     }
 
     //Video Stats
-    static async getVideoViewsQuantity(req: OpineRequest, res: OpineResponse) {
-        const data = await runRequest(req, "VideoStatistics");
+    // deno-lint-ignore no-explicit-any
+    static async getVideoViewsQuantity({params, response}: {params: {token: string, videoId: string}, response: any}) {
+        const data = await runRequest(params, "VideoStatistics");
         const videoViews = data.items[0].statistics.viewCount;
-        res.send(videoViews);
+        response.body = {data: videoViews};
     }
-    static async getVideoLikesQuantity(req: OpineRequest, res: OpineResponse) {
-        const data = await runRequest(req, "VideoStatistics");
+    // deno-lint-ignore no-explicit-any
+    static async getVideoLikesQuantity({params, response}: {params: {token: string, videoId: string}, response: any}) {
+        const data = await runRequest(params, "VideoStatistics");
         const videoLikes = data.items[0].statistics.likeCount;
-        res.send(videoLikes);
+        response.body = {data: videoLikes};
     }
-    static async getVideoDislikesQuantity(req: OpineRequest, res: OpineResponse) {
-        const data = await runRequest(req, "VideoStatistics");
+    // deno-lint-ignore no-explicit-any
+    static async getVideoDislikesQuantity({params, response}: {params: {token: string, videoId: string}, response: any}) {
+        const data = await runRequest(params, "VideoStatistics");
         const videoDislikes = data.items[0].statistics.dislikeCount;
-        res.send(videoDislikes);
+        response.body = {data: videoDislikes};
     }
-    static async getVideoCommentQuantity(req: OpineRequest, res: OpineResponse) {
-        const data = await runRequest(req, "VideoStatistics");
+    // deno-lint-ignore no-explicit-any
+    static async getVideoCommentQuantity({params, response}: {params: {token: string, videoId: string}, response: any}) {
+        const data = await runRequest(params, "VideoStatistics");
         const videoComments = data.items[0].statistics.commentCount;
-        res.send(videoComments);
+        response.body = {data: videoComments};
     }
 
     //----------------------------------------
@@ -167,8 +177,9 @@ export default class myStats{
     //----------------------------------------
 
     //Get List with all playlist ids
-    static async getAllPlaylists(req: OpineRequest, res: OpineResponse) {
-        const data = await runRequest(req, "Playlists");
+    // deno-lint-ignore no-explicit-any
+    static async getAllPlaylists({params, response}: {params: {token: string}, response: any}) {
+        const data = await runRequest(params, "Playlists");
 
         const playlists = [];
 
@@ -176,76 +187,91 @@ export default class myStats{
             playlists.push(data.items[i].id)
             
         }
-        res.send(playlists);
+        response.body = {data: playlists};
     }
 
     //Playlist Stats
-    static async getPlaylistName(req: OpineRequest, res: OpineResponse) {
-        const data = await runRequest(req, "PlaylistStatistics");
+    // deno-lint-ignore no-explicit-any
+    static async getPlaylistName({params, response}: {params: {token: string, playlistId: string}, response: any}) {
+        const data = await runRequest(params, "PlaylistStatistics");
         const playlistName = data.items[0].snippet.title;
-        res.send(playlistName);
+        response.body = {data: playlistName};
     }
-    static async getPlaylistDescription(req: OpineRequest, res: OpineResponse) {
-        const data = await runRequest(req, "PlaylistStatistics");
+    // deno-lint-ignore no-explicit-any
+    static async getPlaylistDescription({params, response}: {params: {token: string, playlistId: string}, response: any}) {
+        const data = await runRequest(params, "PlaylistStatistics");
         const playlistDescription = data.items[0].snippet.description;
-        res.send(playlistDescription);
+        response.body = {data: playlistDescription};
     }
-    static async getPlaylistPublishedAt(req: OpineRequest, res: OpineResponse) {
-        const data = await runRequest(req, "PlaylistStatistics");
+    // deno-lint-ignore no-explicit-any
+    static async getPlaylistPublishedAt({params, response}: {params: {token: string, playlistId: string}, response: any}) {
+        const data = await runRequest(params, "PlaylistStatistics");
         const playlistPublishedAt = data.items[0].snippet.publishedAt;
-        res.send(playlistPublishedAt);
+        response.body = {data: playlistPublishedAt};
     }
-    static async getPlaylistVideoQuantity(req: OpineRequest, res: OpineResponse) {
-        const data = await runRequest(req, "PlaylistStatistics");
+    // deno-lint-ignore no-explicit-any
+    static async getPlaylistVideoQuantity({params, response}: {params: {token: string, playlistId: string}, response: any}) {
+        const data = await runRequest(params, "PlaylistStatistics");
         const playlistVideoQuantity = data.items[0].contentDetails.itemCount;
-        res.send(playlistVideoQuantity);
+        response.body = {data: playlistVideoQuantity};
     }
 
 
     //----------------------------------------
     //-------My Stats Per Month---------------
     //----------------------------------------
-
-    static getViewsInMonthForCurrentYear(req: OpineRequest, res: OpineResponse){
-        getStetsPerMonthForCurrentYear(req, res, 0)
+// deno-lint-ignore no-explicit-any 
+    static getViewsInMonthForCurrentYear({params, response}: {params: {token: string}, response: any}){
+        getStetsPerMonthForCurrentYear({params, response}, 0)
     }
-    static getCommentsInMonthForCurrentYear(req: OpineRequest, res: OpineResponse){
-        getStetsPerMonthForCurrentYear(req, res, 1)
+    // deno-lint-ignore no-explicit-any
+    static getCommentsInMonthForCurrentYear({params, response}: {params: {token: string}, response: any}){
+        getStetsPerMonthForCurrentYear({params, response}, 1)
     }
-    static getLikesInMonthForCurrentYear(req: OpineRequest, res: OpineResponse){
-        getStetsPerMonthForCurrentYear(req, res, 2)
+    // deno-lint-ignore no-explicit-any
+    static getLikesInMonthForCurrentYear({params, response}: {params: {token: string}, response: any}){
+        getStetsPerMonthForCurrentYear({params, response}, 2)
     }
-    static getDislikesInMonthForCurrentYear(req: OpineRequest, res: OpineResponse){
-        getStetsPerMonthForCurrentYear(req, res, 3)
+    // deno-lint-ignore no-explicit-any
+    static getDislikesInMonthForCurrentYear({params, response}: {params: {token: string}, response: any}){
+        getStetsPerMonthForCurrentYear({params, response}, 3)
     }
-    static getEstimatedMinutesWatchedInMonthForCurrentYear(req: OpineRequest, res: OpineResponse){
-        getStetsPerMonthForCurrentYear(req, res, 4)
+    // deno-lint-ignore no-explicit-any
+    static getEstimatedMinutesWatchedInMonthForCurrentYear({params, response}: {params: {token: string}, response: any}){
+        getStetsPerMonthForCurrentYear({params, response}, 4)
     }
-    static getAverageViewDurationInMonthForCurrentYear(req: OpineRequest, res: OpineResponse){
-        getStetsPerMonthForCurrentYear(req, res, 5)
+    // deno-lint-ignore no-explicit-any
+    static getAverageViewDurationInMonthForCurrentYear({params, response}: {params: {token: string}, response: any}){
+        getStetsPerMonthForCurrentYear({params, response}, 5)
     }
 
     //----------------------------------------
     //-------My Stats Per Month---------------
     //----------------------------------------
 
-    static getViewsPerDayLastThirtyDays(req: OpineRequest, res: OpineResponse){
-        getStetsPerDayLastThirtyDays(req, res, 0)
+    // deno-lint-ignore no-explicit-any
+    static getViewsPerDayLastThirtyDays({params, response}: {params: {token: string}, response: any}){
+        getStetsPerDayLastThirtyDays({params, response}, 0)
     }
-    static getCommentsPerDayLastThirtyDays(req: OpineRequest, res: OpineResponse){
-        getStetsPerDayLastThirtyDays(req, res, 1)
+    // deno-lint-ignore no-explicit-any
+    static getCommentsPerDayLastThirtyDays({params, response}: {params: {token: string}, response: any}){
+        getStetsPerDayLastThirtyDays({params, response}, 1)
     }
-    static getLikesPerDayLastThirtyDays(req: OpineRequest, res: OpineResponse){
-        getStetsPerDayLastThirtyDays(req, res, 2)
+    // deno-lint-ignore no-explicit-any
+    static getLikesPerDayLastThirtyDays({params, response}: {params: {token: string}, response: any}){
+        getStetsPerDayLastThirtyDays({params, response}, 2)
     }
-    static getDislikesPerDayLastThirtyDays(req: OpineRequest, res: OpineResponse){
-        getStetsPerDayLastThirtyDays(req, res, 3)
+    // deno-lint-ignore no-explicit-any
+    static getDislikesPerDayLastThirtyDays({params, response}: {params: {token: string}, response: any}){
+        getStetsPerDayLastThirtyDays({params, response}, 3)
     }
-    static getEstimatedMinutesWatchedPerDayLastThirtyDays(req: OpineRequest, res: OpineResponse){
-        getStetsPerDayLastThirtyDays(req, res, 4)
+    // deno-lint-ignore no-explicit-any
+    static getEstimatedMinutesWatchedPerDayLastThirtyDays({params, response}: {params: {token: string}, response: any}){
+        getStetsPerDayLastThirtyDays({params, response}, 4)
     }
-    static getAverageViewDurationPerDayLastThirtyDays(req: OpineRequest, res: OpineResponse){
-        getStetsPerDayLastThirtyDays(req, res, 5)
+    // deno-lint-ignore no-explicit-any
+    static getAverageViewDurationPerDayLastThirtyDays({params, response}: {params: {token: string}, response: any}){
+        getStetsPerDayLastThirtyDays({params, response}, 5)
     }
 
 
