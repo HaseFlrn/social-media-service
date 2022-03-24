@@ -1,4 +1,5 @@
 import startAndenddateForEveryMonth from './startAndenddateForEveryMonth.json' assert { type: "json" };
+import { helpers } from "../../../deps.ts";
 
 async function runRequest(params: { token: string, videoId?: string, playlistId?: string }, requestName: string) {
 
@@ -32,6 +33,7 @@ async function runRequest(params: { token: string, videoId?: string, playlistId?
     const result = await response.json();
     return result; 
 }
+
 
 // deno-lint-ignore no-explicit-any
 export async function getStatsInTimeRange({params, response}: {params: {token: string}, response: any}, startDate:string, endDate: string) {
@@ -112,6 +114,20 @@ async function getStetsPerMonthForCurrentYear({params, response}: {params: {toke
 */
 
 export default class myStats{
+
+    static channelInformationsUrl = `https://youtube.googleapis.com/youtube/v3/channels`
+    //?part=snippet%2CcontentDetails%2Cstatistics&mine=true&access_token=${params.token}`
+    static videosUrl = `https://youtube.googleapis.com/youtube/v3/activities`
+    //?part=snippet%2CcontentDetails&maxResults=25&mine=true&access_token=${params.token}`
+    //static VideoStatisticsUrl = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${params.videoId}&access_token=${params.token}`
+    static playlistsUrl = `https://youtube.googleapis.com/youtube/v3/playlists`
+    //?part=snippet%2CcontentDetails&mine=true&access_token=${params.token}`
+    //static playlistStatisticsUrl = `https://youtube.googleapis.com/youtube/v3/playlists?part=snippet%2CcontentDetails&id=${params.playlistId}&access_token=${params.token}`
+    static countryUrl = `https://youtubeanalytics.googleapis.com/v2/reports`
+    //?dimensions=country&endDate=${currentDate}&ids=channel%3D%3DMINE&metrics=views%2CestimatedMinutesWatched%2CaverageViewDuration%2CaverageViewPercentage%2CsubscribersGained&sort=-estimatedMinutesWatched&startDate=2014-05-01&access_token=${params.token}`
+   
+
+
     //----------------------------------------
     //----------Channel Stats-----------------
     //----------------------------------------
@@ -315,12 +331,69 @@ export default class myStats{
         }
         response.body = {data: valuePerMonth};
     }
+    /*
     // deno-lint-ignore no-explicit-any
     static async getStatsPercountry({params, response}: {params: {token: string}, response: any}){
         const data = await runRequest(params, "Country");
         const countryStats = data.rows;
         response.body = {data: countryStats};
     }
+    */
 
+
+    // deno-lint-ignore no-explicit-any
+    static async getStatsPercountry(ctx: any) {
+        // 
+        const req = helpers.getQuery(ctx, { mergeParams: true });
+        const res = ctx.response;
+        if(!req.token) {
+          res.status = 401
+          res.body = { err: 'Unauthorized: token missing' }
+        }
+
+        try{
+
+            const tempDate = new Date();
+            const currentDate = tempDate.getFullYear() + "-" + ('0' + (tempDate.getMonth() + 1)).slice(-2) + "-" + ('0' + tempDate.getDate()).slice(-2);
+
+            const url = `${myStats.countryUrl}?dimensions=country&endDate=${currentDate}&ids=channel%3D%3DMINE&metrics=views%2CestimatedMinutesWatched%2CaverageViewDuration%2CaverageViewPercentage%2CsubscribersGained&sort=-estimatedMinutesWatched&startDate=2014-05-01&access_token=${req.token}`;
+    
+            const finalResult: {countryStats: ICountryStats[]} = { 
+                countryStats: []
+            };
+
+            const countryResponse = await fetch(url);
+            const data = await countryResponse.json();
+            
+            for (let i = 0; i <  data.rows.length; i++) {
+                const tempCountryStats = {
+                    country: data.rows[i][0],
+                    views: data.rows[i][1],
+                    estimatedMinutesWatched: data.rows[i][2],
+                    averageViewDuration: data.rows[i][3],
+                    averageViewPercentage: data.rows[i][4],
+                    subscribersGained : data.rows[i][5],
+                }
+                finalResult.countryStats.push(tempCountryStats);       
+            } 
+                
+        res.status = 200;
+        res.body = finalResult;
+        } catch (err) {
+          console.log(err);
+          res.status = 502;
+          res.body = { err: '502: Bad Gateway'}
+        }
+      }
+
+      
 }
 
+export interface ICountryStats {
+    country: string,
+    views: number,
+    estimatedMinutesWatched: number,
+    averageViewDuration: number,
+    averageViewPercentage: number,
+    subscribersGained : number,
+  }
