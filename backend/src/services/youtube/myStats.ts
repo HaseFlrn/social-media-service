@@ -33,18 +33,26 @@ async function runRequest(params: { token: string, videoId?: string, playlistId?
     return result; 
 }
 
-
-export async function getStatsInTimeRange(token:string, startDate:string, endDate: string) {
-    const response = await fetch(`https://youtubeanalytics.googleapis.com/v2/reports?endDate=${endDate}&ids=channel%3D%3DMINE&metrics=views%2Ccomments%2Clikes%2Cdislikes%2CestimatedMinutesWatched%2CaverageViewDuration&startDate=${startDate}&access_token=${token}`);
-    const res = await response.json();
+// deno-lint-ignore no-explicit-any
+export async function getStatsInTimeRange({params, response}: {params: {token: string}, response: any}, startDate:string, endDate: string) {
+    try {
+        const response = await fetch(`https://youtubeanalytics.googleapis.com/v2/reports?endDate=${endDate}&ids=channel%3D%3DMINE&metrics=views%2Ccomments%2Clikes%2Cdislikes%2CestimatedMinutesWatched%2CaverageViewDuration&startDate=${startDate}&access_token=${params.token}`);
+        const res = await response.json();
     return res; 
+    } catch (error) {
+        console.log("an error occurreddd\n" + error);
+        response.status = 500;
+        response.body = {msg: error.toString()};
+    }
+
 }
 
 //----------------------------------------
 //----My Stats In Time Range--------------
 //----------------------------------------
-async function getValueInTimeRange(params: {token: string}, arrayIndex:number, startDate:string, endDate:string) {
-    const data = await getStatsInTimeRange(params.token, startDate, endDate);
+// deno-lint-ignore no-explicit-any
+async function getValueInTimeRange({params, response}: {params: {token: string}, response: any}, arrayIndex:number, startDate:string, endDate:string) {
+    const data = await getStatsInTimeRange({params, response}, startDate, endDate);
     let value
     try {
         value = data.rows[0][arrayIndex];
@@ -67,11 +75,11 @@ async function getStetsPerMonthForCurrentYear({params, response}: {params: {toke
         for (let i = 0; i < currentMonth; i++) {
             const tempStartDate = currentYear + "-" + startAndenddateForEveryMonth[i].startdate
             const tempEndDate = currentYear + "-" + startAndenddateForEveryMonth[i].enddate
-            valuePerMonth.push(await getValueInTimeRange(params, arrayindex, tempStartDate, tempEndDate))
+            valuePerMonth.push(await getValueInTimeRange({params, response}, arrayindex, tempStartDate, tempEndDate))
           }
         const startDateCurrentMonth = currentYear + "-" + startAndenddateForEveryMonth[currentMonth].startdate
         const endDateCurrentMonth = currentYear + "-" + (('0' + (currentMonth + 1)).slice(-2)) + "-" + currentDay
-        valuePerMonth.push(await getValueInTimeRange(params, arrayindex, startDateCurrentMonth, endDateCurrentMonth))
+        valuePerMonth.push(await getValueInTimeRange({params, response}, arrayindex, startDateCurrentMonth, endDateCurrentMonth))
     
         response.body = {data: valuePerMonth}
     } catch (error) {
@@ -94,7 +102,7 @@ async function getStetsPerMonthForCurrentYear({params, response}: {params: {toke
 
         console.log(tempStartAndEnddate)
 
-        valuePerDay.push([tempStartAndEnddate, await getValueInTimeRange(params, arrayindex, tempStartAndEnddate, tempStartAndEnddate)])
+        valuePerDay.push([tempStartAndEnddate, await getValueInTimeRange({params, response}, arrayindex, tempStartAndEnddate, tempStartAndEnddate)])
         
     }
 
