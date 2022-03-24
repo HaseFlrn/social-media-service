@@ -21,12 +21,7 @@ router
   // Channel Stats per Month in current Year
   .get("/channelStatsPerMonth/:token", myStats.getChannelStatsPerMonth)
   // Channel Stats per Day last 30 days
-  .get("/viewsPerDayLastThirtyDays/:token", myStats.getViewsPerDayLastThirtyDays)
-  .get("/commentsPerDayLastThirtyDays/:token", myStats.getCommentsPerDayLastThirtyDays)
-  .get("/likesPerDayLastThirtyDays/:token", myStats.getLikesPerDayLastThirtyDays)
-  .get("/dislikesPerDayLastThirtyDays/:token", myStats.getDislikesPerDayLastThirtyDays)
-  .get("/estimatedMinutesWatchedPerDayLastThirtyDays/:token", myStats.getEstimatedMinutesWatchedPerDayLastThirtyDays)
-  .get("/averageViewDurationPerDayLastThirtyDays/:token", myStats.getAverageViewDurationPerDayLastThirtyDays)
+
   // Channel Stats per Country
   .get("/statsPerCountry/:token", myStats.getStatsPerCountry)
   // Uploaded Videos Per Month

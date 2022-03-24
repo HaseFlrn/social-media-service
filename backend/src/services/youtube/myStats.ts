@@ -1,29 +1,6 @@
 import startAndenddateForEveryMonth from './startAndenddateForEveryMonth.json' assert { type: "json" };
 import { helpers } from "../../../deps.ts";
 
-
-/*
-// deno-lint-ignore no-explicit-any
- async function getStetsPerDayLastThirtyDays({params, response}: {params: {token: string}, response: any}, arrayindex:number) {
-
-    const valuePerDay = [];
-
-    for (let i = 30; i > 0; i--){
-        const currentDate = new Date()
-
-        currentDate.setDate(currentDate.getDate()-i);
-        const tempStartAndEnddate = currentDate.getFullYear() + "-" + ('0' + (currentDate.getMonth() + 1)).slice(-2) + "-" + ('0' + currentDate.getDate()).slice(-2);
-
-        console.log(tempStartAndEnddate)
-
-        valuePerDay.push([tempStartAndEnddate, await getValueInTimeRange({params, response}, arrayindex, tempStartAndEnddate, tempStartAndEnddate)])
-        
-    }
-
-    response.body = {data: valuePerDay}
-}
-*/
-
 export default class myStats{
 
     static channelInformationsUrl = `https://youtube.googleapis.com/youtube/v3/channels`
@@ -32,6 +9,7 @@ export default class myStats{
     static playlistsUrl = `https://youtube.googleapis.com/youtube/v3/playlists`
     static playlistStatisticsUrl = `https://youtube.googleapis.com/youtube/v3/playlists`
     static reportsUrl = `https://youtubeanalytics.googleapis.com/v2/reports`
+
 
     //----------------------------------------
     //----------Channel Stats-----------------
@@ -48,8 +26,8 @@ export default class myStats{
         }
 
         try{
-            const countryResponse = await fetch(`${myStats.channelInformationsUrl}?part=snippet%2CcontentDetails%2Cstatistics&mine=true&access_token=${req.token}`);
-            const data = await countryResponse.json();
+            const response = await fetch(`${myStats.channelInformationsUrl}?part=snippet%2CcontentDetails%2Cstatistics&mine=true&access_token=${req.token}`);
+            const data = await response.json();
             
             if(data.items[0]){
                 const finalResult= { 
@@ -87,8 +65,8 @@ export default class myStats{
         }
 
         try{
-            const countryResponse = await fetch(`${myStats.videosUrl}?part=snippet%2CcontentDetails&maxResults=1000&mine=true&access_token=${req.token}`);
-            const data = await countryResponse.json();
+            const response = await fetch(`${myStats.videosUrl}?part=snippet%2CcontentDetails&maxResults=1000&mine=true&access_token=${req.token}`);
+            const data = await response.json();
             
             if(data.items){
                 const finalResult: {latestVideo: String, allVideos: String[]} = { 
@@ -133,8 +111,8 @@ export default class myStats{
         }
 
         try{
-            const countryResponse = await fetch(`${myStats.videoStatisticsUrl}?part=snippet%2CcontentDetails%2Cstatistics&id=${req.videoId}&access_token=${req.token}`);
-            const data = await countryResponse.json();
+            const response = await fetch(`${myStats.videoStatisticsUrl}?part=snippet%2CcontentDetails%2Cstatistics&id=${req.videoId}&access_token=${req.token}`);
+            const data = await response.json();
             
             if(data.items[0]){
                 const finalResult= { 
@@ -173,8 +151,8 @@ export default class myStats{
         }
 
         try{
-            const countryResponse = await fetch(`${myStats.playlistsUrl}?part=snippet%2CcontentDetails&mine=true&access_token=${req.token}`);
-            const data = await countryResponse.json();
+            const response = await fetch(`${myStats.playlistsUrl}?part=snippet%2CcontentDetails&mine=true&access_token=${req.token}`);
+            const data = await response.json();
             
             if(data.items){
                 const finalResult: {latestPlaylist: String, allplaylist: String[]} = { 
@@ -219,8 +197,8 @@ export default class myStats{
         }
 
         try{
-            const countryResponse = await fetch(`${myStats.playlistStatisticsUrl}?part=snippet%2CcontentDetails&id=${req.playlistId}&access_token=${req.token}`);
-            const data = await countryResponse.json();
+            const response = await fetch(`${myStats.playlistStatisticsUrl}?part=snippet%2CcontentDetails&id=${req.playlistId}&access_token=${req.token}`);
+            const data = await response.json();
             
             if(data.items[0]){
                 const finalResult= { 
@@ -244,11 +222,9 @@ export default class myStats{
     } 
 
 
-    
     //----------------------------------------
     //-------My Stats Per Month---------------
     //----------------------------------------
-
 
     // deno-lint-ignore no-explicit-any
     static async getChannelStatsPerMonth(ctx: any) {
@@ -259,22 +235,19 @@ export default class myStats{
             res.status = 401;
             res.body = { err: 'Unauthorized: token missing' };
         }
-    
+
         try{
-            
             const currentYear = (new Date()).getFullYear()
             //starts with 0
             const currentMonth = (new Date()).getMonth()
-            const currentDay = (new Date()).getDate()
             
-            const valuePerMonth = [{},{},{},{},{},{},{},{},{},{},{},{}]
+            const emptyYear = [{},{},{},{},{},{},{},{},{},{},{},{}]
             
             for (let i = 0; i <= currentMonth; i++) {
                 const tempStartDate = currentYear + "-" + startAndenddateForEveryMonth[i].startdate
                 const tempEndDate = currentYear + "-" + startAndenddateForEveryMonth[i].enddate
 
-                const url = `${myStats.reportsUrl}?endDate=${tempEndDate}&ids=channel%3D%3DMINE&metrics=views%2Ccomments%2Clikes%2Cdislikes%2CestimatedMinutesWatched%2CaverageViewDuration&startDate=${tempStartDate}&access_token=${req.token}`
-                const response = await fetch(url);
+                const response = await fetch(`${myStats.reportsUrl}?endDate=${tempEndDate}&ids=channel%3D%3DMINE&metrics=views%2Ccomments%2Clikes%2Cdislikes%2CestimatedMinutesWatched%2CaverageViewDuration&startDate=${tempStartDate}&access_token=${req.token}`);
                 const data = await response.json();
 
                 if(data.rows[0]){
@@ -286,44 +259,23 @@ export default class myStats{
                         estimatedMinutesWatched: data.rows[0][4],
                         averageViewDuration: data.rows[0][5]
                     };
-                    valuePerMonth[i] = oneMonthStats;
-                }
-
-                
-            }
-            /*
-            const startDateCurrentMonth = currentYear + "-" + startAndenddateForEveryMonth[currentMonth].startdate
-            const endDateCurrentMonth = currentYear + "-" + (('0' + (currentMonth + 1)).slice(-2)) + "-" + currentDay
-
-            const response = await fetch(`${myStats.reportsUrl}?endDate=${endDateCurrentMonth}&ids=channel%3D%3DMINE&metrics=views%2Ccomments%2Clikes%2Cdislikes%2CestimatedMinutesWatched%2CaverageViewDuration&startDate=${startDateCurrentMonth}&access_token=${req.token}`);
-            const data = await response.json();
-
-            if(data.rows[0]){
-                const oneMonthStats= { 
-                    views: data.rows[0][0],
-                    comments: data.rows[0][1],
-                    likes: data.rows[0][2],
-                    dislikes: data.rows[0][3],
-                    estimatedMinutesWatched: data.rows[0][4],
-                    averageViewDuration: data.rows[0][5]
-                };
-                valuePerMonth[currentMonth] = oneMonthStats;
-            }
-               */            
+                    emptyYear[i] = oneMonthStats;
+                } 
+            }        
 
             const finalResult = { 
-                january: valuePerMonth[0],
-                february: valuePerMonth[1],
-                march: valuePerMonth[2],
-                april: valuePerMonth[3],
-                may: valuePerMonth[4],
-                june: valuePerMonth[5],
-                july: valuePerMonth[6],
-                august: valuePerMonth[7],
-                september: valuePerMonth[8],
-                october: valuePerMonth[9],
-                november: valuePerMonth[10],
-                december: valuePerMonth[11]
+                january: emptyYear[0],
+                february: emptyYear[1],
+                march: emptyYear[2],
+                april: emptyYear[3],
+                may: emptyYear[4],
+                june: emptyYear[5],
+                july: emptyYear[6],
+                august: emptyYear[7],
+                september: emptyYear[8],
+                october: emptyYear[9],
+                november: emptyYear[10],
+                december: emptyYear[11]
             };
 
             res.status = 200;
@@ -340,31 +292,7 @@ export default class myStats{
     //-------My Stats Per Day---------------
     //----------------------------------------
 
-    // deno-lint-ignore no-explicit-any
-    static getViewsPerDayLastThirtyDays({params, response}: {params: {token: string}, response: any}){
-        //getStetsPerDayLastThirtyDays({params, response}, 0)
-    }
-    // deno-lint-ignore no-explicit-any
-    static getCommentsPerDayLastThirtyDays({params, response}: {params: {token: string}, response: any}){
-        //getStetsPerDayLastThirtyDays({params, response}, 1)
-    }
-    // deno-lint-ignore no-explicit-any
-    static getLikesPerDayLastThirtyDays({params, response}: {params: {token: string}, response: any}){
-        //getStetsPerDayLastThirtyDays({params, response}, 2)
-    }
-    // deno-lint-ignore no-explicit-any
-    static getDislikesPerDayLastThirtyDays({params, response}: {params: {token: string}, response: any}){
-        //getStetsPerDayLastThirtyDays({params, response}, 3)
-    }
-    // deno-lint-ignore no-explicit-any
-    static getEstimatedMinutesWatchedPerDayLastThirtyDays({params, response}: {params: {token: string}, response: any}){
-        //getStetsPerDayLastThirtyDays({params, response}, 4)
-    }
-    // deno-lint-ignore no-explicit-any
-    static getAverageViewDurationPerDayLastThirtyDays({params, response}: {params: {token: string}, response: any}){
-        //getStetsPerDayLastThirtyDays({params, response}, 5)
-    }
-
+    //TODO
 
     //----------------------------------------
     //-----Uploaded Videos per Month----------
@@ -429,6 +357,7 @@ export default class myStats{
         }
       }
 
+
     //----------------------------------------
     //--------Stats per country---------------
     //----------------------------------------
@@ -454,8 +383,8 @@ export default class myStats{
                 countryStats: []
             };
 
-            const countryResponse = await fetch(url);
-            const data = await countryResponse.json();
+            const response = await fetch(url);
+            const data = await response.json();
             
             if(data.rows){
                 for (let i = 0; i <  data.rows.length; i++) {
