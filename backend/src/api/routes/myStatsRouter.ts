@@ -11,8 +11,7 @@ router
   // Channel Quantities
   .get("/channelStats/:token", myStats.getChannelStats)
   //Get Video ID's
-  .get("/latestVideo/:token", myStats.getLatestVideo)
-  .get("/allVideos/:token", myStats.getAllVideos)
+  .get("/videoIds/:token", myStats.getVideoIds)
   // Video Stats
   .get("/videoStats/:token/:videoId", myStats.getVideoStats)
   //Get Playlist ID's

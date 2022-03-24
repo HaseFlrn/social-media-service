@@ -119,7 +119,7 @@ export default class myStats{
     //?part=snippet%2CcontentDetails%2Cstatistics&mine=true&access_token=${params.token}`
     static videosUrl = `https://youtube.googleapis.com/youtube/v3/activities`
     //?part=snippet%2CcontentDetails&maxResults=25&mine=true&access_token=${params.token}`
-    static VideoStatisticsUrl = `https://youtube.googleapis.com/youtube/v3/videos`
+    static videoStatisticsUrl = `https://youtube.googleapis.com/youtube/v3/videos`
     //?part=snippet%2CcontentDetails%2Cstatistics&id=${params.videoId}&access_token=${params.token}`
     static playlistsUrl = `https://youtube.googleapis.com/youtube/v3/playlists`
     //?part=snippet%2CcontentDetails&mine=true&access_token=${params.token}`
@@ -176,7 +176,7 @@ export default class myStats{
         }
 
         try{
-            const countryResponse = await fetch(`${myStats.VideoStatisticsUrl}?part=snippet%2CcontentDetails%2Cstatistics&id=${res.videoId}&access_token=${res.token}`);
+            const countryResponse = await fetch(`${myStats.videoStatisticsUrl}?part=snippet%2CcontentDetails%2Cstatistics&id=${res.videoId}&access_token=${res.token}`);
             const data = await countryResponse.json();
             
             const finalResult= { 
@@ -195,32 +195,42 @@ export default class myStats{
         }
       }  
 
-    //----------------------------------------
-    //----------Video Stats-------------------
-    //----------------------------------------
 
-    //Get Latest Video Id
-    // deno-lint-ignore no-explicit-any
-    static async getLatestVideo({params, response}: {params: {token: string}, response: any}) {
-        const data = await runRequest(params, "Videos");
-        const latestVideo = data.items[0].contentDetails.upload.videoId;
-        response.body = {data: latestVideo};
-    }
+    //----------------------------------------
+    //----------Video ID's-----------------
+    //----------------------------------------
 
     // deno-lint-ignore no-explicit-any
-    static async getAllVideos({params, response}: {params: {token: string}, response: any}) {
-        const data = await runRequest(params, "Videos");
+    static async getVideoIds(ctx: any) {
+        // 
+        const req = helpers.getQuery(ctx, { mergeParams: true });
+        const res = ctx.response;
+        if(!req.token) {
+          res.status = 401
+          res.body = { err: 'Unauthorized: token missing' }
+        }
 
-        const videos = [];
-        
-           
+        try{
+            const countryResponse = await fetch(`${myStats.videosUrl}?part=snippet%2CcontentDetails&maxResults=25&mine=true&access_token=${res.token}`);
+            const data = await countryResponse.json();
+            
+            const finalResult: {latestVideo: String, allVideos: String[]} = { 
+                latestVideo: data.items[0].contentDetails.upload.videoId,
+                allVideos: [],
+            };
+
             for (let i = 0; i < data.items.length; i++) {
-                videos.push(data.items[i].contentDetails.upload.videoId)
-                
+                finalResult.allVideos.push(data.items[i].contentDetails.upload.videoId) 
             }
-        
-        response.body = {data: videos};
-    }
+
+        res.status = 200;
+        res.body = finalResult;
+        } catch (err) {
+          console.log(err);
+          res.status = 502;
+          res.body = { err: '502: Bad Gateway'}
+        }
+      }  
 
 
     //----------------------------------------
