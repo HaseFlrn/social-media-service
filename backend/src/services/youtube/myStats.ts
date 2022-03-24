@@ -176,9 +176,13 @@ export default class myStats{
         // 
         const req = helpers.getQuery(ctx, { mergeParams: true });
         const res = ctx.response;
+        if(!req.videoId) {
+            res.status = 400;
+            res.body = { err: "Bad Request: channelId missing" };
+        }
         if(!req.token) {
-          res.status = 401
-          res.body = { err: 'Unauthorized: token missing' }
+            res.status = 401;
+            res.body = { err: 'Unauthorized: token missing' };
         }
 
         try{
@@ -300,9 +304,13 @@ export default class myStats{
         // 
         const req = helpers.getQuery(ctx, { mergeParams: true });
         const res = ctx.response;
+        if(!req.playlistId) {
+            res.status = 400;
+            res.body = { err: "Bad Request: channelId missing" };
+        }
         if(!req.token) {
-          res.status = 401
-          res.body = { err: 'Unauthorized: token missing' }
+            res.status = 401;
+            res.body = { err: 'Unauthorized: token missing' };
         }
 
         try{
