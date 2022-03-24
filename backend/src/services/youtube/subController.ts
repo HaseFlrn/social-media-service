@@ -15,7 +15,8 @@ export default class subController {
     const req = helpers.getQuery(ctx, { mergeParams: true });
     const res = ctx.response;
     if(!req.token) {
-      res.setStatus(401).json({ err: 'token missing'})
+      res.status = 401
+      res.body = { err: 'Unauthorized: token missing' }
     }
     try{
       const url = `${subController.subscptionUrl}?part=snippet&mine=true&access_token=${req.token}`;
@@ -37,10 +38,12 @@ export default class subController {
         pageToken = data.nextPageToken;
       } while(pageToken) 
 
-      res.setStatus(200).json(finalResult);
+      res.status = 200;
+      res.body = finalResult;
     } catch (err) {
-      console.log("an error occurreddd\n" + err );
-      res.setStatus(502).json(err);
+      console.log(err);
+      res.status = 502;
+      res.body = { err: '502: Bad Gateway'}
     }
   }
 
@@ -49,10 +52,12 @@ export default class subController {
     const req = helpers.getQuery(ctx, { mergeParams: true });
     const res = ctx.response;
     if(!req.channelId) {
-      return res.setStatus(400).json({ err: "Bad Request: channelId missing" });
+      res.status = 400;
+      res.body = { err: "Bad Request: channelId missing" };
     }
     if(!req.token) {
-      return res.setStatus(401).json({ err: 'Unauthorized: token missing'})
+      res.status = 401;
+      res.body = { err: 'Unauthorized: token missing' };
     }
     try{
         const channelResponse = await fetch(`${subController.channelUrl}?part=id,statistics,status,topicDetails&id=${req.channelId}&access_token=${req.token}`);
@@ -81,7 +86,8 @@ export default class subController {
         }
       } catch( err ) {
         console.log("an error occurreddd\n" + err );
-        res.setStatus(502).json(err);
+        res.status = 502;
+        res.body = { err: 'Bad Gateway' };
       }
   }
   
@@ -91,10 +97,12 @@ export default class subController {
     const req = helpers.getQuery(ctx, { mergeParams: true });
     const res = ctx.response;
     if(!req.channelId) {
-      res.setStatus(400).json({ err: 'Bad Request: channelId missing'})
+      res.status = 400;
+      res.body = { err: 'Bad Request: channelId missing'};
     }
     if(!req.token) {
-      res.setStatus(401).json({ err: 'Unauthorized: token missing'})
+      res.status = 401;
+      res.body = { err: 'Unauthorized: token missing'};
     }
     if(req.count) {
       count = parseInt(req.count);
@@ -146,7 +154,8 @@ export default class subController {
       res.json(finalResult);
     } catch (err) {
       console.log("an error occurreddd\n" + err );
-      res.setStatus(502).json(err);
+      res.status = 502;
+      res.body = { err: 'Bad Gateway' };
     }
   }
 
@@ -164,10 +173,12 @@ export default class subController {
     const res = ctx.response;
 
     if(!req.channelId) {
-      res.setStatus(400).json({ err: 'Bad Request: channelId missing'})
+      res.status = 400;
+      res.body = { err: 'Bad Request: channelId missing'};
     }
     if(!req.token) {
-      res.setStatus(401).json({ err: 'Unauthorized: token missing'})
+      res.status = 401;
+      res.body = { err: 'Unauthorized: token missing'};
     }
     try{
       const response = await fetch(`${subController.videoUrl}&access_token=${req.token}&onlyIds=true`);
@@ -176,7 +187,8 @@ export default class subController {
 
     } catch (err) {
       console.log("an error occurreddd\n" + err);
-      res.setStatus(502).json(err);
+      res.status = 502;
+      res.body = { err: 'Bad Gateway' };
     }
   }
 
