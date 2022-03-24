@@ -48,11 +48,10 @@ async function getValueInTimeRange(params: {token: string}, arrayIndex:number, s
     let value
     try {
         value = data.rows[0][arrayIndex];
+        return value;
     } catch (error) {
-        console.log(error)
-    }
-    
-    return value;
+        console.log(error);
+    }   
 }
 // deno-lint-ignore no-explicit-any
 async function getStetsPerMonthForCurrentYear({params, response}: {params: {token: string}, response: any}, arrayindex:number) {
