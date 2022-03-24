@@ -1,11 +1,12 @@
-import { Router } from "https://deno.land/x/opine@2.1.1/mod.ts";
+import { Router } from "../../../deps.ts";
 import myStats from "../../services/youtube/myStats.ts";
 
-const router = Router();
+const router = new Router();
 
 router
-  .get("/", (_req, res) => {
-    res.send("This is myStatsRouter.ts");
+// deno-lint-ignore no-explicit-any
+  .get("/", ({response}: {response: any}) => {
+    response.body = "This is myStatsRouter.ts";
   })
   //Get Channel Quantities
   .get("/videoQuantity/:token", myStats.getVideoQuantity)
@@ -26,13 +27,22 @@ router
   .get("/playlistDescription/:token/:playlistId", myStats.getPlaylistDescription)
   .get("/playlistPublishedAt/:token/:playlistId", myStats.getPlaylistPublishedAt)
   .get("/playlistVideoQuantity/:token/:playlistId", myStats.getPlaylistVideoQuantity)
-  // Channel Stats in Time Range
-  .get("/viewsInTimeRange/:token/:startDate/:endDate", myStats.getViewsInTimeRange)
-  .get("/commentsInTimeRange/:token/:startDate/:endDate", myStats.getCommentsInTimeRange)
-  .get("/dislikesInTimeRanges/:token/:startDate/:endDate", myStats.getDislikesInTimeRanges)
-  .get("/likesInTimeRange/:token/:startDate/:endDate", myStats.getLikesInTimeRange)
-  .get("/estimatedMinutesWatchedInTimeRange/:token/:startDate/:endDate", myStats.getEstimatedMinutesWatchedInTimeRange)
-  .get("/averageViewDurationInTimeRange/:token/:startDate/:endDate", myStats.getAverageViewDurationInTimeRange)
+  // Channel Stats per Month in current Year
+  .get("/viewsInMonthForCurrentYear/:token", myStats.getViewsInMonthForCurrentYear)
+  .get("/commentsInMonthForCurrentYear/:token", myStats.getCommentsInMonthForCurrentYear)
+  .get("/likesInMonthForCurrentYear/:token", myStats.getLikesInMonthForCurrentYear)
+  .get("/dislikesInMonthForCurrentYear/:token", myStats.getDislikesInMonthForCurrentYear)
+  .get("/estimatedMinutesWatchedInMonthForCurrentYear/:token", myStats.getEstimatedMinutesWatchedInMonthForCurrentYear)
+  .get("/averageViewDurationInMonthForCurrentYear/:token", myStats.getAverageViewDurationInMonthForCurrentYear)
+  // Channel Stats per Day last 30 days
+  .get("/viewsPerDayLastThirtyDays/:token", myStats.getViewsPerDayLastThirtyDays)
+  .get("/commentsPerDayLastThirtyDays/:token", myStats.getCommentsPerDayLastThirtyDays)
+  .get("/likesPerDayLastThirtyDays/:token", myStats.getLikesPerDayLastThirtyDays)
+  .get("/dislikesPerDayLastThirtyDays/:token", myStats.getDislikesPerDayLastThirtyDays)
+  .get("/estimatedMinutesWatchedPerDayLastThirtyDays/:token", myStats.getEstimatedMinutesWatchedPerDayLastThirtyDays)
+  .get("/averageViewDurationPerDayLastThirtyDays/:token", myStats.getAverageViewDurationPerDayLastThirtyDays)
+  // Channel Stats per Country
+  .get("/uploadedVideosPerMonth/:token", myStats.getUploadedVideosPerMonth)
 //.get("/PATH", (req,res) => {function})
 
 export default router;
