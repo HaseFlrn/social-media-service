@@ -127,29 +127,38 @@ export default class myStats{
     //?dimensions=country&endDate=${currentDate}&ids=channel%3D%3DMINE&metrics=views%2CestimatedMinutesWatched%2CaverageViewDuration%2CaverageViewPercentage%2CsubscribersGained&sort=-estimatedMinutesWatched&startDate=2014-05-01&access_token=${params.token}`
    
 
-
     //----------------------------------------
     //----------Channel Stats-----------------
     //----------------------------------------
 
     // deno-lint-ignore no-explicit-any
-    static async getVideoQuantity({params, response}: {params: {token: string}, response: any}) {
-        const data = await runRequest(params, "ChannelInformations");
-        const videoQuantity = data.items[0].statistics.videoCount;
-        response.body = {data: videoQuantity};
-    }
-    // deno-lint-ignore no-explicit-any
-    static async getSubscriberQuantity({request, response}: {request: any, response: any}) {
-        const data = await runRequest(request, "ChannelInformations");
-        const subscriberQuantity = data.items[0].statistics.subscriberCount;
-        response.body = {data: subscriberQuantity};
-    }
-    // deno-lint-ignore no-explicit-any
-    static async getAllTimeViews({request, response}: {request: any, response: any}) {
-        const data = await runRequest(request, "ChannelInformations");
-        const allTimeViews = data.items[0].statistics.viewCount;
-        response.body = {data: allTimeViews};
-    }
+    static async getChannelStats(ctx: any) {
+        // 
+        const req = helpers.getQuery(ctx, { mergeParams: true });
+        const res = ctx.response;
+        if(!req.token) {
+          res.status = 401
+          res.body = { err: 'Unauthorized: token missing' }
+        }
+
+        try{
+            const countryResponse = await fetch(`${myStats.channelInformationsUrl}?part=snippet%2CcontentDetails%2Cstatistics&mine=true&access_token=${res.token}`);
+            const data = await countryResponse.json();
+            
+            const finalResult= { 
+                videoCount: data.items[0].statistics.videoCount,
+                subscriberCount: data.items[0].statistics.subscriberCount,
+                viewCount: data.items[0].statistics.viewCount,
+            };
+                
+        res.status = 200;
+        res.body = finalResult;
+        } catch (err) {
+          console.log(err);
+          res.status = 502;
+          res.body = { err: '502: Bad Gateway'}
+        }
+      }
 
     //----------------------------------------
     //----------Video Stats-------------------

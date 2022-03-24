@@ -9,9 +9,7 @@ router
     response.body = "This is myStatsRouter.ts";
   })
   //Get Channel Quantities
-  .get("/videoQuantity/:token", myStats.getVideoQuantity)
-  .get("/subscriberQuantity/:token", myStats.getSubscriberQuantity)
-  .get("/allTimeViews/:token", myStats.getAllTimeViews)
+  .get("/channelStats/:token", myStats.getChannelStats)
   //Get Video ID's
   .get("/latestVideo/:token", myStats.getLatestVideo)
   .get("/allVideos/:token", myStats.getAllVideos)
