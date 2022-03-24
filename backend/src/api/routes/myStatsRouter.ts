@@ -42,7 +42,9 @@ router
   .get("/estimatedMinutesWatchedPerDayLastThirtyDays/:token", myStats.getEstimatedMinutesWatchedPerDayLastThirtyDays)
   .get("/averageViewDurationPerDayLastThirtyDays/:token", myStats.getAverageViewDurationPerDayLastThirtyDays)
   // Channel Stats per Country
-  .get("/getStatsPerCountry/:token", myStats.getStatsPerCountry)
+  .get("/statsPerCountry/:token", myStats.getStatsPerCountry)
+  // Uploaded Videos Per Month
+  .get("/uploadedVideosPerMonth/:token", myStats.getUploadedVideosPerMonth)
 //.get("/PATH", (req,res) => {function})
 
 export default router;
