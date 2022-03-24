@@ -1,11 +1,12 @@
-import { Router } from "https://deno.land/x/opine@2.1.1/mod.ts";
+import { Router } from "../../../deps.ts";
 import general from "../../services/youtube/general.ts";
 
-const router = Router();
+
+const router = new Router();
 
 router
-  .get("/", (_req, res) => {
-    res.send("This is generalRouter.ts");
+  .get("/", ({response}) => {
+    response.body = "This is generalRouter.ts";
   })
   .get("/channelName/:token", general.getChannelName)
   .get("/channelDescription/:token", general.getChannelDescription)

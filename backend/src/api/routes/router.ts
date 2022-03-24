@@ -1,29 +1,29 @@
-import { Router } from "https://deno.land/x/opine@2.1.1/mod.ts";
+import { Router } from "../../../deps.ts";
 import OAuth2Client from "../connections/YoutubeClient.ts";
 import GeneralRouter from "./generalRouter.ts";
 import StatsRouter from "./myStatsRouter.ts";
-import TrendsRouter from "./trendsRouter.ts";
-import SubsRouter from "./subscriptionRouter.ts";
+// import TrendsRouter from "./trendsRouter.ts";
+// import SubsRouter from "./subscriptionRouter.ts";
 
-const router = Router();
+const router = new Router();
 
 
 router
-  .get("/", (_req, res) => {
-    res.send("Welcome to the YouTool API");
+  .get("/", ({response}) => {
+    response.body = "Welcome to the YouTool API";
   })
   // Auth Process
-  .get("/login", (_req, res) => {
+  .get("/login", ({response}) => {
     console.log("executed login");
-    res.redirect(OAuth2Client.code.getAuthorizationUri().toString());
+    response.redirect(OAuth2Client.code.getAuthorizationUri().toString());
   })
-  .get("/auth/callback", async (req, res) => {
-    const tokens = await OAuth2Client.code.getToken(req.originalUrl);
-    res.redirect(`${Deno.env.get("FRONTEND_URL")}youtube?token=${tokens.accessToken}`);
+  .get("/auth/callback", async ({request, response}) => {
+    const tokens = await OAuth2Client.code.getToken(request.url);
+    response.redirect(`${Deno.env.get("FRONTEND_URL")}youtube?token=${tokens.accessToken}`);
   });
-router.use("/general", GeneralRouter);
-router.use("/myStats", StatsRouter);
-router.use("/trends", TrendsRouter);
-router.use("/mySubs", SubsRouter);
+ router.use("/general", GeneralRouter.routes(), GeneralRouter.allowedMethods());
+ router.use("/myStats", StatsRouter.routes(), StatsRouter.allowedMethods());
+// router.use("/trends", TrendsRouter.routes(), TrendsRouter.allowedMethods());
+// router.use("/mySubs", SubsRouter.routes(), SubsRouter.allowedMethods());
 
 export default router;
