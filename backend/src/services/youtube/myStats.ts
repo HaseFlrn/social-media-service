@@ -382,7 +382,7 @@ export default class myStats{
             const currentYear = (new Date()).getFullYear()
             const videoCountPerMonth: number[] = [0,0,0,0,0,0,0,0,0,0,0,0];
 
-            const url = `${myStats.videosUrl}?part=snippet%2CcontentDetails&maxResults=1000&mine=true&access_token=${res.token}`
+            const url = `${myStats.videosUrl}?part=snippet%2CcontentDetails&maxResults=25&mine=true&access_token=${res.token}`
 
             const response = await fetch(url);
             const data = await response.json();
