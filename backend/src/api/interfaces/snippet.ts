@@ -9,7 +9,6 @@ export interface IVideoSnippet {
 }
 
 export interface IReqVideoSnippet {
-  channelId: string,
   title: string,
   thumbnails: Record<string, undefined>
 }

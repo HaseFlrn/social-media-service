@@ -1,4 +1,7 @@
-import { helpers } from "../../../deps.ts"
+import { helpers } from "../../../deps.ts";
+import { IChannel, IReqChannel } from "../../api/interfaces/channel.ts";
+import { IVideo, IReqVideo } from "../../api/interfaces/video.ts";
+import { IReqVideoSnippet } from "../../api/interfaces/snippet.ts";
 
 export default class subController {
   //---------------------------------------------------
@@ -93,7 +96,7 @@ export default class subController {
   
   // deno-lint-ignore no-explicit-any
   static async getChannelVideos(ctx: any) {
-    let count = 20000000; 
+    let count = 20000000; //20.000.000
     const req = helpers.getQuery(ctx, { mergeParams: true });
     const res = ctx.response;
     if(!req.channelId) {
@@ -109,20 +112,11 @@ export default class subController {
     }
     try{
       const url = `${subController.searchUrl}?part=snippet&channelId=${req.channelId}&access_token=${req.token}`;
-      let finalResult: {
-        videoCount: number,
-        videos: {
-          id: {
-            kind: string,
-            videoId: string
-          },
-          snippet: Record<string, unknown>,
-          publishTime: string
-        }[]
-      } = { 
+      const finalResult: {videoCount: number, videos: IReqVideo[]} = { 
         videoCount: 0,
-        videos: [] 
+        videos: []
       };
+      let result: IVideo[] = [];
       let pageToken = '';
       do {
         const nextCnt = count > 50 ? 50 : count;
@@ -130,28 +124,30 @@ export default class subController {
         const data = await response.json();
         
         count = count - data.items.length;
-
-        finalResult = {
-          videoCount: finalResult.videoCount + data.items.length,
-          videos: finalResult.videos.concat(data.items),
-        }
-        
+        result = result.concat(data.items);
         pageToken = data.nextPageToken;
+
       } while(pageToken && count > 0) 
 
-      if(req.onlyIds) {
-        const videoIds: {videoCount: number, videoIds: string[]} = {
-          videoCount: finalResult.videoCount,
-          videoIds: [] 
-        };
-        finalResult.videos.forEach(element => {
-          videoIds.videoIds.push(element.id.videoId)
-        });
+      result.forEach( element => {
+        if(element.kind == 'youtube#video') {
+          const tempSnippet: IReqVideoSnippet = {
+            title: element.snippet.title,
+            thumbnails: element.snippet.thumbnails
+          };
+          finalResult.videos.push({
+            videoId: element.id.videoId,
+            channelId: element.snippet.channelId,
+            channelTitle: element.channelTitle,
+            snippet: tempSnippet 
+          })
+          
+          finalResult.videoCount++;
+        }
+      });
 
-        return res.json(videoIds);
-      }
-
-      res.json(finalResult);
+      res.status = 200;
+      res.body = finalResult;
     } catch (err) {
       console.log("an error occurreddd\n" + err );
       res.status = 502;
@@ -159,38 +155,36 @@ export default class subController {
     }
   }
 
-  
-
-  
-  // deno-lint-ignore no-explicit-any no-unused-vars
-  static async getChannelTopVideos({request, response} : {request: any, response: any}) {
-  
-  }
-
   // deno-lint-ignore no-explicit-any
   static async getChannelChartVideos(ctx: any) {
     const req = helpers.getQuery(ctx, { mergeParams: true})
     const res = ctx.response;
 
-    if(!req.channelId) {
+    if(!req.channelId || !req.region) {
       res.status = 400;
-      res.body = { err: 'Bad Request: channelId missing'};
+      res.body = { err: 'Bad Request: channelId or region missing'};
     }
     if(!req.token) {
       res.status = 401;
       res.body = { err: 'Unauthorized: token missing'};
     }
     try{
-      const response = await fetch(`${subController.videoUrl}&access_token=${req.token}&onlyIds=true`);
+      const response = await fetch(`${subController.videoUrl}?charts=mostPopular&reagionCode=${req.region}&part=snippet&access_token=${req.token}`);
       const data = await response.json();
 
-
+      subController.getChannelVideos({});
     } catch (err) {
       console.log("an error occurreddd\n" + err);
       res.status = 502;
       res.body = { err: 'Bad Gateway' };
     }
   }
+
+  // deno-lint-ignore no-explicit-any no-unused-vars
+  static async getChannelTopVideos({request, response} : {request: any, response: any}) {
+  
+  }
+
 
   //---------------------------------------------------
   //--------Subscriped Channel Information-------------
