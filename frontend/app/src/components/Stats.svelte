@@ -1,5 +1,12 @@
 <script>
   import {onMount} from 'svelte';
+  import {count} from './stores.js';
+
+  let countValue;
+
+  count.subscribe(value => {
+		countValue = value;
+	});
 
   function createChart() {
     const barChart = document.getElementById('likesChart');
@@ -72,12 +79,10 @@
   })
 }
 
-const urlParams = new URLSearchParams(window.location.search);
-  const token = urlParams.get("token");
   let value = "";
   async function getChannelInfo() {
     const res = await fetch(
-      `https://localhost:3000/api/v1/myStats/subscriberQuantity/${token}`
+      `https://localhost:3000/api/v1/myStats/subscriberQuantity/${countValue}`
     );
     const info = await res.json();
     console.log(info);
@@ -89,6 +94,7 @@ const urlParams = new URLSearchParams(window.location.search);
 
 <main>
   <h1> Overview </h1>
+  <div>{countValue}</div>
 
   <div class="grid-container">
     <div class="item">XXX

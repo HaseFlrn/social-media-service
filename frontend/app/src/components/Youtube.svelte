@@ -1,6 +1,13 @@
 <script>
+ import { count } from './stores.js';
+ let countValue;
+
+	count.subscribe(value => {
+		countValue = value;
+	});
   const urlParams = new URLSearchParams(window.location.search);
   const token = urlParams.get("token");
+  count.update(n => n = token);
   let value = "";
   async function getChannelInfo() {
     const res = await fetch(
@@ -26,6 +33,8 @@
 <button on:click={getChannelInfo}>Get my channel information</button>
 <br />
 {value}
+<br />
+<div>The Token is {countValue}</div>
 
 <style>
   
