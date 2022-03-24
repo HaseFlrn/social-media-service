@@ -71,6 +71,19 @@
     },
   })
 }
+
+const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get("token");
+  let value = "";
+  async function getChannelInfo() {
+    const res = await fetch(
+      `https://localhost:3000/api/v1/myStats/subscriberQuantity/${token}`
+    );
+    const info = await res.json();
+    console.log(info);
+    value = JSON.stringify(info.items[0]);
+  }
+
   onMount(createChart);
 </script>
 
@@ -84,7 +97,7 @@
     <div class="item">XXX
       <div>Likes</div>
     </div>
-    <div class="item">XXX
+    <div class="item"> {value}
       <div>Gained Subscribers</div>
     </div>  
     <div class="item">XXX
