@@ -382,9 +382,7 @@ export default class myStats{
             const currentYear = (new Date()).getFullYear()
             const videoCountPerMonth: number[] = [0,0,0,0,0,0,0,0,0,0,0,0];
 
-            const url = `${myStats.videosUrl}?part=snippet%2CcontentDetails&maxResults=1000&mine=true&access_token=${res.token}`
-
-            const countryResponse = await fetch(url);
+            const countryResponse = await fetch(`${myStats.videosUrl}?part=snippet%2CcontentDetails&maxResults=1000&mine=true&access_token=${res.token}`);
             const data = await countryResponse.json();
             
             for (let i = 0; i < data.items.length; i++) {
@@ -400,7 +398,7 @@ export default class myStats{
                 }        
             }
 
-            const finalResult= { 
+            const finalResult = { 
                 January: videoCountPerMonth[0],
                 February: videoCountPerMonth[1],
                 March: videoCountPerMonth[2],
@@ -416,7 +414,7 @@ export default class myStats{
             };
                 
         res.status = 200;
-        res.body = finalResult;
+        res.body = {data: finalResult};
         } catch (err) {
           console.log(err);
           res.status = 502;
