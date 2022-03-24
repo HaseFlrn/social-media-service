@@ -12,9 +12,8 @@ export default class subController {
 
   static async getAllSubscriptions(req: OpineRequest, res: OpineResponse) {
     if(!req.query.token) {
-      res.setStatus(501).json({ err: 'token missing'})
+      res.setStatus(401).json({ err: 'token missing'})
     }
-    //returns all channels, that the current Channels subscribes
     try{
       const url = `${subController.subscptionUrl}?part=snippet&mine=true&access_token=${req.query.token}`;
       let finalResult = { 
@@ -34,19 +33,19 @@ export default class subController {
         pageToken = data.nextPageToken;
       } while(pageToken) 
 
-      res.json(finalResult);
+      res.setStatus(200).json(finalResult);
     } catch (err) {
       console.log("an error occurreddd\n" + err );
-      res.setStatus(500).json(err);
+      res.setStatus(502).json(err);
     }
   }
 
   static async getChannelStats(req: OpineRequest, res: OpineResponse) {
     if(!req.query.channelId) {
-      return res.setStatus(501).json({ err: "channelId missing" });
+      return res.setStatus(400).json({ err: "Bad Request: channelId missing" });
     }
     if(!req.query.token) {
-      res.setStatus(501).json({ err: 'token missing'})
+      res.setStatus(401).json({ err: 'Unauthorized: token missing'})
     }
     try{
       //permission given for: id, statistics, contentDetails(different to subs api), contentOwnerDetails, localizations(no output), snippet(same as subs api), status, topicDetails
@@ -74,24 +73,34 @@ export default class subController {
       res.send(returnData);
     } catch( err ) {
       console.log("an error occurreddd\n" + err );
-      res.setStatus(500).json(err);
+      res.setStatus(502).json(err);
     }
   }
   
   static async getChannelVideos(req: OpineRequest, res: OpineResponse) {
     let count = 20000000; 
     if(!req.query.channelId) {
-      res.setStatus(501).json({ err: 'channelId missing'})
+      res.setStatus(400).json({ err: 'Bad Request: channelId missing'})
     }
     if(!req.query.token) {
-      res.setStatus(501).json({ err: 'token missing'})
+      res.setStatus(401).json({ err: 'Unauthorized: token missing'})
     }
     if(req.query.count) {
       count = req.query.count;
     }
     try{
       const url = `${subController.searchUrl}?part=snippet&channelId=${req.query.channelId}&access_token=${req.query.token}`;
-      let finalResult = { 
+      let finalResult: {
+        videoCount: number,
+        videos: {
+          id: {
+            kind: string,
+            videoId: string
+          },
+          snippet: Record<string, unknown>,
+          publishTime: string
+        }[]
+      } = { 
         videoCount: 0,
         videos: [] 
       };
@@ -111,10 +120,24 @@ export default class subController {
         pageToken = data.nextPageToken;
       } while(pageToken && count > 0) 
 
+
+
+      if(req.query.onlyIds) {
+        const videoIds: {videoCount: number, videoIds: string[]} = {
+          videoCount: finalResult.videoCount,
+          videoIds: [] 
+        };
+        finalResult.videos.forEach(element => {
+          videoIds.videoIds.push(element.id.videoId)
+        });
+
+        return res.json(videoIds);
+      }
+
       res.json(finalResult);
     } catch (err) {
       console.log("an error occurreddd\n" + err );
-      res.setStatus(500).json(err);
+      res.setStatus(502).json(err);
     }
   }
 
@@ -122,8 +145,22 @@ export default class subController {
 
   }
 
-  static async getChannelChartVideos(_req: OpineRequest, _res: OpineResponse) {
+  static async getChannelChartVideos(req: OpineRequest, res: OpineResponse) {
+    if(!req.query.channelId) {
+      res.setStatus(400).json({ err: 'Bad Request: channelId missing'})
+    }
+    if(!req.query.token) {
+      res.setStatus(401).json({ err: 'Unauthorized: token missing'})
+    }
+    try{
+      const response = await fetch(`${subController.videoUrl}&access_token=${req.query.token}&onlyIds=true`);
+      const data = await response.json();
 
+
+    } catch (err) {
+      console.log("an error occurreddd\n" + err);
+      res.setStatus(502).json(err);
+    }
   }
 }
 
