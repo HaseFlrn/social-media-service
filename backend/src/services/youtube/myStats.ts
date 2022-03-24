@@ -280,13 +280,12 @@ export default class myStats{
     //--------Stats per country---------------
     //----------------------------------------
 
-<<<<<<< HEAD
-    static async getUploadedVideosPerMonth(req: OpineRequest, res: OpineResponse){
+    static async getUploadedVideosPerMonth({params, response}: {params: {token: string}, response: any}){
         const currentYear = (new Date()).getFullYear()
         const valuePerMonth: number[] = [0,0,0,0,0,0,0,0,0,0,0,0];
     
         //get all videos
-        const data = await runRequest(req, "Videos");
+        const data = await runRequest(params, "Videos");
         for (let i = 0; i < data.items.length; i++) {
             //get publishedAt from Video
             const publishedAt = data.items[i].snippet.publishedAt
@@ -300,14 +299,13 @@ export default class myStats{
                 }
             }        
         }
-        res.send(valuePerMonth)
-=======
+        response.body = {data: valuePerMonth};
+    }
     // deno-lint-ignore no-explicit-any
     static async getStatsPercountry({params, response}: {params: {token: string}, response: any}){
         const data = await runRequest(params, "Country");
         const countryStats = data.rows;
         response.body = {data: countryStats};
->>>>>>> 7563fb239fa39e5d5f5c2c3ec268a7b8dcd9b24b
     }
 
 }
