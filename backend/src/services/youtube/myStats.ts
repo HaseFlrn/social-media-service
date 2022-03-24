@@ -341,6 +341,7 @@ export default class myStats{
     */
 
 
+    /*
     // deno-lint-ignore no-explicit-any
     static async getStatsPerCountry(ctx: any) {
         // 
@@ -385,10 +386,10 @@ export default class myStats{
           res.body = { err: '502: Bad Gateway'}
         }
       }
-
+*/
       
 }
-
+/*
 export interface ICountryStats {
     country: string,
     views: number,
@@ -397,3 +398,4 @@ export interface ICountryStats {
     averageViewPercentage: number,
     subscribersGained : number,
   }
+*/
