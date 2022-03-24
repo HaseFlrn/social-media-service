@@ -20,7 +20,7 @@ router
   })
   .get("/auth/callback", async ({request, response}) => {
     const tokens = await OAuth2Client.code.getToken(request.url);
-    response.redirect(`${FRONTEND_URL}?token=${tokens.accessToken}`);
+    response.redirect(`${FRONTEND_URL}/youtube?token=${tokens.accessToken}`);
   });
  router.use("/general", GeneralRouter.routes(), GeneralRouter.allowedMethods());
  router.use("/myStats", StatsRouter.routes(), StatsRouter.allowedMethods());
