@@ -1,5 +1,4 @@
-import { OpineResponse, OpineRequest } from "https://deno.land/x/opine@2.1.1/mod.ts";
-
+import { helpers } from "../../../deps.ts"
 
 export default class subController {
   //---------------------------------------------------
@@ -10,12 +9,17 @@ export default class subController {
   static subscptionUrl = 'https://www.googleapis.com/youtube/v3/subscriptions';
   static videoUrl = 'https://www.googleapis.com/youtube/v3/videos';
 
-  static async getAllSubscriptions(req: OpineRequest, res: OpineResponse) {
-    if(!req.query.token) {
+  // deno-lint-ignore no-explicit-any
+  static async getAllSubscriptions(ctx: any) {
+    //returns all channels, that the current Channels subscribes
+    const req = helpers.getQuery(ctx, { mergeParams: true });
+    const res = ctx.response;
+    if(!req.token) {
       res.setStatus(401).json({ err: 'token missing'})
     }
     try{
-      const url = `${subController.subscptionUrl}?part=snippet&mine=true&access_token=${req.query.token}`;
+      const url = `${subController.subscptionUrl}?part=snippet&mine=true&access_token=${req.token}`;
+
       let finalResult = { 
         channelCount: 0,
         channels: [] 
@@ -24,7 +28,7 @@ export default class subController {
       do {
         const response = await fetch((pageToken == '') ? url : (url + '&page_token=' + pageToken));
         const data = await response.json();
-
+        
         finalResult = {
           channelCount: finalResult.channelCount + data.items.length,
           channels: finalResult.channels.concat(data.items),
@@ -40,56 +44,63 @@ export default class subController {
     }
   }
 
-  static async getChannelStats(req: OpineRequest, res: OpineResponse) {
-    if(!req.query.channelId) {
+  // deno-lint-ignore no-explicit-any
+  static async getChannelStats(ctx: any) {
+    const req = helpers.getQuery(ctx, { mergeParams: true });
+    const res = ctx.response;
+    if(!req.channelId) {
       return res.setStatus(400).json({ err: "Bad Request: channelId missing" });
     }
-    if(!req.query.token) {
-      res.setStatus(401).json({ err: 'Unauthorized: token missing'})
+    if(!req.token) {
+      return res.setStatus(401).json({ err: 'Unauthorized: token missing'})
     }
     try{
-      //permission given for: id, statistics, contentDetails(different to subs api), contentOwnerDetails, localizations(no output), snippet(same as subs api), status, topicDetails
-      //https://www.googleapis.com/youtube/v3/channels
-      const channelResponse = await fetch(`${subController.channelUrl}?part=id,statistics,status,topicDetails&id=${req.query.channelId}&access_token=${req.query.token}`);
-      const channelData = await channelResponse.json();
-
-      const topics = channelData.items[0].topicDetails;
-      const topicNames: string[] = [];
-
-      topics.topicCategories.forEach((e: string) => {
-        const parts: string[] = e.split('/');
-        topicNames.push(parts[parts.length-1]);
-      });
-
-      const returnData = {
-        channelId: channelData.items[0].id,
-        videoCnt: channelData.items[0].statistics.videoCount,
-        viewCnt: channelData.items[0].statistics.viewCount,
-        subscriberCnt: channelData.items[0].statistics.subscriberCount,
-        forKids: channelData.items[0].status.madeForKids,
-        topics: topicNames
-      };
-
-      res.send(returnData);
-    } catch( err ) {
-      console.log("an error occurreddd\n" + err );
-      res.setStatus(502).json(err);
-    }
+        const channelResponse = await fetch(`${subController.channelUrl}?part=id,statistics,status,topicDetails&id=${req.channelId}&access_token=${req.token}`);
+        const channelData = await channelResponse.json();
+        if (channelData.items){
+          const topics = channelData.items[0].topicDetails;
+          const topicNames: string[] = [];
+  
+          topics.topicCategories.forEach((e: string) => {
+            const parts: string[] = e.split('/');
+            topicNames.push(parts[parts.length-1]);
+          });
+  
+          const returnData = {
+            channelId: channelData.items[0].id,
+            videoCnt: channelData.items[0].statistics.videoCount,
+            viewCnt: channelData.items[0].statistics.viewCount,
+            subscriberCnt: channelData.items[0].statistics.subscriberCount,
+            forKids: channelData.items[0].status.madeForKids,
+            topics: topicNames
+          };
+          res.body = {data: returnData};
+        } else {
+          res.status = 200;
+          res.body = [];
+        }
+      } catch( err ) {
+        console.log("an error occurreddd\n" + err );
+        res.setStatus(502).json(err);
+      }
   }
   
-  static async getChannelVideos(req: OpineRequest, res: OpineResponse) {
+  // deno-lint-ignore no-explicit-any
+  static async getChannelVideos(ctx: any) {
     let count = 20000000; 
-    if(!req.query.channelId) {
+    const req = helpers.getQuery(ctx, { mergeParams: true });
+    const res = ctx.response;
+    if(!req.channelId) {
       res.setStatus(400).json({ err: 'Bad Request: channelId missing'})
     }
-    if(!req.query.token) {
+    if(!req.token) {
       res.setStatus(401).json({ err: 'Unauthorized: token missing'})
     }
-    if(req.query.count) {
-      count = req.query.count;
+    if(req.count) {
+      count = parseInt(req.count);
     }
     try{
-      const url = `${subController.searchUrl}?part=snippet&channelId=${req.query.channelId}&access_token=${req.query.token}`;
+      const url = `${subController.searchUrl}?part=snippet&channelId=${req.channelId}&access_token=${req.token}`;
       let finalResult: {
         videoCount: number,
         videos: {
@@ -120,9 +131,7 @@ export default class subController {
         pageToken = data.nextPageToken;
       } while(pageToken && count > 0) 
 
-
-
-      if(req.query.onlyIds) {
+      if(req.onlyIds) {
         const videoIds: {videoCount: number, videoIds: string[]} = {
           videoCount: finalResult.videoCount,
           videoIds: [] 
@@ -141,19 +150,27 @@ export default class subController {
     }
   }
 
-  static async getChannelTopVideos(_req: OpineRequest, _res: OpineResponse) {
+  
 
+  
+  // deno-lint-ignore no-explicit-any no-unused-vars
+  static async getChannelTopVideos({request, response} : {request: any, response: any}) {
+  
   }
 
-  static async getChannelChartVideos(req: OpineRequest, res: OpineResponse) {
-    if(!req.query.channelId) {
+  // deno-lint-ignore no-explicit-any
+  static async getChannelChartVideos(ctx: any) {
+    const req = helpers.getQuery(ctx, { mergeParams: true})
+    const res = ctx.response;
+
+    if(!req.channelId) {
       res.setStatus(400).json({ err: 'Bad Request: channelId missing'})
     }
-    if(!req.query.token) {
+    if(!req.token) {
       res.setStatus(401).json({ err: 'Unauthorized: token missing'})
     }
     try{
-      const response = await fetch(`${subController.videoUrl}&access_token=${req.query.token}&onlyIds=true`);
+      const response = await fetch(`${subController.videoUrl}&access_token=${req.token}&onlyIds=true`);
       const data = await response.json();
 
 
@@ -162,6 +179,10 @@ export default class subController {
       res.setStatus(502).json(err);
     }
   }
+
+  //---------------------------------------------------
+  //--------Subscriped Channel Information-------------
+  //---------------------------------------------------
 }
 
 
