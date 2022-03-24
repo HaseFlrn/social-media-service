@@ -59,6 +59,7 @@ async function getValueInTimeRange({params, response}: {params: {token: string},
         console.log(error);
     }   
 }
+/*
 // deno-lint-ignore no-explicit-any
 async function getStetsPerMonthForCurrentYear({params, response}: {params: {token: string}, response: any}, arrayindex:number) {
 
@@ -87,6 +88,7 @@ async function getStetsPerMonthForCurrentYear({params, response}: {params: {toke
     }
 
 }
+*/
 // deno-lint-ignore no-explicit-any
  async function getStetsPerDayLastThirtyDays({params, response}: {params: {token: string}, response: any}, arrayindex:number) {
 
