@@ -78,7 +78,8 @@ async function getStetsPerMonthForCurrentYear({params, response}: {params: {toke
         const startDateCurrentMonth = currentYear + "-" + startAndenddateForEveryMonth[currentMonth].startdate
         const endDateCurrentMonth = currentYear + "-" + (('0' + (currentMonth + 1)).slice(-2)) + "-" + currentDay
         valuePerMonth.push(await getValueInTimeRange({params, response}, arrayindex, startDateCurrentMonth, endDateCurrentMonth))
-    
+        console.log(valuePerMonth)
+
         response.body = {data: valuePerMonth}
     } catch (error) {
         console.log(error);
