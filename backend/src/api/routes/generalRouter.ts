@@ -8,9 +8,7 @@ router
   .get("/", ({response}) => {
     response.body = "This is generalRouter.ts";
   })
-  .get("/channelName/:token", general.getChannelName)
-  .get("/channelDescription/:token", general.getChannelDescription)
-  .get("/channelPublishedAt/:token", general.getChannelPublishedAt)
+  .get("/channelInfos/:token", general.getChannelInfos)
 //.get("/PATH", (req,res) => {function})
 
 export default router;
