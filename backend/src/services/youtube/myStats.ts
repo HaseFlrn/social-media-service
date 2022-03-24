@@ -279,7 +279,6 @@ export default class myStats{
     //----------------------------------------
     //--------Stats per country---------------
     //----------------------------------------
-    // deno-lint-ignore no-explicit-any
     static async getUploadedVideosPerMonth({params, response}: {params: {token: string}, response: any}){
         const currentYear = (new Date()).getFullYear()
         const valuePerMonth: number[] = [0,0,0,0,0,0,0,0,0,0,0,0];
@@ -299,9 +298,8 @@ export default class myStats{
                 }
             }        
         }
-        response.send(valuePerMonth)
+        response.body = {data: valuePerMonth};
     }
-
     // deno-lint-ignore no-explicit-any
     static async getStatsPercountry({params, response}: {params: {token: string}, response: any}){
         const data = await runRequest(params, "Country");
