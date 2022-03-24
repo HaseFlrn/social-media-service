@@ -308,6 +308,7 @@ export default class myStats{
     //----------------------------------------
     //-------My Stats Per Month---------------
     //----------------------------------------
+
 // deno-lint-ignore no-explicit-any 
     static getViewsInMonthForCurrentYear({params, response}: {params: {token: string}, response: any}){
         //getStetsPerMonthForCurrentYear({params, response}, 0)
@@ -381,7 +382,9 @@ export default class myStats{
             const currentYear = (new Date()).getFullYear()
             const videoCountPerMonth: number[] = [0,0,0,0,0,0,0,0,0,0,0,0];
 
-            const countryResponse = await fetch(`${myStats.videosUrl}?part=snippet%2CcontentDetails&maxResults=1000&mine=true&access_token=${res.token}`);
+            const url = `${myStats.videosUrl}?part=snippet%2CcontentDetails&maxResults=1000&mine=true&access_token=${res.token}`
+
+            const countryResponse = await fetch(url);
             const data = await countryResponse.json();
             
             for (let i = 0; i < data.items.length; i++) {
