@@ -10,17 +10,14 @@ router
   })
   // Channel Quantities
   .get("/channelStats/:token", myStats.getChannelStats)
-  //Get Video ID's
+  // Video ID's
   .get("/videoIds/:token", myStats.getVideoIds)
   // Video Stats
   .get("/videoStats/:token/:videoId", myStats.getVideoStats)
-  //Get Playlist ID's
-  .get("/allPlaylists/:token", myStats.getAllPlaylists)
-  //Get Playlist Stats
-  .get("/playlistName/:token/:playlistId", myStats.getPlaylistName)
-  .get("/playlistDescription/:token/:playlistId", myStats.getPlaylistDescription)
-  .get("/playlistPublishedAt/:token/:playlistId", myStats.getPlaylistPublishedAt)
-  .get("/playlistVideoQuantity/:token/:playlistId", myStats.getPlaylistVideoQuantity)
+  // Playlist ID's
+  .get("/playlistIds/:token", myStats.getPlaylistIds)
+  // Playlist Infos
+  .get("/playlistInfos/:token/:playlistId", myStats.getPlaylistInfos)
   // Channel Stats per Month in current Year
   .get("/viewsInMonthForCurrentYear/:token", myStats.getViewsInMonthForCurrentYear)
   .get("/commentsInMonthForCurrentYear/:token", myStats.getCommentsInMonthForCurrentYear)

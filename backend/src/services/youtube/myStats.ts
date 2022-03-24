@@ -123,7 +123,8 @@ export default class myStats{
     //?part=snippet%2CcontentDetails%2Cstatistics&id=${params.videoId}&access_token=${params.token}`
     static playlistsUrl = `https://youtube.googleapis.com/youtube/v3/playlists`
     //?part=snippet%2CcontentDetails&mine=true&access_token=${params.token}`
-    //static playlistStatisticsUrl = `https://youtube.googleapis.com/youtube/v3/playlists?part=snippet%2CcontentDetails&id=${params.playlistId}&access_token=${params.token}`
+    static playlistStatisticsUrl = `https://youtube.googleapis.com/youtube/v3/playlists`
+    //?part=snippet%2CcontentDetails&id=${params.playlistId}&access_token=${params.token}`
     static countryUrl = `https://youtubeanalytics.googleapis.com/v2/reports`
     //?dimensions=country&endDate=${currentDate}&ids=channel%3D%3DMINE&metrics=views%2CestimatedMinutesWatched%2CaverageViewDuration%2CaverageViewPercentage%2CsubscribersGained&sort=-estimatedMinutesWatched&startDate=2014-05-01&access_token=${params.token}`
    
@@ -211,7 +212,7 @@ export default class myStats{
         }
 
         try{
-            const countryResponse = await fetch(`${myStats.videosUrl}?part=snippet%2CcontentDetails&maxResults=25&mine=true&access_token=${res.token}`);
+            const countryResponse = await fetch(`${myStats.videosUrl}?part=snippet%2CcontentDetails&maxResults=1000&mine=true&access_token=${res.token}`);
             const data = await countryResponse.json();
             
             const finalResult: {latestVideo: String, allVideos: String[]} = { 
@@ -234,49 +235,75 @@ export default class myStats{
 
 
     //----------------------------------------
-    //----------Playlist Stats-------------------
+    //----------Playlist ID's-----------------
     //----------------------------------------
 
-    //Get List with all playlist ids
     // deno-lint-ignore no-explicit-any
-    static async getAllPlaylists({params, response}: {params: {token: string}, response: any}) {
-        const data = await runRequest(params, "Playlists");
-
-        const playlists = [];
-
-        for (let i = 0; i < data.items.length; i++) {
-            playlists.push(data.items[i].id)
-            
+    static async getPlaylistIds(ctx: any) {
+        // 
+        const req = helpers.getQuery(ctx, { mergeParams: true });
+        const res = ctx.response;
+        if(!req.token) {
+          res.status = 401
+          res.body = { err: 'Unauthorized: token missing' }
         }
-        response.body = {data: playlists};
-    }
 
-    //Playlist Stats
-    // deno-lint-ignore no-explicit-any
-    static async getPlaylistName({params, response}: {params: {token: string, playlistId: string}, response: any}) {
-        const data = await runRequest(params, "PlaylistStatistics");
-        const playlistName = data.items[0].snippet.title;
-        response.body = {data: playlistName};
-    }
-    // deno-lint-ignore no-explicit-any
-    static async getPlaylistDescription({params, response}: {params: {token: string, playlistId: string}, response: any}) {
-        const data = await runRequest(params, "PlaylistStatistics");
-        const playlistDescription = data.items[0].snippet.description;
-        response.body = {data: playlistDescription};
-    }
-    // deno-lint-ignore no-explicit-any
-    static async getPlaylistPublishedAt({params, response}: {params: {token: string, playlistId: string}, response: any}) {
-        const data = await runRequest(params, "PlaylistStatistics");
-        const playlistPublishedAt = data.items[0].snippet.publishedAt;
-        response.body = {data: playlistPublishedAt};
-    }
-    // deno-lint-ignore no-explicit-any
-    static async getPlaylistVideoQuantity({params, response}: {params: {token: string, playlistId: string}, response: any}) {
-        const data = await runRequest(params, "PlaylistStatistics");
-        const playlistVideoQuantity = data.items[0].contentDetails.itemCount;
-        response.body = {data: playlistVideoQuantity};
-    }
+        try{
+            const countryResponse = await fetch(`${myStats.videosUrl}?part=snippet%2CcontentDetails&mine=true&access_token=${res.token}`);
+            const data = await countryResponse.json();
+            
+            const finalResult: {latestVideo: String, allVideos: String[]} = { 
+                latestVideo: data.items[0].id,
+                allVideos: [],
+            };
 
+            for (let i = 0; i < data.items.length; i++) {
+                finalResult.allVideos.push(data.items[i].id) 
+            }
+
+        res.status = 200;
+        res.body = finalResult;
+        } catch (err) {
+          console.log(err);
+          res.status = 502;
+          res.body = { err: '502: Bad Gateway'}
+        }
+      }  
+
+
+    //----------------------------------------
+    //----------Playlist Infos----------------
+    //----------------------------------------
+
+    // deno-lint-ignore no-explicit-any
+    static async getPlaylistInfos(ctx: any) {
+        // 
+        const req = helpers.getQuery(ctx, { mergeParams: true });
+        const res = ctx.response;
+        if(!req.token) {
+          res.status = 401
+          res.body = { err: 'Unauthorized: token missing' }
+        }
+
+        try{
+            const countryResponse = await fetch(`${myStats.playlistStatisticsUrl}?part=snippet%2CcontentDetails&id=${res.playlistId}&access_token=${res.token}`);
+            const data = await countryResponse.json();
+            
+            const finalResult= { 
+                playlistTitle: data.items[0].snippet.title,
+                playlistDescription: data.items[0].snippet.description,
+                playlistPublishedAt: data.items[0].snippet.publishedAt,
+                playlistItemCount: data.items[0].contentDetails.itemCount
+            };
+                
+        res.status = 200;
+        res.body = finalResult;
+        } catch (err) {
+          console.log(err);
+          res.status = 502;
+          res.body = { err: '502: Bad Gateway'}
+        }
+      } 
 
     //----------------------------------------
     //-------My Stats Per Month---------------
