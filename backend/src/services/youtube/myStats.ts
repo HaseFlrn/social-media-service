@@ -279,6 +279,7 @@ export default class myStats{
     //--------Stats per country---------------
     //----------------------------------------
 
+    // deno-lint-ignore no-explicit-any
     static async getStatsPercountry({params, response}: {params: {token: string}, response: any}){
         const data = await runRequest(params, "Country");
         const countryStats = data.rows;
