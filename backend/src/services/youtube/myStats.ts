@@ -23,7 +23,7 @@ async function runRequest(params: { token: string, videoId?: string, playlistId?
             url = `https://youtube.googleapis.com/youtube/v3/playlists?part=snippet%2CcontentDetails&id=${params.playlistId}&access_token=${params.token}`
             break;
         case "Country":
-            url = `https://youtubeanalytics.googleapis.com/v2/reports?dimensions=country&endDate=${currentDate}&ids=channel%3D%3DMINE&metrics=views%2CestimatedMinutesWatched%2CaverageViewDuration%2CaverageViewPercentage%2CsubscribersGained&sort=-estimatedMinutesWatched&startDate=2014-05-01&access_token=${req.params.token}`
+            url = `https://youtubeanalytics.googleapis.com/v2/reports?dimensions=country&endDate=${currentDate}&ids=channel%3D%3DMINE&metrics=views%2CestimatedMinutesWatched%2CaverageViewDuration%2CaverageViewPercentage%2CsubscribersGained&sort=-estimatedMinutesWatched&startDate=2014-05-01&access_token=${params.token}`
             break;
         default:
             break;
@@ -279,10 +279,10 @@ export default class myStats{
     //--------Stats per country---------------
     //----------------------------------------
 
-    static async getStatsPercountry(req: OpineRequest, res: OpineResponse){
-        const data = await runRequest(req, "Country");
+    static async getStatsPercountry({params, response}: {params: {token: string}, response: any}){
+        const data = await runRequest(params, "Country");
         const countryStats = data.rows;
-        res.send(countryStats);
+        response.body = {data: countryStats};
     }
 
 }
