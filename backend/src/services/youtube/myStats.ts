@@ -96,6 +96,7 @@ async function getStetsPerMonthForCurrentYear(req: OpineRequest, res: OpineRespo
     res.send(valuePerDay)
 }
 
+
 export default class myStats{
     //----------------------------------------
     //----------Channel Stats-----------------
@@ -253,10 +254,26 @@ export default class myStats{
     //--------Stats per country---------------
     //----------------------------------------
 
-    static async getStatsPercountry(req: OpineRequest, res: OpineResponse){
-        const data = await runRequest(req, "Country");
-        const countryStats = data.rows;
-        res.send(countryStats);
+    static async getUploadedVideosPerMonth(req: OpineRequest, res: OpineResponse){
+        const currentYear = (new Date()).getFullYear()
+        const valuePerMonth: number[] = [0,0,0,0,0,0,0,0,0,0,0,0];
+    
+        //get all videos
+        const data = await runRequest(req, "Videos");
+        for (let i = 0; i < data.items.length; i++) {
+            //get publishedAt from Video
+            const publishedAt = data.items[i].snippet.publishedAt
+    
+            //check in with month the video has been published and ++ array
+            for (let j = 1; j < 13; j++) {
+                const startsWith = currentYear + "-" + ('0' + (j)).slice(-2)
+
+                if (publishedAt.startsWith(startsWith)){
+                    valuePerMonth[j - 1] = valuePerMonth[j - 1] + 1;
+                }
+            }        
+        }
+        res.send(valuePerMonth)
     }
 
 }

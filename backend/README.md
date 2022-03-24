@@ -165,3 +165,6 @@ Url zum Aufrufen: https://localhost:3000/api/v1/myStats/
 <br/>
 
 - statsPercountry/(token) -> Liefert ein Array, in welchem sich für jedes Land ein weiteres Array befindet. Index 0 ist dabei das entspechende Land, Index 1: views, Index 2: estimatedMinutesWatched, Index 3: averageViewDuration, Index 4: averageViewPercentage, Index 5: subscribersGained   (Arrayausschnitt: [["DE",11,3,16,109.35,0]]) 
+<br/>
+
+- uploadedVideosPerMonth/(token) -> Liefert ein Array, in welchem sich für jeden Monat des aktuellen Jahrs die Anzahl an hochgeladenen Videos befindet 
