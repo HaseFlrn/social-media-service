@@ -310,11 +310,7 @@ export default class myStats{
                 valuePerMonth[currentMonth] = oneMonthStats;
             }
             */                
-        
-            const finalResult = { 
-                hello: "hi"
-            };
-/*
+
             const finalResult = { 
                 january: valuePerMonth[0],
                 february: valuePerMonth[1],
@@ -329,7 +325,7 @@ export default class myStats{
                 november: valuePerMonth[10],
                 december: valuePerMonth[11]
             };
-*/
+
             res.status = 200;
             res.body = finalResult;
         } catch (err) {
