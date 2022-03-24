@@ -5,7 +5,7 @@
   </div>
 
   <h1>
-    <a style="color:black" href="https://localhost:3000/api/v1/youtube/login">Get Youtube Key!</a></h1>
+    <a style="color:black" href="https://localhost:3000/api/v1/login">Get Youtube Key!</a></h1>
 
 
 <link
