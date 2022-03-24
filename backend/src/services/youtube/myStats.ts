@@ -2,9 +2,11 @@ import startAndenddateForEveryMonth from './startAndenddateForEveryMonth.json' a
 
 async function runRequest(params: { token: string, videoId?: string, playlistId?: string }, requestName: string) {
 
-    let url = ``;
+    const tempDate = new Date();
+    const currentDate = tempDate.getFullYear() + "-" + ('0' + (tempDate.getMonth() + 1)).slice(-2) + "-" + ('0' + tempDate.getDate()).slice(-2);
 
-    switch (requestName) {
+    let url = ``;
+   switch (requestName) {
         case "ChannelInformations":
             url = `https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&mine=true&access_token=${params.token}`
             break;
@@ -19,6 +21,9 @@ async function runRequest(params: { token: string, videoId?: string, playlistId?
             break;
         case "PlaylistStatistics":
             url = `https://youtube.googleapis.com/youtube/v3/playlists?part=snippet%2CcontentDetails&id=${params.playlistId}&access_token=${params.token}`
+            break;
+        case "Country":
+            url = `https://youtubeanalytics.googleapis.com/v2/reports?dimensions=country&endDate=${currentDate}&ids=channel%3D%3DMINE&metrics=views%2CestimatedMinutesWatched%2CaverageViewDuration%2CaverageViewPercentage%2CsubscribersGained&sort=-estimatedMinutesWatched&startDate=2014-05-01&access_token=${req.params.token}`
             break;
         default:
             break;
@@ -267,6 +272,17 @@ export default class myStats{
     // deno-lint-ignore no-explicit-any
     static getAverageViewDurationPerDayLastThirtyDays({params, response}: {params: {token: string}, response: any}){
         getStetsPerDayLastThirtyDays({params, response}, 5)
+    }
+
+
+    //----------------------------------------
+    //--------Stats per country---------------
+    //----------------------------------------
+
+    static async getStatsPercountry(req: OpineRequest, res: OpineResponse){
+        const data = await runRequest(req, "Country");
+        const countryStats = data.rows;
+        res.send(countryStats);
     }
 
 }

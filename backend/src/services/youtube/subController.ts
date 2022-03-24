@@ -4,7 +4,6 @@ export default class subController {
   //---------------------------------------------------
   //------------general for Subscribers----------------
   //---------------------------------------------------
-
   static searchUrl = 'https://www.googleapis.com/youtube/v3/search';
   static channelUrl = 'https://www.googleapis.com/youtube/v3/channels';
   static subscptionUrl = 'https://www.googleapis.com/youtube/v3/subscriptions';
@@ -15,6 +14,7 @@ export default class subController {
     //returns all channels, that the current Channels subscribes
     try{
       const url = `${subController.subscptionUrl}?part=snippet&mine=true&access_token=${params.token}`;
+
       let finalResult = { 
         channelCount: 0,
         channels: [] 
@@ -39,6 +39,7 @@ export default class subController {
       response.body = {msg: err.toString()};
     }
   }
+
 
   // deno-lint-ignore no-explicit-any
   static async getChannelStats(ctx: any) {
@@ -136,6 +137,7 @@ export default class subController {
   }
 
   
+
   
   // deno-lint-ignore no-explicit-any no-unused-vars
   static async getChannelTopVideos({request, response} : {request: any, response: any}) {
@@ -149,9 +151,6 @@ export default class subController {
   //---------------------------------------------------
   //--------Subscriped Channel Information-------------
   //---------------------------------------------------
-
-
-
 }
 
 
