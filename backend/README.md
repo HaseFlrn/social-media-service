@@ -65,9 +65,23 @@ Rückgabe: Activity Liste
         - access_token={OAuth Token}
     - Optional:
         - part=snippet --> Genauere Angaben zu den Videos
-        - forMine=true --> zeigt nur Videos vom authentifizierten User
+        - forMine=true --> zeigt nur Videos vom authentifizierten User (type=video required)
         - channelId={channelId} --> Nur videos von bestimmten Channel werden angezeigt
         - type={video,...} --> Nur anzeige dieses Uploadtypes
+
+### [Youtube Video API](https://developers.google.com/youtube/v3/docs/videos/list)
+- Basis URL: https://www.googleapis.com/youtube/v3/videos
+- Queries:
+    - Requires:
+        - access_token={OAuth Token}
+        - part={siehe googel dokumentation}
+    - Filters (genau 1):
+        - chart=mostPopular --> bekanntesten videos für Region und Videoart
+        - id={videoIds Liste} --> Infos zu entsprechenden Videos
+        - myRating={like|dislike} --> Zeigt videos an, die der User gelikes/disliked hat 
+    - Optional:
+        - regionCode={DE, ...} --> Nach ISO 3166-1 2 Buchstaben, nur mit chart-Filter nutzbar
+        - videoCategoryId={0,1,...} --> default 0, nur mit chart-Filter nutzbar
 
 ### Youtube Report API
 

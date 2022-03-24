@@ -7,8 +7,11 @@ router
   .get("/", (_req, res) => {
     res.send("That's fuckin Obi-Wan-Kenobi!");
   })
-	.get("/subs/:token", subController.getAllSubscriptions)
-  .get("/stats/:token", subController.getChannelStats)
+	.get("/subs", subController.getAllSubscriptions)
+  .get("/sub/stats", subController.getChannelStats)
+  .get("/sub/videos", subController.getChannelVideos)
+  .get("/sub/topVideos", subController.getChannelTopVideos)
+  .get("/sub/charts", subController.getChannelChartVideos)
 //.get("/PATH", (req,res) => {function})
 
 export default router;
