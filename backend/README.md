@@ -110,61 +110,37 @@ Alle Scripts aus /backend starten!
 - holt neueste Updates für imports
 
 ## Services
-Folgend sind die verschiedenen Namen für die Url mit den entsprechenden Paramentern aufgelistet. Die Funktionen haben entsprechend den gleichen Namen nur mit "get" davor.
+Folgend sind die verschiedenen Namen für die Url mit den entsprechenden Paramentern aufgelistet. Die Funktionen haben entsprechend den gleichen Namen nur mit "get" davor. 
 
 ### General.ts:
 Url zum Aufrufen: https://170.187.186.86:3000/api/v1/general/(Name der folgenden Funktion)/(Parameter den die Funktion braucht)
 </br>
 
-- getChannelInformations/(token) holt sich die alle Channel Informationen des eigenen Channels. Alle weiteren Methoden rufen diese auf und filtern einzelne Daten aus der JSON raus und geben diese zurück
-- getChannelName/(token) gibt den Namen des Channels zurück
-- getChannelDescription/(token) gibt die Beschreibung des Channels zurück
-- getChannelPublishedAt/(token) gibt das Datum zurück, an dem der Cahnnel ertellt wurde
+- channelInfos/(token) Liefert ein den Namen, die Beschreibung und das Veröffentlichungsdatum des Channels
 
 ### myStats.ts:
 Url zum Aufrufen: https://170.187.186.86:3000/api/v1/myStats/
-
-- videoQuantity/(token) -> Gesamtanzahl an Videos auf eigenem Channel 
-- subscriberQuantity/(token) -> Gesamtanzahl an Subscribern 
-- allTimeViews/(token) -> Gesamtanzahl an Views auf alle Videos
 </br>
 
-- latestVideo/(token) -> Liefert die VideoId des neuesten (zuletzt hochgeladenen) Videos
-- allVideos/(token) -> Liefert eine Liste mit den Id's aller Videos 
+- channelStats/(token) -> Anzahl Videos, Subscriber, Views auf eigenem Channel
+</br>
+
+- videoIds/(token) -> Video-ID des neusten Videos und Array mit "allen" Videos(bzw. deren Id's)
 <br/>
 
-- videoViewsQuantity/(token)/(videoId) -> Anzahl an Views auf ausgewähles Video
-- videoLikesQuantity/(token)/(videoId) -> Anzahl an Likes auf ausgewähles Video
-- videoDislikesQuantity/(token)/(videoId) -> Anzahl an Dislikes auf ausgewähles Video
-- videoCommentQuantity/(token)/(videoId) -> Anzahl an Kommentaren auf ausgewähles Video
+- videoStats/(token)/(videoId) -> Anzahl Views, Likes, Dislikes, Kommentare des übergebenen Videos 
 <br/>
 
-- allPlaylists/(token) -> Liefert eine Liste mit den Id's aller Playlists
+- playlistIds/(token) -> Playlist-ID der neusten Playlist und Array mit "allen" Playlists(bzw. deren Id's)
 <br/>
 
-- playlistName/(token)/(playlistId) -> Name der gewählten Playlist
-- playlistDescription/(token)/(playlistId) -> Beschreibung der gewählten Playlist
-- playlistPublishedAt/(token)/(playlistId) -> Veröffentlichungsdatum der gewählten Playlist
-- playlistVideoQuantity/(token)/(playlistId) -> Anzahl an Videos in der gewählten Playlist
+- playlistInfos/(token)/(playlistId) -> Name, Beschreibung, Veröffnetlichungsdatum, Viedeoanzhal der übergebenenen Playlist
 <br/>
 
-- viewsInMonthForCurrentYear/(token) -> Liefert ein Array mit der Anzahl der gemachten Views des jeweiligen Monats. Index 0 ist Januar, usw. Das Array endet im aktuellen Monat und gibt die Views bis zum aktuellen Datum an
-- commentsInMonthForCurrentYear/(token) -> Gleich wie Views nur mit Kommentaren
-- likesInMonthForCurrentYear/(token) -> Gleich wie Views nur mit Likes
-- dislikesInMonthForCurrentYear/(token) -> Gleich wie Views nur mit Dislikes
-- estimatedMinutesWatchedInMonthForCurrentYear/(token) -> Gleich wie Views nur mit Geschätzte geschaute Minuten
-- averageViewDurationInMonthForCurrentYear/(token) -> Gleich wie Views nur mit Durchschnittliche View Duration
+- channelStatsPerMonth/(token) -> Array mit allen Monaten des aktuellen Jahres. Die bereits vergangenen, sowie der aktuelle Monat enthalten ein Array mit Views, Kommentaren, Likes, Dislikes, estimatedMinutesWatched, averageViewDuration in dem entsprechenden Monat
 <br/>
 
-- viewsPerDayLastThirtyDays/(token) -> Liefert ein Array, in welchem sich für jeden tag der letzen 30 Tage ein weiteres array befindet. index 0 ist dabei das entspechende Datum un index 1 die Anzahl der gemachten Views an dem Tag (Arrayausschnitt: [["2022-02-20",0],["2022-02-21",0], ..) Wichtig: Die letzten zwei Tage sind null, dort liefert die Api kein Ergebnis
-- commentsPerDayLastThirtyDays/(token) -> Gleich wie Views nur mit Kommentaren
-- likesPerDayLastThirtyDays/(token) -> Gleich wie Views nur mit Likes
-- dislikesPerDayLastThirtyDays/(token) -> Gleich wie Views nur mit Dislikes
-- estimatedMinutesWatchedPerDayLastThirtyDays/(token) -> Gleich wie Views nur mit Geschätzte geschaute Minuten
-- averageViewDurationPerDayLastThirtyDays/(token) -> Gleich wie Views nur mit Durchschnittliche View Duration
+- statsPerCountry/(token) -> Array welches für jedes Land, aus dem bereits ein Video des Channels geschaut wurde  folgende Daten enthält: Name des Landes, Views, estimatedMinutesWatched, averageViewDuration, averageViewPercentage, subscribersGained 
 <br/>
 
-- statsPercountry/(token) -> Liefert ein Array, in welchem sich für jedes Land ein weiteres Array befindet. Index 0 ist dabei das entspechende Land, Index 1: views, Index 2: estimatedMinutesWatched, Index 3: averageViewDuration, Index 4: averageViewPercentage, Index 5: subscribersGained (Arrayausschnitt: [["DE",11,3,16,109.35,0]]) 
-<br/>
-
-- uploadedVideosPerMonth/(token) -> Liefert ein Array, in welchem sich für jeden Monat des aktuellen Jahrs die Anzahl an hochgeladenen Videos befindet 
+- uploadedVideosPerMonth/(token) -> Gibt für denen Monat die Anzhaal an hochgeladenen Videos an

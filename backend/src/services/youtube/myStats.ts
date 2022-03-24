@@ -294,6 +294,62 @@ export default class myStats{
 
     //TODO
 
+
+    //----------------------------------------
+    //--------Stats per country---------------
+    //----------------------------------------
+    
+    // deno-lint-ignore no-explicit-any
+    static async getStatsPerCountry(ctx: any) {
+        // 
+        const req = helpers.getQuery(ctx, { mergeParams: true });
+        const res = ctx.response;
+        if(!req.token) {
+          res.status = 401
+          res.body = { err: 'Unauthorized: token missing' }
+        }
+
+        try{
+
+            const tempDate = new Date();
+            const currentDate = tempDate.getFullYear() + "-" + ('0' + (tempDate.getMonth() + 1)).slice(-2) + "-" + ('0' + tempDate.getDate()).slice(-2);
+
+            const url = `${myStats.reportsUrl}?dimensions=country&endDate=${currentDate}&ids=channel%3D%3DMINE&metrics=views%2CestimatedMinutesWatched%2CaverageViewDuration%2CaverageViewPercentage%2CsubscribersGained&sort=-estimatedMinutesWatched&startDate=2014-05-01&access_token=${req.token}`;
+    
+            const finalResult: {countryStats: ICountryStats[]} = { 
+                countryStats: []
+            };
+
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            if(data.rows){
+                for (let i = 0; i <  data.rows.length; i++) {
+                    const tempCountryStats = {
+                        country: data.rows[i][0],
+                        views: data.rows[i][1],
+                        estimatedMinutesWatched: data.rows[i][2],
+                        averageViewDuration: data.rows[i][3],
+                        averageViewPercentage: data.rows[i][4],
+                        subscribersGained : data.rows[i][5]
+                    }
+                    finalResult.countryStats.push(tempCountryStats);       
+                } 
+                    
+                res.status = 200;
+                res.body = finalResult;
+            }else{
+                res.status = 200;
+                res.body = [];
+            }
+        } catch (err) {
+          console.log(err);
+          res.status = 502;
+          res.body = { err: '502: Bad Gateway'}
+        }
+      }
+      
+
     //----------------------------------------
     //-----Uploaded Videos per Month----------
     //----------------------------------------
@@ -356,62 +412,6 @@ export default class myStats{
           res.body = { err: '502: Bad Gateway'}
         }
       }
-
-
-    //----------------------------------------
-    //--------Stats per country---------------
-    //----------------------------------------
-    
-    // deno-lint-ignore no-explicit-any
-    static async getStatsPerCountry(ctx: any) {
-        // 
-        const req = helpers.getQuery(ctx, { mergeParams: true });
-        const res = ctx.response;
-        if(!req.token) {
-          res.status = 401
-          res.body = { err: 'Unauthorized: token missing' }
-        }
-
-        try{
-
-            const tempDate = new Date();
-            const currentDate = tempDate.getFullYear() + "-" + ('0' + (tempDate.getMonth() + 1)).slice(-2) + "-" + ('0' + tempDate.getDate()).slice(-2);
-
-            const url = `${myStats.reportsUrl}?dimensions=country&endDate=${currentDate}&ids=channel%3D%3DMINE&metrics=views%2CestimatedMinutesWatched%2CaverageViewDuration%2CaverageViewPercentage%2CsubscribersGained&sort=-estimatedMinutesWatched&startDate=2014-05-01&access_token=${req.token}`;
-    
-            const finalResult: {countryStats: ICountryStats[]} = { 
-                countryStats: []
-            };
-
-            const response = await fetch(url);
-            const data = await response.json();
-            
-            if(data.rows){
-                for (let i = 0; i <  data.rows.length; i++) {
-                    const tempCountryStats = {
-                        country: data.rows[i][0],
-                        views: data.rows[i][1],
-                        estimatedMinutesWatched: data.rows[i][2],
-                        averageViewDuration: data.rows[i][3],
-                        averageViewPercentage: data.rows[i][4],
-                        subscribersGained : data.rows[i][5]
-                    }
-                    finalResult.countryStats.push(tempCountryStats);       
-                } 
-                    
-                res.status = 200;
-                res.body = finalResult;
-            }else{
-                res.status = 200;
-                res.body = [];
-            }
-        } catch (err) {
-          console.log(err);
-          res.status = 502;
-          res.body = { err: '502: Bad Gateway'}
-        }
-      }
-      
 }
 
 export interface ICountryStats {
