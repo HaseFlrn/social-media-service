@@ -1,6 +1,11 @@
 <script>
   import {onMount} from 'svelte';
-  import {count} from './stores.js';
+  import {userToken} from './stores.js';
+
+  let token;
+  userToken.subscribe(value => {
+		token = value;
+	});
 
   function createChart() {
     const barChart = document.getElementById('likesChart');
@@ -74,21 +79,29 @@
 }
 
   let value = "";
-  async function getChannelInfo() {
+  let value2 = "";
+  async function getSubInfo() {
     const res = await fetch(
-      `https://localhost:3000/api/v1/myStats/subscriberQuantity/${countValue}`
-    );
+      `https://170.187.186.86:3000/api/v1/myStats/channelStats/${token}`
+          );
     const info = await res.json();
     console.log(info);
-    value = JSON.stringify(info.items[0]);
+    value2 = JSON.stringify(info.subscriberCount);
+    value = JSON.stringify(info);
   }
 
-  onMount(createChart);
+  onMount(() => {
+  createChart();
+  getSubInfo();
+  });
+
 </script>
 
 <main>
   <h1> Overview </h1>
-  <div>{count}</div>
+  <div>{token}</div>
+  <br />
+  <div>{value2}</div>
 
   <div class="grid-container">
     <div class="item">XXX
@@ -97,8 +110,8 @@
     <div class="item">XXX
       <div>Likes</div>
     </div>
-    <div class="item"> {value}
-      <div>Gained Subscribers</div>
+    <div class="item"> {value2}
+      <div>Subscribers</div>
     </div>  
     <div class="item">XXX
       <div>Comments</div>

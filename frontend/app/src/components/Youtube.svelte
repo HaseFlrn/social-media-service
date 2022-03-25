@@ -1,14 +1,11 @@
 <script>
   import { navigate } from "svelte-routing";
-  import { count } from './stores.js';
- let countValue;
+  import { userToken } from './stores.js';
 
-	count.set(value => {
-		countValue = value;
-	});
+
   const urlParams = new URLSearchParams(window.location.search);
   const token = urlParams.get("token");
-  count.update((n) => (n = token));
+  userToken.set(token);
   let value = "";
   async function getChannelInfo() {
     const res = await fetch(
@@ -35,7 +32,6 @@
 <br />
 {value}
 <br />
-<div>The Token is {countValue}</div>
 
 <style>
 </style>
