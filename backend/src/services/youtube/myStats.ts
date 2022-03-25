@@ -245,7 +245,6 @@ export default class myStats{
             
             for (let i = 0; i <= currentMonth; i++) {
                 const tempStartDate = currentYear + "-" + ('0' + (i+1)).slice(-2) + "-01"
-                console.log(tempStartDate)
 
                 const lastDayInMonth = new Date(currentYear, i+1 , 0)
                 const tempEndDate = lastDayInMonth.getFullYear() + "-" + ('0' + (lastDayInMonth.getMonth() + 1)).slice(-2) + "-" + ('0' + lastDayInMonth.getDate()).slice(-2);              
