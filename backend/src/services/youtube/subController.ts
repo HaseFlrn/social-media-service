@@ -1,7 +1,8 @@
 import { helpers } from "../../../deps.ts";
-import { IChannel, IReqChannel } from "../../api/interfaces/channel.ts";
+//import { IChannel, IReqChannel } from "../../api/interfaces/channel.ts";
 import { IVideo, IReqVideo } from "../../api/interfaces/video.ts";
 import { IReqVideoSnippet } from "../../api/interfaces/snippet.ts";
+import countries from "./countries.json" assert { type: "json" };
 
 export default class subController {
   //---------------------------------------------------
@@ -131,17 +132,7 @@ export default class subController {
 
       result.forEach( element => {
         if(element.kind == 'youtube#video') {
-          const tempSnippet: IReqVideoSnippet = {
-            title: element.snippet.title,
-            thumbnails: element.snippet.thumbnails
-          };
-          finalResult.videos.push({
-            videoId: element.id.videoId,
-            channelId: element.snippet.channelId,
-            channelTitle: element.channelTitle,
-            snippet: tempSnippet 
-          })
-          
+          finalResult.videos.push(subController.parseIReqVid(element))
           finalResult.videoCount++;
         }
       });
@@ -155,12 +146,36 @@ export default class subController {
     }
   }
 
+  static isAlpha2Region(region: string) {
+    countries.forEach( element => {
+      if(element["alpha-2"] == region) {
+        return true;
+      }
+    });
+    return false
+  }
+
+  static parseIReqVid(video: IVideo) {
+    const tempSnippet: IReqVideoSnippet = {
+      title: video.snippet.title,
+      thumbnails: video.snippet.thumbnails
+    };
+    const reqVideo = {
+      videoId: video.id.videoId,
+      channelId: video.snippet.channelId,
+      channelTitle: video.channelTitle,
+      snippet: tempSnippet 
+    };
+    return reqVideo;
+  }
+
   // deno-lint-ignore no-explicit-any
   static async getChannelChartVideos(ctx: any) {
+    console.log("in method");
     const req = helpers.getQuery(ctx, { mergeParams: true})
     const res = ctx.response;
 
-    if(!req.channelId || !req.region) {
+    if(!req.channelId) {
       res.status = 400;
       res.body = { err: 'Bad Request: channelId or region missing'};
     }
@@ -169,10 +184,31 @@ export default class subController {
       res.body = { err: 'Unauthorized: token missing'};
     }
     try{
-      const response = await fetch(`${subController.videoUrl}?charts=mostPopular&reagionCode=${req.region}&part=snippet&access_token=${req.token}`);
-      const data = await response.json();
+      const region = subController.isAlpha2Region(req.region) ? req.region : 'DE';
+      let pageToken = '';
+      let result: IVideo[] = [];
+      do {
+        const url = `${subController.videoUrl}?chart=mostPopular&regionCode=${region}&maxResults=50&part=snippet&access_token=${req.token}`;
+        const response = await fetch(pageToken == '' ? url : url + `page_token=${pageToken}`);
+        const data = await response.json();
+        
+        result = result.concat(data.items);
+        pageToken = data.nextPageToken;
+      } while(pageToken)
+      
+      const chartVideos: IReqVideo[] = []; 
+      result.forEach( element => {
+        if(element) {
+          //console.log("parsing first snippet");
+          if(element.snippet.channelId == req.channelId) {
+            chartVideos.push(subController.parseIReqVid(element))
+          }
+        }
+      });
 
-      subController.getChannelVideos({});
+      res.status = 200;
+      //res.body = result;
+      res.body = chartVideos;
     } catch (err) {
       console.log("an error occurreddd\n" + err);
       res.status = 502;
@@ -182,7 +218,7 @@ export default class subController {
 
   // deno-lint-ignore no-explicit-any no-unused-vars
   static async getChannelTopVideos({request, response} : {request: any, response: any}) {
-  
+    
   }
 
 
