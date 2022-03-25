@@ -1,4 +1,3 @@
-import startAndenddateForEveryMonth from './startAndenddateForEveryMonth.json' assert { type: "json" };
 import { helpers } from "../../../deps.ts";
 
 export default class myStats{
@@ -17,7 +16,6 @@ export default class myStats{
 
     // deno-lint-ignore no-explicit-any
     static async getChannelStats(ctx: any) {
-        // 
         const req = helpers.getQuery(ctx, { mergeParams: true });
         const res = ctx.response;
         if(!req.token) {
@@ -37,7 +35,7 @@ export default class myStats{
                 };
                     
                 res.status = 200;
-                res.body = finalResult;
+                res.body = {data: finalResult};
             }else{
                 res.status = 200;
                 res.body = [];
@@ -69,6 +67,7 @@ export default class myStats{
             const data = await response.json();
             
             if(data.items){
+                // deno-lint-ignore ban-types
                 const finalResult: {latestVideo: String, allVideos: String[]} = { 
                     latestVideo: data.items[0].contentDetails.upload.videoId,
                     allVideos: [],
@@ -79,7 +78,7 @@ export default class myStats{
                 }
 
                 res.status = 200;
-                res.body = finalResult;
+                res.body = {data: finalResult};
             }else{
                 res.status = 200;
                 res.body = [];
@@ -102,7 +101,7 @@ export default class myStats{
         const req = helpers.getQuery(ctx, { mergeParams: true });
         const res = ctx.response;
         if(!req.videoId) {
-            res.status = 400;
+            res.status = 401;
             res.body = { err: "Bad Request: channelId missing" };
         }
         if(!req.token) {
@@ -123,7 +122,7 @@ export default class myStats{
                 };
                     
                 res.status = 200;
-                res.body = finalResult;
+                res.body = {data: finalResult};
             }else{
                 res.status = 200;
                 res.body = [];
@@ -155,6 +154,7 @@ export default class myStats{
             const data = await response.json();
             
             if(data.items){
+                // deno-lint-ignore ban-types
                 const finalResult: {latestPlaylist: String, allplaylist: String[]} = { 
                     latestPlaylist: data.items[0].id,
                     allplaylist: [],
@@ -165,7 +165,7 @@ export default class myStats{
                 }
 
                 res.status = 200;
-                res.body = finalResult;
+                res.body = {data: finalResult};
             }else{
                 res.status = 200;
                 res.body = [];
@@ -188,7 +188,7 @@ export default class myStats{
         const req = helpers.getQuery(ctx, { mergeParams: true });
         const res = ctx.response;
         if(!req.playlistId) {
-            res.status = 400;
+            res.status = 401;
             res.body = { err: "Bad Request: channelId missing" };
         }
         if(!req.token) {
@@ -209,7 +209,7 @@ export default class myStats{
                 };
                     
                 res.status = 200;
-                res.body = finalResult;
+                res.body = {data: finalResult};
             }else{
                 res.status = 200;
                 res.body = [];
@@ -244,8 +244,11 @@ export default class myStats{
             const emptyYear = [{},{},{},{},{},{},{},{},{},{},{},{}]
             
             for (let i = 0; i <= currentMonth; i++) {
-                const tempStartDate = currentYear + "-" + startAndenddateForEveryMonth[i].startdate
-                const tempEndDate = currentYear + "-" + startAndenddateForEveryMonth[i].enddate
+                const tempStartDate = currentYear + "-" + ('0' + (i+1)).slice(-2) + "-01"
+                console.log(tempStartDate)
+
+                const lastDayInMonth = new Date(currentYear, i+1 , 0)
+                const tempEndDate = lastDayInMonth.getFullYear() + "-" + ('0' + (lastDayInMonth.getMonth() + 1)).slice(-2) + "-" + ('0' + lastDayInMonth.getDate()).slice(-2);              
 
                 const response = await fetch(`${myStats.reportsUrl}?endDate=${tempEndDate}&ids=channel%3D%3DMINE&metrics=views%2Ccomments%2Clikes%2Cdislikes%2CestimatedMinutesWatched%2CaverageViewDuration&startDate=${tempStartDate}&access_token=${req.token}`);
                 const data = await response.json();
@@ -279,7 +282,7 @@ export default class myStats{
             };
 
             res.status = 200;
-            res.body = finalResult;
+            res.body = {data: finalResult};
         } catch (err) {
             console.log(err);
             res.status = 502;
@@ -337,7 +340,7 @@ export default class myStats{
                 } 
                     
                 res.status = 200;
-                res.body = finalResult;
+                res.body = {data: finalResult};
             }else{
                 res.status = 200;
                 res.body = [];
@@ -385,7 +388,7 @@ export default class myStats{
                     }        
                 }
 
-                const returnData = { 
+                const finalResult = { 
                     january: videoCountPerMonth[0],
                     february: videoCountPerMonth[1],
                     march: videoCountPerMonth[2],
@@ -401,7 +404,7 @@ export default class myStats{
                 };
                     
                 res.status = 200;
-                res.body = {data: returnData};
+                res.body = {data: finalResult};
             }else{
                 res.status = 200;
                 res.body = [];
