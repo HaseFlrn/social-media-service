@@ -1,12 +1,23 @@
 <script>
 </script>
+
 <div class="image">
-    <img  src="/images/YouToolBlank.png" alt="Youtool Logo" width="600px">
-  </div>
+  <img src="/images/YouToolBlank.png" alt="Youtool Logo" width="600px" />
+</div>
 
-  <h1>
-    <a style="color:black" href="https://localhost:3000/api/v1/login">Get Youtube Key!</a></h1>
+<h1>
+  <a style="color:black" href="https://youtol.de:3000/api/v1/login"
+    >Get Youtube Key! (Youtol.de)</a
+  >
+</h1>
 
+<br />
+
+<h1>
+  <a style="color:black" href="https://localhost:3000/api/v1/login"
+    >Get Youtube Key! (localhost)</a
+  >
+</h1>
 
 <link
   href="https://fonts.googleapis.com/css?family=Overpass:100,400"
@@ -14,7 +25,6 @@
 />
 
 <style>
-
   :global(body) {
     margin: 10px;
     width: auto;
@@ -32,6 +42,5 @@
     font-size: 4em;
     font-weight: 100;
     text-align: center;
-
   }
 </style>

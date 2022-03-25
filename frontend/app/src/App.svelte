@@ -17,20 +17,20 @@
 
 <Router {url}>
   <nav>
-    <Link to="{url}/">Home</Link>
-    <Link to="{url}/youtube">Youtube</Link>
-    <Link to="{url}/mystats">YoutubeStats</Link>
-    <Link to="{url}/mysubs">YoutubeSubs</Link>
-    <Link to="{url}/trends">YoutubeTrends</Link>
-    <Link to="{url}/dashboard">YoutubeDashboard</Link> 
+    <Link to="/">Home</Link>
+    <Link to="/youtube">Youtube</Link>
+    <Link to="/mystats">YoutubeStats</Link>
+    <Link to="/mysubs">YoutubeSubs</Link>
+    <Link to="/trends">YoutubeTrends</Link>
+    <Link to="/dashboard">YoutubeDashboard</Link>
   </nav>
   <div>
-    <Route path="{url}/youtube" component={Youtube} />
-    <Route path="{url}/mystats" component={MyStats} />
-    <Route path="{url}/mysubs" component={MySubscriptions} />
-    <Route path="{url}/trends" component={Trends} />
-    <Route path="{url}/dashboard" component={Dashboard}/>
-    <Route path="{url}/*"><NotFound /></Route>
-    <Route path="{url}/"><Home /></Route>
+    <Route path="/youtube" component={Youtube} />
+    <Route path="/mystats" component={MyStats} />
+    <Route path="/mysubs" component={MySubscriptions} />
+    <Route path="/trends" component={Trends} />
+    <Route path="/dashboard" component={Dashboard} />
+    <Route path="/*"><NotFound /></Route>
+    <Route path="/"><Home /></Route>
   </div>
 </Router>
