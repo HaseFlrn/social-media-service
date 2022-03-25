@@ -1,11 +1,11 @@
 <script>
   import { navigate } from "svelte-routing";
-  import { count } from "./stores.js";
-  let countValue;
+  import { count } from './stores.js';
+ let countValue;
 
-  count.subscribe((value) => {
-    countValue = value;
-  });
+	count.set(value => {
+		countValue = value;
+	});
   const urlParams = new URLSearchParams(window.location.search);
   const token = urlParams.get("token");
   count.update((n) => (n = token));
