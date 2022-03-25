@@ -1,13 +1,14 @@
 <script>
- import { count } from './stores.js';
- let countValue;
+  import { navigate } from "svelte-routing";
+  import { count } from "./stores.js";
+  let countValue;
 
-	count.subscribe(value => {
-		countValue = value;
-	});
+  count.subscribe((value) => {
+    countValue = value;
+  });
   const urlParams = new URLSearchParams(window.location.search);
   const token = urlParams.get("token");
-  count.update(n => n = token);
+  count.update((n) => (n = token));
   let value = "";
   async function getChannelInfo() {
     const res = await fetch(
@@ -25,7 +26,7 @@
     console.log(info);
     value = JSON.stringify(info.items[0]);
   }
-  
+  $: navigate("/youtube", { replace: true });
 </script>
 
 <h1>Text</h1>
@@ -37,5 +38,4 @@
 <div>The Token is {countValue}</div>
 
 <style>
-  
 </style>
