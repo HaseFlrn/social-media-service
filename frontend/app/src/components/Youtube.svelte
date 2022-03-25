@@ -2,7 +2,7 @@
  import { count } from './stores.js';
  let countValue;
 
-	count.subscribe(value => {
+	count.set(value => {
 		countValue = value;
 	});
   const urlParams = new URLSearchParams(window.location.search);

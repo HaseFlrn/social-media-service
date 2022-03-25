@@ -16,6 +16,7 @@
 </script>
 
 <Router {url}>
+  <div class="navbar">
   <nav>
     <Link to="{url}/">Home</Link>
     <Link to="{url}/youtube">Youtube</Link>
@@ -24,6 +25,7 @@
     <Link to="{url}/trends">YoutubeTrends</Link>
     <Link to="{url}/dashboard">YoutubeDashboard</Link> 
   </nav>
+  </div>
   <div>
     <Route path="{url}/youtube" component={Youtube} />
     <Route path="{url}/mystats" component={MyStats} />
@@ -34,3 +36,16 @@
     <Route path="{url}/"><Home /></Route>
   </div>
 </Router>
+
+<style>
+  .navbar {
+    font-size: 200%;
+    font-weight: 300;
+    border: 2px solid black;
+    border-radius: 10px;
+    text-align: center;
+    margin:auto;
+    margin-left: 100px;
+    padding: 20px;
+  }
+</style>

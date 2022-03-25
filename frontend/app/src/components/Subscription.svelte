@@ -33,6 +33,7 @@
 </script>
 
 <main>
+  <Layout />
   <h1>My Subscriptions</h1>
 
   <div class="column side">

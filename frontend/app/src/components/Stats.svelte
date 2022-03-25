@@ -2,12 +2,6 @@
   import {onMount} from 'svelte';
   import {count} from './stores.js';
 
-  let countValue;
-
-  count.subscribe(value => {
-		countValue = value;
-	});
-
   function createChart() {
     const barChart = document.getElementById('likesChart');
     const likesChart = new Chart(barChart, {
@@ -94,7 +88,7 @@
 
 <main>
   <h1> Overview </h1>
-  <div>{countValue}</div>
+  <div>{count}</div>
 
   <div class="grid-container">
     <div class="item">XXX
@@ -130,7 +124,8 @@
 
 <style>
 
-  .test {
+
+.test {
     position: relative;
     height: 70%;
     width: 70%;
