@@ -20,8 +20,6 @@ router
   .get("/playlistInfos/:token/:playlistId", myStats.getPlaylistInfos)
   // Channel Stats per Month in current Year
   .get("/channelStatsPerMonth/:token", myStats.getChannelStatsPerMonth)
-  // Channel Stats per Day last 30 days
-
   // Channel Stats per Country
   .get("/statsPerCountry/:token", myStats.getStatsPerCountry)
   // Uploaded Videos Per Month
