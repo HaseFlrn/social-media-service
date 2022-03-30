@@ -1,7 +1,8 @@
 import { helpers } from "../../../deps.ts";
 //import { IChannel, IReqChannel } from "../../api/interfaces/channel.ts";
-import { IVideo, IReqVideo } from "../../api/interfaces/video.ts";
+import { IVideo, IReqVideo, IVideoResult } from "../../api/interfaces/video.ts";
 import { IReqVideoSnippet } from "../../api/interfaces/snippet.ts";
+import { IError } from "../../api/interfaces/errors.ts";
 import countries from "./countries.json" assert { type: "json" };
 
 export default class subController {
@@ -52,7 +53,7 @@ export default class subController {
   }
 
   // deno-lint-ignore no-explicit-any
-  static async getChannelStats(ctx: any) {
+  static async getChannelBasicStats(ctx: any) {
     const req = helpers.getQuery(ctx, { mergeParams: true });
     const res = ctx.response;
     if(!req.channelId) {
@@ -94,27 +95,66 @@ export default class subController {
         res.body = { err: 'Bad Gateway' };
       }
   }
-  
+
   // deno-lint-ignore no-explicit-any
-  static async getChannelVideos(ctx: any) {
-    let count = 20000000; //20.000.000
+  static async getChannelAdvStats( ctx: any ) {
     const req = helpers.getQuery(ctx, { mergeParams: true });
     const res = ctx.response;
     if(!req.channelId) {
       res.status = 400;
       return res.body = { err: 'Bad Request: channelId missing'};
     }
+    if(req.count) {
+      res.status = 400;
+      return res.body = { err: 'Bad Request: count must not be set'}
+    }
     if(!req.token) {
       res.status = 401;
       return res.body = { err: 'Unauthorized: token missing'};
+    }
+    try {
+      const result = await subController.getChannelVideos(ctx);
+      //const data = result.json()
+      
+
+
+
+    } catch (err) {
+      console.log("An error occurrredd\n" + err);
+      res.status = 502;
+      res.body = { err: 'Bad Gateway' }
+    }
+    // durchschnittliche clicks per vid
+    // durchschnittliche likes per vid
+    // durchschnittliche comments pro video
+    // tags per video
+    // (tags of best performing vid)
+    // (topic categories of best performing vid)
+  }
+  
+  // deno-lint-ignore no-explicit-any
+  static async getChannelVideos(ctx: any): Promise<undefined|IError|IVideoResult> {
+    let count = 20000000; //20.000.000
+    const req = helpers.getQuery(ctx, { mergeParams: true });
+    const res = ctx.response;
+    let error: IError;
+    if(!req.channelId) {
+      res.status = 400;
+      error = { err: 'Bad Request: channelId missing'};
+      return res.body = error;
+    }
+    if(!req.token) {
+      res.status = 401;
+      error = { err: 'Unauthorized: token missing'};
+      return res.body = error;
     }
     if(req.count) {
       count = parseInt(req.count);
     }
     try{
       const url = `${subController.searchUrl}?part=snippet&channelId=${req.channelId}&access_token=${req.token}`;
-      const finalResult: {videoCount: number, videos: IReqVideo[]} = { 
-        videoCount: 0,
+      const finalResult: IVideoResult = { 
+        count: 0,
         videos: []
       };
       let result: IVideo[] = [];
@@ -133,7 +173,7 @@ export default class subController {
       result.forEach( element => {
         if(element.id.kind == 'youtube#video') {
           finalResult.videos.push(subController.parseIReqVid(element))
-          finalResult.videoCount++;
+          finalResult.count++;
         }
       });
 
@@ -142,7 +182,8 @@ export default class subController {
     } catch (err) {
       console.log("an error occurreddd\n" + err );
       res.status = 502;
-      res.body = { err: 'Bad Gateway' };
+      error = { err: 'Bad Gateway' };
+      return res.body = error;
     }
   }
 
