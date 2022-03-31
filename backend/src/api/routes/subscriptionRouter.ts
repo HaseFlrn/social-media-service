@@ -9,10 +9,11 @@ router
     response.body = "That's fuckin Obi-Wan-Kenobi!";
   })
 	.get("/subs", subController.getAllSubscriptions)
-  .get("/sub/stats", subController.getChannelStats)
-  .get("/sub/videos", subController.getChannelVideos)
-  .get("/sub/topVideos", subController.getChannelTopVideos)
-  .get("/sub/charts", subController.getChannelChartVideos)
+  .get("/stats/basic", subController.getChannelBasicStats)
+  .get("/stats/advanced", subController.getChannelAdvStats)
+  .get("/videos", subController.getChannelVideos)
+  .get("/topVideos", subController.getChannelTopVideos)
+  .get("/charts", subController.getChannelChartVideos)
 //.get("/PATH", (req,res) => {function})
 
 export default router;

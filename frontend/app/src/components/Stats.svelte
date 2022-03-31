@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {onMount} from 'svelte';
   import {userToken} from './stores.js';
 
@@ -77,44 +77,80 @@
     },
   })
 }
+let subscriber = "";
+let views = "";
+let videos = "";
+let likes = "";
 
-  let value = "";
-  let value2 = "";
-  async function getSubInfo() {
+  async function getChannelStats() {
     const res = await fetch(
       `https://170.187.186.86:3000/api/v1/myStats/channelStats/${token}`
           );
     const info = await res.json();
     console.log(info);
-    value2 = JSON.stringify(info.subscriberCount);
-    value = JSON.stringify(info);
+    subscriber = info.data.subscriberCount;
+    views = info.data.videoCount;
+    videos = info.data.viewCount;
+
+  }
+
+  async function getVideoStats() {
+    const res = await fetch(
+      `https://170.187.186.86:3000/api/v1/myStats/videoIds/${token}`
+    );
+    const info = await res.json();
+    console.log(info);
+
+    for(var i=0; i < info.data.allVideos.length; i++){
+      let videoId = info.data.allVideos[i];
+      const res2 = await fetch(
+      `https://170.187.186.86:3000/api/v1/myStats/videoStats/${token}/${videoId}`
+    );
+    const info2 = await res2.json();
+    console.log(info2);
+
+    likes += info2.data.likeCount;
+
+    }
+  }
+
+  var monthlyViews: String[];
+
+  async function getMonthlyStats() {
+    const res = await fetch(
+      `https://170.187.186.86:3000/api/v1/myStats/channelStatsPerMonth/${token}`
+    );
+    const info = await res.json();
+    console.log(info);
+    console.log(info.data.length);
+
   }
 
   onMount(() => {
   createChart();
-  getSubInfo();
+  getChannelStats();
+  getVideoStats();
+  getMonthlyStats();
   });
 
 </script>
 
 <main>
   <h1> Overview </h1>
-  <div>{token}</div>
   <br />
-  <div>{value2}</div>
-
+  <div> {likes} </div>
   <div class="grid-container">
-    <div class="item">XXX
+    <div class="item"> {views}
       <div>Views</div>
     </div>
-    <div class="item">XXX
+    <div class="item"> {likes}
       <div>Likes</div>
     </div>
-    <div class="item"> {value2}
+    <div class="item"> {subscriber}
       <div>Subscribers</div>
     </div>  
-    <div class="item">XXX
-      <div>Comments</div>
+    <div class="item"> {videos}
+      <div>Videos</div>
     </div>
   </div>
 
@@ -146,14 +182,14 @@
   }
   h1 {
     font-size: 50px;
-    color:#eb7d00;
+    color:#f0ab00;
     text-align: center;
   }
  .grid-container {
   display: grid;
   grid-template-columns: auto auto;
   grid-gap: 20px;
-  background-color: #eb7d00;
+  background-color: #f0ab00;
   padding: 20px;
   border-radius: 10px;
 }

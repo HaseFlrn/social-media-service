@@ -17,3 +17,8 @@ export interface IReqVideo {
   channelTitle: string,
   snippet: IReqVideoSnippet
 }
+
+export interface IVideoResult {
+  count: number,
+  videos: IReqVideo[]
+}
