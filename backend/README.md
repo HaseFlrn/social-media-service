@@ -5,36 +5,14 @@
 Eine .env erstellen mit folgendem Inhalt:
 
 - PORT=[your Port]
-- INSTAGRAM_CLIENT_ID=[instagram-client-id aus Instagram-dev]
-- INSTAGRAM_CLIENT_SECRET=[instagram-client-secret aus Instagram-dev]
-- YOUTUBE_CLIENT_ID=[google-app id]
-- YOUTUBE_PROJECT_ID=[google-project id]
-- YOUTUBE_CLIENT_SECRET=[google-app secret]
+- FRONTEND_URL=[url zum frontend]
+- CLIENT_ID=[google-app id]
+- REDIRECT=[url zur callback route]
+- PROJECT_ID=[google-project id]
+- CLIENT_SECRET=[google-app secret]
+- SSL_PATH=[path to cert and key]
 
 weitere Properties könnten folgen.
-
-## Instagram Basic API
-
-`https://graph.instagram.com/{user_id}?fields=[id,username,media]`
-
-Rückgabe:
-
-- id: user_id
-- username: username
-- media: ein data Array mit den Ids zu den Medien
-
-`https://graph.instagram.com/{media_id}?fields=[id,caption,media_type,media_url,permalink,timestamp,username,children]`
-
-Rückgabe:
-
-- caption: caption
-- media_type: media_type in Uppercase => IMAGE,VIDEO,CAROUSEL_ALBUM
-- media_url: Link zum Datenbankeintrag
-- media_count: Anzahl an Medien
-- permalink: Link zum content
-- timestamp: timestamp zum Upload
-- username: username
-- children: NUR BEI CAROUSEL_ALBUM => ids der einzelnen Medien im Album
 
 ## Youtube  
 
@@ -59,29 +37,31 @@ Rückgabe: Activity Liste
 <img src="code.png" alt="example response" style="width:400px;"/>
 
 ### [Youtube Search API](https://developers.google.com/youtube/v3/docs/search/list)
-- Basis URL: https://www.googleapis.com/youtube/v3/search
+
+- Basis URL: <https://www.googleapis.com/youtube/v3/search>
 - Queries:
-    - Required:
-        - access_token={OAuth Token}
-    - Optional:
-        - part=snippet --> Genauere Angaben zu den Videos
-        - forMine=true --> zeigt nur Videos vom authentifizierten User (type=video required)
-        - channelId={channelId} --> Nur videos von bestimmten Channel werden angezeigt
-        - type={video,...} --> Nur anzeige dieses Uploadtypes
+  - Required:
+    - access_token={OAuth Token}
+  - Optional:
+    - part=snippet --> Genauere Angaben zu den Videos
+    - forMine=true --> zeigt nur Videos vom authentifizierten User (type=video required)
+    - channelId={channelId} --> Nur videos von bestimmten Channel werden angezeigt
+    - type={video,...} --> Nur anzeige dieses Uploadtypes
 
 ### [Youtube Video API](https://developers.google.com/youtube/v3/docs/videos/list)
-- Basis URL: https://www.googleapis.com/youtube/v3/videos
+
+- Basis URL: <https://www.googleapis.com/youtube/v3/videos>
 - Queries:
-    - Requires:
-        - access_token={OAuth Token}
-        - part={siehe googel dokumentation}
-    - Filters (genau 1):
-        - chart=mostPopular --> bekanntesten videos für Region und Videoart
-        - id={videoIds Liste} --> Infos zu entsprechenden Videos
-        - myRating={like|dislike} --> Zeigt videos an, die der User gelikes/disliked hat 
-    - Optional:
-        - regionCode={DE, ...} --> Nach ISO 3166-1 2 Buchstaben, nur mit chart-Filter nutzbar
-        - videoCategoryId={0,1,...} --> default 0, nur mit chart-Filter nutzbar
+  - Requires:
+    - access_token={OAuth Token}
+    - part={siehe googel dokumentation}
+  - Filters (genau 1):
+    - chart=mostPopular --> bekanntesten videos für Region und Videoart
+    - id={videoIds Liste} --> Infos zu entsprechenden Videos
+    - myRating={like|dislike} --> Zeigt videos an, die der User gelikes/disliked hat
+  - Optional:
+    - regionCode={DE, ...} --> Nach ISO 3166-1 2 Buchstaben, nur mit chart-Filter nutzbar
+    - videoCategoryId={0,1,...} --> default 0, nur mit chart-Filter nutzbar
 
 ### Youtube Report API
 
@@ -110,16 +90,19 @@ Alle Scripts aus /backend starten!
 - holt neueste Updates für imports
 
 ## Services
-Folgend sind die verschiedenen Namen für die Url mit den entsprechenden Paramentern aufgelistet. Die Funktionen haben entsprechend den gleichen Namen nur mit "get" davor. 
 
-### General.ts:
-Url zum Aufrufen: https://170.187.186.86:3000/api/v1/general/(Name der folgenden Funktion)/(Parameter den die Funktion braucht)
+Folgend sind die verschiedenen Namen für die Url mit den entsprechenden Paramentern aufgelistet. Die Funktionen haben entsprechend den gleichen Namen nur mit "get" davor.
+
+### General.ts
+
+Url zum Aufrufen: <https://youtol.de:3000/api/v1/general/(Name der folgenden Funktion)/(Parameter den die Funktion braucht)>
 </br>
 
 - channelInfos/(token) Liefert ein den Namen, die Beschreibung und das Veröffentlichungsdatum des Channels
 
-### myStats.ts:
-Url zum Aufrufen: https://170.187.186.86:3000/api/v1/myStats/
+### myStats.ts
+
+Url zum Aufrufen: <https://youtol.de:3000/api/v1/myStats/>
 </br>
 
 - channelStats/(token) -> Anzahl Videos, Subscriber, Views auf eigenem Channel
@@ -128,7 +111,7 @@ Url zum Aufrufen: https://170.187.186.86:3000/api/v1/myStats/
 - videoIds/(token) -> Video-ID des neusten Videos und Array mit "allen" Videos(bzw. deren Id's)
 <br/>
 
-- videoStats/(token)/(videoId) -> Anzahl Views, Likes, Dislikes, Kommentare des übergebenen Videos 
+- videoStats/(token)/(videoId) -> Anzahl Views, Likes, Dislikes, Kommentare des übergebenen Videos
 <br/>
 
 - playlistIds/(token) -> Playlist-ID der neusten Playlist und Array mit "allen" Playlists(bzw. deren Id's)
@@ -140,7 +123,30 @@ Url zum Aufrufen: https://170.187.186.86:3000/api/v1/myStats/
 - channelStatsPerMonth/(token) -> Array mit allen Monaten des aktuellen Jahres. Die bereits vergangenen, sowie der aktuelle Monat enthalten ein Array mit Views, Kommentaren, Likes, Dislikes, estimatedMinutesWatched, averageViewDuration in dem entsprechenden Monat
 <br/>
 
-- statsPerCountry/(token) -> Array welches für jedes Land, aus dem bereits ein Video des Channels geschaut wurde  folgende Daten enthält: Name des Landes, Views, estimatedMinutesWatched, averageViewDuration, averageViewPercentage, subscribersGained 
+- statsPerCountry/(token) -> Array welches für jedes Land, aus dem bereits ein Video des Channels geschaut wurde  folgende Daten enthält: Name des Landes, Views, estimatedMinutesWatched, averageViewDuration, averageViewPercentage, subscribersGained
 <br/>
 
 - uploadedVideosPerMonth/(token) -> Gibt für denen Monat die Anzhaal an hochgeladenen Videos an
+
+## Instagram Basic API
+
+`https://graph.instagram.com/{user_id}?fields=[id,username,media]`
+
+Rückgabe:
+
+- id: user_id
+- username: username
+- media: ein data Array mit den Ids zu den Medien
+
+`https://graph.instagram.com/{media_id}?fields=[id,caption,media_type,media_url,permalink,timestamp,username,children]`
+
+Rückgabe:
+
+- caption: caption
+- media_type: media_type in Uppercase => IMAGE,VIDEO,CAROUSEL_ALBUM
+- media_url: Link zum Datenbankeintrag
+- media_count: Anzahl an Medien
+- permalink: Link zum content
+- timestamp: timestamp zum Upload
+- username: username
+- children: NUR BEI CAROUSEL_ALBUM => ids der einzelnen Medien im Album
