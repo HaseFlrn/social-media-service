@@ -29,17 +29,11 @@ export default class myStats{
             
             if(data.items[0]){
 
-                const videoCount:number = data.items[0].statistics.videoCount;
-                const subscriberCount:number = data.items[0].statistics.subscriberCount;
-                const viewCount:number = data.items[0].statistics.viewCount;
-
-
-                const finalResult: {videoCount: number} = { 
-                    videoCount: data.items[0].statistics.videoCount
+                const finalResult: {videoCount: number, subscriberCount: number, viewCount: number} = { 
+                    videoCount: data.items[0].statistics.videoCount,
+                    subscriberCount: data.items[0].statistics.subscriberCount,
+                    viewCount: data.items[0].statistics.viewCount
                 };
-
-
-
                     
                 res.status = 200;
                 res.body = {data: finalResult};
@@ -122,16 +116,11 @@ export default class myStats{
             
             if(data.items[0]){
 
-                const viewCount:number = parseInt(data.items[0].statistics.viewCount)
-                const likeCount:number = parseInt(data.items[0].statistics.likeCount)
-                const dislikeCount:number = parseInt(data.items[0].statistics.dislikeCount)
-                const commentCount:number = parseInt(data.items[0].statistics.commentCount)
-
-                const finalResult= { 
-                    viewCount: viewCount,
-                    likeCount: likeCount,
-                    dislikeCount: dislikeCount,
-                    commentCount: commentCount
+                const finalResult: {viewCount: number, likeCount: number, dislikeCount: number, commentCount: number} = { 
+                    viewCount: data.items[0].statistics.viewCount,
+                    likeCount: data.items[0].statistics.likeCount,
+                    dislikeCount: data.items[0].statistics.dislikeCount,
+                    commentCount: data.items[0].statistics.commentCount
                 };
                     
                 res.status = 200;
