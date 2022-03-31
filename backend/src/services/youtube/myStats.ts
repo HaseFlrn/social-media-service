@@ -30,9 +30,9 @@ export default class myStats{
             if(data.items[0]){
 
                 const finalResult= { 
-                    videoCount: parseInt(data.items[0].statistics.videoCount),
+                    videoCount: +data.items[0].statistics.videoCount,
                     subscriberCount: +data.items[0].statistics.subscriberCount,
-                    viewCount: data.items[0].statistics.viewCount
+                    viewCount: +data.items[0].statistics.viewCount
                 };
                     
                 res.status = 200;
@@ -116,11 +116,11 @@ export default class myStats{
             
             if(data.items[0]){
 
-                const finalResult: {viewCount: number, likeCount: number, dislikeCount: number, commentCount: number} = { 
-                    viewCount: data.items[0].statistics.viewCount,
-                    likeCount: data.items[0].statistics.likeCount,
-                    dislikeCount: data.items[0].statistics.dislikeCount,
-                    commentCount: data.items[0].statistics.commentCount
+                const finalResult = { 
+                    viewCount: +data.items[0].statistics.viewCount,
+                    likeCount: +data.items[0].statistics.likeCount,
+                    dislikeCount: +data.items[0].statistics.dislikeCount,
+                    commentCount: +data.items[0].statistics.commentCount
                 };
                     
                 res.status = 200;
