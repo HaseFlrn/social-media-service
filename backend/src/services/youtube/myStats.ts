@@ -30,7 +30,8 @@ export default class myStats{
             if(data.items[0]){
 
                 const finalResult: {videoCount: number, subscriberCount: number, viewCount: number} = { 
-                    videoCount: data.items[0].statistics.videoCount,
+                    videoCount: 10,
+                    //videoCount: data.items[0].statistics.videoCount,
                     subscriberCount: data.items[0].statistics.subscriberCount,
                     viewCount: data.items[0].statistics.viewCount
                 };
