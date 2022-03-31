@@ -34,7 +34,7 @@ export default class myStats{
                 const viewCount:number = data.items[0].statistics.viewCount;
 
                 const finalResult= { 
-                    videoCount: videoCount,
+                    videoCount: 5,
                     subscriberCount: subscriberCount,
                     viewCount: viewCount,
                 };
