@@ -29,9 +29,9 @@ export default class myStats{
             
             if(data.items[0]){
                 const finalResult= { 
-                    videoCount: data.items[0].statistics.videoCount,
-                    subscriberCount: data.items[0].statistics.subscriberCount,
-                    viewCount: data.items[0].statistics.viewCount,
+                    videoCount: +data.items[0].statistics.videoCount,
+                    subscriberCount: +data.items[0].statistics.subscriberCount,
+                    viewCount: +data.items[0].statistics.viewCount,
                 };
                     
                 res.status = 200;
@@ -115,10 +115,10 @@ export default class myStats{
             
             if(data.items[0]){
                 const finalResult= { 
-                    viewCount: data.items[0].statistics.viewCount,
-                    likeCount: data.items[0].statistics.likeCount,
-                    dislikeCount: data.items[0].statistics.dislikeCount,
-                    commentCount: data.items[0].statistics.commentCount
+                    viewCount: +data.items[0].statistics.viewCount,
+                    likeCount: +data.items[0].statistics.likeCount,
+                    dislikeCount: +data.items[0].statistics.dislikeCount,
+                    commentCount: +data.items[0].statistics.commentCount
                 };
                     
                 res.status = 200;
@@ -253,7 +253,7 @@ export default class myStats{
                 const data = await response.json();
 
                 if(data.rows[0]){
-                    const oneMonthStats= { 
+                    const oneMonthStats = { 
                         views: data.rows[0][0],
                         comments: data.rows[0][1],
                         likes: data.rows[0][2],
