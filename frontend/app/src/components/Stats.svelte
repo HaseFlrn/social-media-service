@@ -1,5 +1,6 @@
 <script lang="ts">
   import {onMount} from 'svelte';
+  import { beforeUpdate, afterUpdate } from 'svelte';
   import {userToken} from './stores.js';
 
   let token;
@@ -7,15 +8,92 @@
 		token = value;
 	});
 
-  function createChart() {
+  
+let subscriber = "";
+let views = "";
+let videos = "";
+let likes = 0;
+
+  async function getChannelStats() {
+    const res = await fetch(
+      `https://170.187.186.86:3000/api/v1/myStats/channelStats/${token}`
+          );
+    const info = await res.json();
+    console.log(info);
+    subscriber = info.data.subscriberCount;
+    views = info.data.viewCount;
+    videos = info.data.videoCount;
+
+  }
+
+  async function getVideoStats() {
+    const res = await fetch(
+      `https://170.187.186.86:3000/api/v1/myStats/videoIds/${token}`
+    );
+    const info = await res.json();
+    console.log(info);
+
+    for(var i=0; i < info.data.allVideos.length; i++){
+      let videoId = info.data.allVideos[i];
+      const res2 = await fetch(
+      `https://170.187.186.86:3000/api/v1/myStats/videoStats/${token}/${videoId}`
+    );
+    const info2 = await res2.json();
+    console.log(info2);
+
+    var addition =  info2.data.likeCount;
+    var stringadd = JSON.stringify(addition);
+    console.log(stringadd);
+    var likes2: number = +stringadd;
+    likes = likes2 + likes;
+
+    }
+  }
+
+  
+
+  async function getMonthlyStats() {
+    const res = await fetch(
+      `https://170.187.186.86:3000/api/v1/myStats/channelStatsPerMonth/${token}`
+    );
+    const info = await res.json();
+    console.log(info);
+    var monthlyViews = new Array(12);
+    monthlyViews[0] = 1;
+    monthlyViews[1] = 2;
+    monthlyViews[2] = info.data.march.views;
+    monthlyViews[3] = 22;
+    // monthlyViews[4] = info.data.may.views;
+    // monthlyViews[5] = info.data.june.views;
+    // monthlyViews[6] = info.data.july.views;
+    // monthlyViews[7] = info.data.august.views;
+    // monthlyViews[8] = info.data.september.views;
+    // monthlyViews[9] = info.data.october.views;
+    // monthlyViews[10] = info.data.november.views;
+    // monthlyViews[11] = info.data.december.views;
+    monthlyViews[4] = 10
+    monthlyViews[5] = 12
+    monthlyViews[6] = 1
+    monthlyViews[7] = 5
+    monthlyViews[8] = 4
+    monthlyViews[9] = 48
+    monthlyViews[10] = 35
+    monthlyViews[11] = 20
+    console.log(monthlyViews);
+
+    return monthlyViews;
+  }
+
+  async function createChart() {
     const barChart = document.getElementById('likesChart');
+    const test = await getMonthlyStats();
     const likesChart = new Chart(barChart, {
       type: 'bar',
       data: {
-          labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+          labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
           datasets: [{
               label: 'Filler Chart',
-              data: [12, 19, 3, 5, 2, 3],
+              data: test,
               backgroundColor: [
                   'rgba(235, 125, 0, 0.2)',
                   'rgba(255, 197, 71, 0.2)',
@@ -47,10 +125,10 @@
     const viewChart = new Chart(lineChart, {
       type: 'line',
       data: {
-          labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+          labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
           datasets: [{
               label: 'Filler Chart',
-              data: [12, 19, 21, 30, 28, 35],
+              data: monthlyViews,
               fill: false,
               borderColor: 'rgba(235, 125, 0, 1)',
               tension: 0.1,
@@ -77,66 +155,20 @@
     },
   })
 }
-let subscriber = "";
-let views = "";
-let videos = "";
-let likes = "";
-
-  async function getChannelStats() {
-    const res = await fetch(
-      `https://170.187.186.86:3000/api/v1/myStats/channelStats/${token}`
-          );
-    const info = await res.json();
-    console.log(info);
-    subscriber = info.data.subscriberCount;
-    views = info.data.videoCount;
-    videos = info.data.viewCount;
-
-  }
-
-  async function getVideoStats() {
-    const res = await fetch(
-      `https://170.187.186.86:3000/api/v1/myStats/videoIds/${token}`
-    );
-    const info = await res.json();
-    console.log(info);
-
-    for(var i=0; i < info.data.allVideos.length; i++){
-      let videoId = info.data.allVideos[i];
-      const res2 = await fetch(
-      `https://170.187.186.86:3000/api/v1/myStats/videoStats/${token}/${videoId}`
-    );
-    const info2 = await res2.json();
-    console.log(info2);
-
-    likes += info2.data.likeCount;
-
-    }
-  }
-
-  var monthlyViews: String[];
-
-  async function getMonthlyStats() {
-    const res = await fetch(
-      `https://170.187.186.86:3000/api/v1/myStats/channelStatsPerMonth/${token}`
-    );
-    const info = await res.json();
-    console.log(info);
-    console.log(info.data.length);
-
-  }
 
   onMount(() => {
-  createChart();
+    getMonthlyStats();
   getChannelStats();
   getVideoStats();
-  getMonthlyStats();
+  createChart();
   });
+  
 
 </script>
 
 <main>
   <h1> Overview </h1>
+  <div>{token}</div>
   <br />
   <div> {likes} </div>
   <div class="grid-container">
