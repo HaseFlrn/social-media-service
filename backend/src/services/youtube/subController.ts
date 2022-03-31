@@ -1,6 +1,6 @@
 import { helpers } from "../../../deps.ts";
 //import { IChannel, IReqChannel } from "../../api/interfaces/channel.ts";
-import { IVideo, IReqVideo, IVideoResult } from "../../api/interfaces/video.ts";
+import { IVideo, IStatsVideo, IReqVideo, IVideoResult } from "../../api/interfaces/video.ts";
 import { IReqVideoSnippet } from "../../api/interfaces/snippet.ts";
 import { IError } from "../../api/interfaces/errors.ts";
 import countries from "./countries.json" assert { type: "json" };
@@ -113,23 +113,44 @@ export default class subController {
       return res.body = { err: 'Unauthorized: token missing'};
     }
     try {
-      const result = await subController.getChannelVideos(ctx);
-      //const data = result.json()
-      
+      const allVideos = await subController.getChannelVideos(ctx);
+      console.log(allVideos);
+      if(allVideos) {
+        if('err' in allVideos) {
+          return res.body = allVideos
+        } else {
+          //const temp: IVideoResult = <IVideoResult>(<unknown>result);
+          const url = `${this.videoUrl}?part=statistics&access_token=${req.token}`;
+          let totalViews = 0; 
+          let totalLikes = 0; 
+          let totalComments = 0;
+          allVideos.videos.forEach( async e => {
+            const result = await fetch(`${url}&id=${e.videoId}`);
+            const data = await result.json();
+            const vid: IStatsVideo = data.items[0];
+            totalViews = totalViews + +vid.statistics.viewCount;
+            totalLikes = totalLikes + +vid.statistics.likeCount;
+            totalComments = totalComments + +vid.statistics.commentCount;
+          });
 
-
+          res.status = 200;
+          res.body = {
+            channelId: req.channelId,
+            viewsPerVid: totalViews/allVideos.count,
+            likesPerVid: totalLikes/allVideos.count,
+            commentsPerVi: totalComments/allVideos.count,
+          }
+        }
+      } else {
+        res.status = 502;
+        res.body = { err: 'Bad Gateway hier' };
+      }
 
     } catch (err) {
       console.log("An error occurrredd\n" + err);
       res.status = 502;
       res.body = { err: 'Bad Gateway' }
     }
-    // durchschnittliche clicks per vid
-    // durchschnittliche likes per vid
-    // durchschnittliche comments pro video
-    // tags per video
-    // (tags of best performing vid)
-    // (topic categories of best performing vid)
   }
   
   // deno-lint-ignore no-explicit-any
@@ -249,7 +270,6 @@ export default class subController {
       });
 
       res.status = 200;
-      //res.body = result;
       res.body = chartVideos;
     } catch (err) {
       console.log("an error occurreddd\n" + err);
@@ -259,7 +279,7 @@ export default class subController {
   }
 
   // deno-lint-ignore no-explicit-any no-unused-vars
-  static async getChannelTopVideos({request, response} : {request: any, response: any}) {
+  static async getChannelTopVideos( ctx: any) {
     
   }
 

@@ -11,6 +11,18 @@ export interface IVideo {
   publishTime: string
 }
 
+export interface IStatsVideo {
+  kind: string,
+  etag: string,
+  id: string,
+  statistics: { 
+    viewCount: string,
+    likeCount: string,
+    favoriteCount: string,
+    commentCount: string
+  }
+}
+
 export interface IReqVideo {
   videoId: string,
   channelId: string,
