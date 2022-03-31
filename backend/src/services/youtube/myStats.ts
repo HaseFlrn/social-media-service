@@ -33,11 +33,12 @@ export default class myStats{
                 const subscriberCount:number = data.items[0].statistics.subscriberCount;
                 const viewCount:number = data.items[0].statistics.viewCount;
 
-                const finalResult= { 
-                    videoCount: 5,
+                const finalResult= JSON.stringify({ 
+                    videoCount: videoCount,
                     subscriberCount: subscriberCount,
                     viewCount: viewCount,
-                };
+                });
+
                     
                 res.status = 200;
                 res.body = {data: finalResult};
