@@ -31,7 +31,7 @@ export default class myStats{
 
                 const finalResult= { 
                     videoCount: parseInt(data.items[0].statistics.videoCount),
-                    subscriberCount: data.items[0].statistics.subscriberCount,
+                    subscriberCount: +data.items[0].statistics.subscriberCount,
                     viewCount: data.items[0].statistics.viewCount
                 };
                     
