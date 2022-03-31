@@ -28,10 +28,15 @@ export default class myStats{
             const data = await response.json();
             
             if(data.items[0]){
+
+                const videoCount:number = data.items[0].statistics.videoCount;
+                const subscriberCount:number = data.items[0].statistics.subscriberCount;
+                const viewCount:number = data.items[0].statistics.viewCount;
+
                 const finalResult= { 
-                    videoCount: parseInt(data.items[0].statistics.videoCount),
-                    subscriberCount: parseInt(data.items[0].statistics.subscriberCount),
-                    viewCount: parseInt(data.items[0].statistics.viewCount),
+                    videoCount: videoCount,
+                    subscriberCount: subscriberCount,
+                    viewCount: viewCount,
                 };
                     
                 res.status = 200;
@@ -114,11 +119,17 @@ export default class myStats{
             const data = await response.json();
             
             if(data.items[0]){
+
+                const viewCount:number = parseInt(data.items[0].statistics.viewCount)
+                const likeCount:number = parseInt(data.items[0].statistics.likeCount)
+                const dislikeCount:number = parseInt(data.items[0].statistics.dislikeCount)
+                const commentCount:number = parseInt(data.items[0].statistics.commentCount)
+
                 const finalResult= { 
-                    viewCount: parseInt(data.items[0].statistics.viewCount),
-                    likeCount: parseInt(data.items[0].statistics.likeCount),
-                    dislikeCount: parseInt(data.items[0].statistics.dislikeCount),
-                    commentCount: parseInt(data.items[0].statistics.commentCount)
+                    viewCount: viewCount,
+                    likeCount: likeCount,
+                    dislikeCount: dislikeCount,
+                    commentCount: commentCount
                 };
                     
                 res.status = 200;
