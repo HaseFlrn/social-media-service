@@ -27,7 +27,7 @@ export default class myStats{
             const response = await fetch(`${myStats.channelInformationsUrl}?part=snippet%2CcontentDetails%2Cstatistics&mine=true&access_token=${req.token}`);
             const data = await response.json();
             
-            if(data.items[0]){
+            if(data.items){
 
                 const finalResult= { 
                     videoCount: +data.items[0].statistics.videoCount,
