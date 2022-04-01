@@ -253,8 +253,8 @@ export default class myStats{
 
                 const response = await fetch(`${myStats.reportsUrl}?endDate=${tempEndDate}&ids=channel%3D%3DMINE&metrics=views%2Ccomments%2Clikes%2Cdislikes%2CestimatedMinutesWatched%2CaverageViewDuration&startDate=${tempStartDate}&access_token=${req.token}`);
                 const data = await response.json();
-
-                if(data.rows[0]){
+                
+                if(data.rows){
                     const oneMonthStats = { 
                         views: data.rows[0][0],
                         comments: data.rows[0][1],
