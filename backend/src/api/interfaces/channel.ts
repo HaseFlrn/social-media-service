@@ -16,3 +16,19 @@ export interface IChannels {
   count: number,
   channels: IChannel[]
 }
+
+export interface IChannelStats {
+  channelId: string,
+  videoCnt: number,
+  viewCnt: number, 
+  subscriberCnt: number,
+  forKids: boolean,
+  topics: string[]
+}
+
+export interface IChannelAdvStats {
+  channelId: string,
+  viewsPerVid: number,
+  likesPerVid: number,
+  commentsPerVid: number
+}

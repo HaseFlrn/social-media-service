@@ -5,16 +5,17 @@ Basis-URL: https://localhost:3000/api/v1
 ## mySubs Services
 
 - URL-Erweiterung: /mySubs
+- evtl. werden Rückgaben noch auf wichtiges reduziert
 
 ### Subscriptions des eigenen Channels
 
 - URL-Erweiterung: /subs
 - GET-Request:
-  - querie: token={OAuthToken}
+  - querie(required): token={OAuthToken}
 - Response:
   - Successful (Statuscode 200):
 
-```json
+```yaml
 {
   count: number,
   channels: [
@@ -49,11 +50,50 @@ Basis-URL: https://localhost:3000/api/v1
   ]
 }
 ```
+  - error (Statuscode 401(client) oder 502(server)):
+```yaml
+{
+  err: string
+}
+```
 
 ### Statistiken eines Channels
 
 - URL-Erweiterung: /stats/basic
 - URL-Erweiterung: /stats/advanced
+  - querie (required): token={OAuthToken}
+  - querie (required): channelId={any channelId}
+
+- Response:
+  - successful basic (Statuscode 200):
+```yaml
+{
+  channelId: string,
+  videoCnt: number,
+  viewCnt: number,
+  subscriberCnt: number,
+  forKids: boolean,
+  topics: string[]
+}
+```
+
+  - successful advanced (Statuscode 200):
+```yaml
+{
+  channelId: string,
+  viewsPerVid: number,
+  likesPerVid: number,
+  commentsPerVid: number
+}
+```
+
+  - error (Statuscode 400(client), 401(client), 502(server)):
+```yaml
+{
+  err: string
+}
+```
+
 
 ### Videos eines Channels
 
