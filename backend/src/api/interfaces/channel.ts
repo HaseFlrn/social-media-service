@@ -11,3 +11,8 @@ export interface IReqChannel {
   channelId: string,
   snippet: IReqChannelSnippet
 }
+
+export interface IChannels {
+  count: number,
+  channels: IChannel[]
+}

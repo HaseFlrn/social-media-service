@@ -1,5 +1,5 @@
 import { helpers } from "../../../deps.ts";
-//import { IChannel, IReqChannel } from "../../api/interfaces/channel.ts";
+import { IChannels } from "../../api/interfaces/channel.ts";
 import { IVideo, IStatsVideo, IReqVideo, IVideoResult } from "../../api/interfaces/video.ts";
 import { IReqVideoSnippet } from "../../api/interfaces/snippet.ts";
 import { IError } from "../../api/interfaces/errors.ts";
@@ -15,19 +15,21 @@ export default class subController {
   static videoUrl = 'https://www.googleapis.com/youtube/v3/videos';
 
   // deno-lint-ignore no-explicit-any
-  static async getAllSubscriptions(ctx: any) {
+  static async getAllSubscriptions(ctx: any): Promise<IError | IChannels> {
     //returns all channels, that the current Channels subscribes
     const req = helpers.getQuery(ctx, { mergeParams: true });
     const res = ctx.response;
+    let error: IError;
     if(!req.token) {
       res.status = 401
-      return res.body = { err: 'Unauthorized: token missing' }
+      error = { err: 'Unauthorized: token missing' }
+      return res.body = error;
     }
     try{
       const url = `${subController.subscptionUrl}?part=snippet&mine=true&access_token=${req.token}`;
 
-      let finalResult = { 
-        channelCount: 0,
+      let finalResult: IChannels = { 
+        count: 0,
         channels: [] 
       };
       let pageToken = '';
@@ -36,7 +38,7 @@ export default class subController {
         const data = await response.json();
         
         finalResult = {
-          channelCount: finalResult.channelCount + data.items.length,
+          count: finalResult.count + data.items.length,
           channels: finalResult.channels.concat(data.items),
         }
         
@@ -44,11 +46,12 @@ export default class subController {
       } while(pageToken) 
 
       res.status = 200;
-      res.body = finalResult;
+      return res.body = finalResult;
     } catch (err) {
       console.log(err);
+      error = { err: '502: Bad Gateway'};
       res.status = 502;
-      res.body = { err: '502: Bad Gateway'}
+      return res.body = error;
     }
   }
 
