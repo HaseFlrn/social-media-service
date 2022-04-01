@@ -154,7 +154,7 @@ export default class myStats{
         try{
             const response = await fetch(`${myStats.playlistsUrl}?part=snippet%2CcontentDetails&mine=true&access_token=${req.token}`);
             const data = await response.json();
-            
+            console.log(data);
             if(data.items){
                 // deno-lint-ignore ban-types
                 const finalResult: {latestPlaylist: String, allplaylist: String[]} = { 
@@ -253,7 +253,7 @@ export default class myStats{
 
                 const response = await fetch(`${myStats.reportsUrl}?endDate=${tempEndDate}&ids=channel%3D%3DMINE&metrics=views%2Ccomments%2Clikes%2Cdislikes%2CestimatedMinutesWatched%2CaverageViewDuration&startDate=${tempStartDate}&access_token=${req.token}`);
                 const data = await response.json();
-                
+                console.log(data);
                 if(data.rows){
                     const oneMonthStats = { 
                         views: data.rows[0][0],
