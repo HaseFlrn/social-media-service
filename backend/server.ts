@@ -13,6 +13,10 @@ if(Number.isNaN(port)){
 }
 
 app.use( oakCors( { origin: "*" } ) );
+router.get("/(.*)", (ctx: any) => {      
+    ctx.response.status = 404;
+    ctx.response.body = "404 | Page not Found";
+});
 router.use("/api/v1", Routes.routes(), Routes.allowedMethods());
 app.use(router.routes());
 app.use(router.allowedMethods());
