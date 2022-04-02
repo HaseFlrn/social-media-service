@@ -12,8 +12,9 @@ router
   .get("/stats/basic", subController.getChannelBasicStats)
   .get("/stats/advanced", subController.getChannelAdvStats)
   .get("/videos", subController.getChannelVideos)
-  .get("/topVideos", subController.getChannelTopVideos)
-  .get("/charts", subController.getChannelChartVideos)
+  .get("/videos/stats", subController.getChannelVideoStats)
+  .get("/videos/top", subController.getChannelTopVideos)
+  .get("/videos/charts", subController.getChannelChartVideos)
 //.get("/PATH", (req,res) => {function})
 
 export default router;

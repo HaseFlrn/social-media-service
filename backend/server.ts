@@ -13,6 +13,7 @@ if(Number.isNaN(port)){
 }
 
 app.use( oakCors( { origin: "*" } ) );
+
 router.use("/api/v1", Routes.routes(), Routes.allowedMethods());
 app.use(router.routes());
 app.use(router.allowedMethods());

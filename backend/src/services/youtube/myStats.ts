@@ -27,7 +27,7 @@ export default class myStats{
             const response = await fetch(`${myStats.channelInformationsUrl}?part=snippet%2CcontentDetails%2Cstatistics&mine=true&access_token=${req.token}`);
             const data = await response.json();
             
-            if(data.items[0]){
+            if(data.items){
 
                 const finalResult= { 
                     videoCount: +data.items[0].statistics.videoCount,
@@ -154,8 +154,8 @@ export default class myStats{
         try{
             const response = await fetch(`${myStats.playlistsUrl}?part=snippet%2CcontentDetails&mine=true&access_token=${req.token}`);
             const data = await response.json();
-            
-            if(data.items){
+
+            if(data.items.length != 0){
                 // deno-lint-ignore ban-types
                 const finalResult: {latestPlaylist: String, allplaylist: String[]} = { 
                     latestPlaylist: data.items[0].id,
@@ -254,7 +254,7 @@ export default class myStats{
                 const response = await fetch(`${myStats.reportsUrl}?endDate=${tempEndDate}&ids=channel%3D%3DMINE&metrics=views%2Ccomments%2Clikes%2Cdislikes%2CestimatedMinutesWatched%2CaverageViewDuration&startDate=${tempStartDate}&access_token=${req.token}`);
                 const data = await response.json();
 
-                if(data.rows[0]){
+                if(data.rows && data.rows.length != 0){
                     const oneMonthStats = { 
                         views: data.rows[0][0],
                         comments: data.rows[0][1],
