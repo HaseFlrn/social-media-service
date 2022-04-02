@@ -222,7 +222,7 @@ export default class subController {
   }
 
   static async getChannelVideoStats() {
-    
+
   }
 
   static async getVideoStatistics() {
@@ -255,17 +255,19 @@ export default class subController {
   }
 
   // deno-lint-ignore no-explicit-any
-  static async getChannelChartVideos(ctx: any) {
+  static async getChannelChartVideos(ctx: any): Promise<IError|IReqVideo[]> {
     const req = helpers.getQuery(ctx, { mergeParams: true})
     const res = ctx.response;
-
+    let error: IError;
     if(!req.channelId) {
       res.status = 400;
-      return res.body = { err: 'Bad Request: channelId or region missing'};
+      error = { err: 'Bad Request: channelId or region missing'};
+      return res.body = error;
     }
     if(!req.token) {
       res.status = 401;
-      return res.body = { err: 'Unauthorized: token missing'};
+      error = { err: 'Unauthorized: token missing'};
+      return res.body = error;
     }
     try{
       const region = subController.isAlpha2Region(req.region) ? req.region : 'DE';
@@ -293,11 +295,12 @@ export default class subController {
       });
 
       res.status = 200;
-      res.body = chartVideos;
+      return res.body = chartVideos;
     } catch (err) {
       console.log("an error occurreddd\n" + err);
       res.status = 502;
-      res.body = { err: 'Bad Gateway' };
+      error = { err: 'Bad Gateway' };
+      return res.body = error;
     }
   }
 

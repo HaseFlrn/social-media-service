@@ -141,3 +141,29 @@ Basis-URL: https://localhost:3000/api/v1
 ### Chart Videos eines Channels
 
 - URL-Erweiterung: /videos/top
+  - querie (required): token={OAuthToken}
+  - querie (required): channelId={any channelId}
+
+- successful Response (Statuscode 200):
+```yaml
+[
+  {
+    videoId: string,
+    channelId: string,
+    channelTitle: string,
+    snippet: {
+      title: string,
+      thumbnails: {
+        siehe Oben
+      }
+    }
+  }
+]
+```
+
+- error (Statuscode 400, 401, 502): 
+```yaml
+{
+  err: string
+}
+```
