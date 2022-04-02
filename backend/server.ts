@@ -22,7 +22,7 @@ if(SSL_PATH){
 	path = SSL_PATH;
 }
 
-const certFile = `${path}certificate.cert`;
+const certFile = `${path}certificate.crt`;
 const keyFile = `${path}private.key`;
 
 
