@@ -113,35 +113,32 @@ export default class subController {
       error = { err: 'Bad Request: channelId missing'};
       return res.body = error;
     }
-    if(req.count) {
-      res.status = 400;
-      error = { err: 'Bad Request: count must not be set'}
-      return res.body = error;
-    }
     if(!req.token) {
       res.status = 401;
       error = { err: 'Unauthorized: token missing'};
       return res.body = error;
     }
     try {
-      const allVideos = await subController.getChannelVideos(ctx);
+      const allVideos: IError|IVideoResult = await subController.getChannelVideos(ctx);
       if(allVideos) {
         if('err' in allVideos) {
           res.status = 502;
           return res.body = allVideos;
         } else {
-          const url = `${this.videoUrl}?part=statistics&access_token=${req.token}`;
+          console.log(subController.videoUrl);
+          const url = `${subController.videoUrl}?part=statistics&access_token=${req.token}`;
           let totalViews = 0; 
           let totalLikes = 0; 
           let totalComments = 0;
-          allVideos.videos.forEach( async e => {
-            const result = await fetch(`${url}&id=${e.videoId}`);
+
+          for(let i = 0; i < allVideos.count; i++) {
+            const result = await fetch(`${url}&id=${allVideos.videos[i].videoId}`);
             const data = await result.json();
             const vid: IStatsVideo = data.items[0];
             totalViews = totalViews + +vid.statistics.viewCount;
             totalLikes = totalLikes + +vid.statistics.likeCount;
             totalComments = totalComments + +vid.statistics.commentCount;
-          });
+          }
 
           res.status = 200;
           const finalResult: IChannelAdvStats = {
@@ -186,30 +183,28 @@ export default class subController {
       count = parseInt(req.count);
     }
     try{
-      const url = `${subController.searchUrl}?part=snippet&channelId=${req.channelId}&access_token=${req.token}`;
+      const url = `${subController.searchUrl}?part=snippet&order=date&channelId=${req.channelId}&access_token=${req.token}`;
       const finalResult: IVideoResult = { 
         count: 0,
         videos: []
       };
-      let result: IVideo[] = [];
       let pageToken = '';
       do {
         const nextCnt = count > 50 ? 50 : count;
         const response = await fetch((pageToken == '') ? url + `&maxResults=${nextCnt}` : (url + `&maxResults=${nextCnt}` +'&page_token=' + pageToken));
         const data = await response.json();
         
-        count = count - data.items.length;
-        result = result.concat(data.items);
         pageToken = data.nextPageToken;
-
-      } while(pageToken && count > 0) 
-
-      result.forEach( element => {
-        if(element.id.kind == 'youtube#video') {
-          finalResult.videos.push(subController.parseIReqVid(element))
-          finalResult.count++;
+        
+        for(let i = 0; i < data.items.length; i++) {
+          const currElement: IVideo = data.items[i];
+          if(currElement.id.kind == 'youtube#video') {
+            finalResult.videos.push(subController.parseIReqVid(currElement));
+            finalResult.count++;
+            count--;
+          }
         }
-      });
+      } while(pageToken && count > 0) 
 
       res.status = 200;
       return res.body = finalResult;
@@ -222,7 +217,7 @@ export default class subController {
   }
 
   static async getChannelVideoStats() {
-    
+
   }
 
   static async getVideoStatistics() {
@@ -255,17 +250,19 @@ export default class subController {
   }
 
   // deno-lint-ignore no-explicit-any
-  static async getChannelChartVideos(ctx: any) {
+  static async getChannelChartVideos(ctx: any): Promise<IError|IReqVideo[]> {
     const req = helpers.getQuery(ctx, { mergeParams: true})
     const res = ctx.response;
-
+    let error: IError;
     if(!req.channelId) {
       res.status = 400;
-      return res.body = { err: 'Bad Request: channelId or region missing'};
+      error = { err: 'Bad Request: channelId or region missing'};
+      return res.body = error;
     }
     if(!req.token) {
       res.status = 401;
-      return res.body = { err: 'Unauthorized: token missing'};
+      error = { err: 'Unauthorized: token missing'};
+      return res.body = error;
     }
     try{
       const region = subController.isAlpha2Region(req.region) ? req.region : 'DE';
@@ -293,11 +290,12 @@ export default class subController {
       });
 
       res.status = 200;
-      res.body = chartVideos;
+      return res.body = chartVideos;
     } catch (err) {
       console.log("an error occurreddd\n" + err);
       res.status = 502;
-      res.body = { err: 'Bad Gateway' };
+      error = { err: 'Bad Gateway' };
+      return res.body = error;
     }
   }
 
