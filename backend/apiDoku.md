@@ -64,8 +64,7 @@ Basis-URL: https://localhost:3000/api/v1
   - querie (required): token={OAuthToken}
   - querie (required): channelId={any channelId}
 
-- Response:
-  - successful basic (Statuscode 200):
+- successful basic Response (Statuscode 200):
 ```yaml
 {
   channelId: string,
@@ -77,7 +76,7 @@ Basis-URL: https://localhost:3000/api/v1
 }
 ```
 
-  - successful advanced (Statuscode 200):
+- successful advanced Response (Statuscode 200):
 ```yaml
 {
   channelId: string,
@@ -87,7 +86,7 @@ Basis-URL: https://localhost:3000/api/v1
 }
 ```
 
-  - error (Statuscode 400(client), 401(client), 502(server)):
+- error (Statuscode 400(client), 401(client), 502(server)):
 ```yaml
 {
   err: string
@@ -98,6 +97,42 @@ Basis-URL: https://localhost:3000/api/v1
 ### Videos eines Channels
 
 - URL-Erweiterung: /videos
+  - querie (required): token={OAuthToken}
+  - querie (required): channelId={any channelId}
+  - querie (optional): count={integer}
+  - --> Anzahl der gewünschten Videos (Standardmäßig alle)
+
+- successful Response (Statuscode 200):
+```yaml
+{
+  count: number,
+  videos: [
+    {
+      videoId: string,
+      channelId: string,
+      channelTitle: string,
+      snippet: {
+        title: string,
+        thumbnails: {
+          siehe Oben
+        }
+      }
+    }
+  ]
+}
+```
+
+- error (Statuscode 400(client), 401(client), 502(server)):
+```yaml
+{
+  err: string
+}
+```
+
+### Videos eines Channels mit Stats
+
+- URL-Erweiterung: /videos/stats
+
 
 ### Top Videos eines Channels
 

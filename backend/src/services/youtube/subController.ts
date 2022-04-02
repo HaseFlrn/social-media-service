@@ -167,7 +167,7 @@ export default class subController {
   }
   
   // deno-lint-ignore no-explicit-any
-  static async getChannelVideos(ctx: any): Promise<undefined|IError|IVideoResult> {
+  static async getChannelVideos(ctx: any): Promise<IError|IVideoResult> {
     let count = 20000000; //20.000.000
     const req = helpers.getQuery(ctx, { mergeParams: true });
     const res = ctx.response;
@@ -212,7 +212,7 @@ export default class subController {
       });
 
       res.status = 200;
-      res.body = finalResult;
+      return res.body = finalResult;
     } catch (err) {
       console.log("an error occurreddd\n" + err );
       res.status = 502;
@@ -221,7 +221,17 @@ export default class subController {
     }
   }
 
-  static isAlpha2Region(region: string) {
+  static async getChannelVideoStats() {
+    
+  }
+
+  static async getVideoStatistics() {
+
+  }
+
+
+
+  static isAlpha2Region(region: string): boolean {
     countries.forEach( element => {
       if(element["alpha-2"] == region) {
         return true;
@@ -230,7 +240,7 @@ export default class subController {
     return false
   }
 
-  static parseIReqVid(video: IVideo) {
+  static parseIReqVid(video: IVideo): IReqVideo {
     const tempSnippet: IReqVideoSnippet = {
       title: video.snippet.title,
       thumbnails: video.snippet.thumbnails

@@ -12,6 +12,7 @@ router
   .get("/stats/basic", subController.getChannelBasicStats)
   .get("/stats/advanced", subController.getChannelAdvStats)
   .get("/videos", subController.getChannelVideos)
+  .get("/videos/stats", subController.getChannelVideoStats)
   .get("/videos/top", subController.getChannelTopVideos)
   .get("/videos/charts", subController.getChannelChartVideos)
 //.get("/PATH", (req,res) => {function})
