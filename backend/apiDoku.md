@@ -60,9 +60,14 @@ Basis-URL: https://localhost:3000/api/v1
 ### Statistiken eines Channels
 
 - URL-Erweiterung: /stats/basic
+  - querie (required): token={OAuthToken}
+  - querie (required): channelId={any channelId}
 - URL-Erweiterung: /stats/advanced
   - querie (required): token={OAuthToken}
   - querie (required): channelId={any channelId}
+  - querie (optional): count={integer} 
+    - Anzahl der letzen x Videos über die die Statistiken erstellt werden sollen
+    - sollte festgelegt werden, sonst sehr langsam (am besten < 50)
 
 - successful basic Response (Statuscode 200):
 ```yaml
