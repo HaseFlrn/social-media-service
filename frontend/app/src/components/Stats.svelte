@@ -16,7 +16,7 @@ let likes = 0;
 
   async function getChannelStats() {
     const res = await fetch(
-      `https://170.187.186.86:3000/api/v1/myStats/channelStats/${token}`
+      `https://youtol.de:3000/api/v1/myStats/channelStats/${token}`
           );
     const info = await res.json();
     console.log(info);
@@ -28,7 +28,7 @@ let likes = 0;
 
   async function getVideoStats() {
     const res = await fetch(
-      `https://170.187.186.86:3000/api/v1/myStats/videoIds/${token}`
+      `https://youtol.de:3000/api/v1/myStats/videoIds/${token}`
     );
     const info = await res.json();
     console.log(info);
@@ -36,16 +36,12 @@ let likes = 0;
     for(var i=0; i < info.data.allVideos.length; i++){
       let videoId = info.data.allVideos[i];
       const res2 = await fetch(
-      `https://170.187.186.86:3000/api/v1/myStats/videoStats/${token}/${videoId}`
+      `https://youtol.de:3000/api/v1/myStats/videoStats/${token}/${videoId}`
     );
     const info2 = await res2.json();
     console.log(info2);
 
-    var addition =  info2.data.likeCount;
-    var stringadd = JSON.stringify(addition);
-    console.log(stringadd);
-    var likes2: number = +stringadd;
-    likes = likes2 + likes;
+    likes += info2.data.likeCount;
 
     }
   }
@@ -54,15 +50,15 @@ let likes = 0;
 
   async function getMonthlyStats() {
     const res = await fetch(
-      `https://170.187.186.86:3000/api/v1/myStats/channelStatsPerMonth/${token}`
+      `https://youtol.de:3000/api/v1/myStats/channelStatsPerMonth/${token}`
     );
     const info = await res.json();
     console.log(info);
-    var monthlyViews = new Array(12);
-    monthlyViews[0] = 1;
-    monthlyViews[1] = 2;
+    var monthlyViews: number[];
+    // monthlyViews[0] = info.data.january.views;
+    // monthlyViews[1] = info.data.february.views;
     monthlyViews[2] = info.data.march.views;
-    monthlyViews[3] = 22;
+    // monthlyViews[3] = 22;
     // monthlyViews[4] = info.data.may.views;
     // monthlyViews[5] = info.data.june.views;
     // monthlyViews[6] = info.data.july.views;
@@ -71,29 +67,23 @@ let likes = 0;
     // monthlyViews[9] = info.data.october.views;
     // monthlyViews[10] = info.data.november.views;
     // monthlyViews[11] = info.data.december.views;
-    monthlyViews[4] = 10
-    monthlyViews[5] = 12
-    monthlyViews[6] = 1
-    monthlyViews[7] = 5
-    monthlyViews[8] = 4
-    monthlyViews[9] = 48
-    monthlyViews[10] = 35
-    monthlyViews[11] = 20
+
     console.log(monthlyViews);
+    
 
     return monthlyViews;
   }
 
   async function createChart() {
     const barChart = document.getElementById('likesChart');
-    const test = await getMonthlyStats();
+    // const test = await getMonthlyStats();
     const likesChart = new Chart(barChart, {
       type: 'bar',
       data: {
           labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
           datasets: [{
               label: 'Filler Chart',
-              data: test,
+              data: [1,1,1,1,1,1,1,1,1,1,1],
               backgroundColor: [
                   'rgba(235, 125, 0, 0.2)',
                   'rgba(255, 197, 71, 0.2)',
@@ -128,7 +118,7 @@ let likes = 0;
           labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
           datasets: [{
               label: 'Filler Chart',
-              data: monthlyViews,
+              data: [0,1,2,3,4,5,6,7,8,9,10,11],
               fill: false,
               borderColor: 'rgba(235, 125, 0, 1)',
               tension: 0.1,
@@ -157,10 +147,10 @@ let likes = 0;
 }
 
   onMount(() => {
-    getMonthlyStats();
   getChannelStats();
   getVideoStats();
   createChart();
+  getMonthlyStats();
   });
   
 
@@ -187,17 +177,17 @@ let likes = 0;
   </div>
 
   <h1>Views</h1>
-  <div class="test">
+  <div class="chart">
   <canvas id="viewChart" />
   </div>
   <h1>Likes</h1>
   <h1>Uploads</h1>
-  <div class="test">
+  <div class="chart">
   <canvas id="likesChart" />
   </div>
   <h1>Comments</h1>
   <h1>Demography</h1>
-  <div class="test">
+  <div class="chart">
   <canvas id="demographyChart" />
   </div>
 
@@ -206,16 +196,15 @@ let likes = 0;
 <style>
 
 
-.test {
-    position: relative;
-    height: 70%;
-    width: 70%;
-    padding-left: 230px;
+.chart {
+    margin: auto;
+    width: 65%;
   }
   h1 {
     font-size: 50px;
     color:#f0ab00;
     text-align: center;
+    font-weight: 350;
   }
  .grid-container {
   display: grid;
@@ -234,6 +223,7 @@ let likes = 0;
   padding: 20px;
   border-radius: 10px;
   font-size: 30px;
+  font-weight: 350;
 }
 
 </style>

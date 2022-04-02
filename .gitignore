@@ -1,3 +1,5 @@
 .env
 myCertFile.cert
 myKeyFile.key 
+private.key
+certificate.crt
