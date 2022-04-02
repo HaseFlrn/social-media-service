@@ -41,7 +41,7 @@
   .navbar {
     font-size: 200%;
     font-weight: 300;
-    border: 2px solid black;
+    border: 1px solid black;
     border-radius: 10px;
     text-align: center;
     margin:auto;
