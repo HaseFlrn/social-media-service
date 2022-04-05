@@ -89,45 +89,6 @@ Alle Scripts aus /backend starten!
 
 - holt neueste Updates für imports
 
-## Services
-
-Folgend sind die verschiedenen Namen für die Url mit den entsprechenden Paramentern aufgelistet. Die Funktionen haben entsprechend den gleichen Namen nur mit "get" davor.
-
-### General.ts
-
-Url zum Aufrufen: <https://youtol.de:3000/api/v1/general/(Name der folgenden Funktion)/(Parameter den die Funktion braucht)>
-</br>
-
-- channelInfos/(token) Liefert ein den Namen, die Beschreibung und das Veröffentlichungsdatum des Channels
-
-### myStats.ts
-
-Url zum Aufrufen: <https://youtol.de:3000/api/v1/myStats/>
-</br>
-
-- channelStats/(token) -> Anzahl Videos, Subscriber, Views auf eigenem Channel
-</br>
-
-- videoIds/(token) -> Video-ID des neusten Videos und Array mit "allen" Videos(bzw. deren Id's)
-<br/>
-
-- videoStats/(token)/(videoId) -> Anzahl Views, Likes, Dislikes, Kommentare des übergebenen Videos
-<br/>
-
-- playlistIds/(token) -> Playlist-ID der neusten Playlist und Array mit "allen" Playlists(bzw. deren Id's)
-<br/>
-
-- playlistInfos/(token)/(playlistId) -> Name, Beschreibung, Veröffnetlichungsdatum, Viedeoanzhal der übergebenenen Playlist
-<br/>
-
-- channelStatsPerMonth/(token) -> Array mit allen Monaten des aktuellen Jahres. Die bereits vergangenen, sowie der aktuelle Monat enthalten ein Array mit Views, Kommentaren, Likes, Dislikes, estimatedMinutesWatched, averageViewDuration in dem entsprechenden Monat
-<br/>
-
-- statsPerCountry/(token) -> Array welches für jedes Land, aus dem bereits ein Video des Channels geschaut wurde  folgende Daten enthält: Name des Landes, Views, estimatedMinutesWatched, averageViewDuration, averageViewPercentage, subscribersGained
-<br/>
-
-- uploadedVideosPerMonth/(token) -> Gibt für denen Monat die Anzhaal an hochgeladenen Videos an
-
 ## Instagram Basic API
 
 `https://graph.instagram.com/{user_id}?fields=[id,username,media]`

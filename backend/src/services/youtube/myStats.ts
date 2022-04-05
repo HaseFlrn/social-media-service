@@ -39,6 +39,7 @@ export default class myStats {
                     viewCount: +data.items[0].statistics.viewCount
                 };
 
+                res.status = 200;
                 return res.body = finalResult;
             } else {
                 res.status = 200;
@@ -83,6 +84,7 @@ export default class myStats {
                     finalResult.allVideos.push(data.items[i].contentDetails.upload.videoId)
                 }
 
+                res.status = 200;
                 return res.body = finalResult;
             } else {
                 res.status = 200;
@@ -130,6 +132,7 @@ export default class myStats {
                     commentCount: +data.items[0].statistics.commentCount
                 };
 
+                res.status = 200;
                 return res.body = finalResult;
             } else {
                 res.status = 200;
@@ -174,6 +177,7 @@ export default class myStats {
                     finalResult.allplaylist.push(data.items[i].id)
                 }
 
+                res.status = 200;
                 return res.body = finalResult;
             } else {
                 res.status = 200;
@@ -222,6 +226,7 @@ export default class myStats {
                     playlistItemCount: data.items[0].contentDetails.itemCount
                 };
 
+                res.status = 200;
                 return res.body = finalResult;
             } else {
                 res.status = 200;
@@ -298,6 +303,7 @@ export default class myStats {
                 december: emptyYear[11]
             };
 
+            res.status = 200;
             return res.body = finalResult;
         } catch (err) {
             console.log("an error occurreddd\n" + err);
@@ -350,6 +356,7 @@ export default class myStats {
                     finalResult.countryStats.push(tempCountryStats);
                 }
 
+                res.status = 200;
                 return res.body = finalResult;
             } else {
                 res.status = 200;
@@ -417,6 +424,7 @@ export default class myStats {
                     december: videoCountPerMonth[11]
                 };
 
+                res.status = 200;
                 return res.body = finalResult;
             } else {
                 res.status = 200;
@@ -430,5 +438,3 @@ export default class myStats {
         }
     }
 }
-
-
