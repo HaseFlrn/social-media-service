@@ -1,5 +1,5 @@
 import { Router } from "../../../deps.ts";
-import general from "../../services/youtube/general.ts";
+import general from "../../services/youtube/generalChannelInformations.ts";
 
 
 const router = new Router();
