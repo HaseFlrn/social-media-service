@@ -27,9 +27,9 @@ let videoComments;
           );
     const info = await res.json();
     console.log(info);
-    subscriber = info.data.subscriberCount;
-    views = info.data.viewCount;
-    videos = info.data.videoCount;
+    subscriber = info.subscriberCount;
+    views = info.viewCount;
+    videos = info.videoCount;
 
   }
 
@@ -40,8 +40,8 @@ let videoComments;
     const info = await res.json();
     console.log(info);
 
-    for(var i=0; i < info.data.allVideos.length; i++){
-      let videoId = info.data.allVideos[i];
+    for(var i=0; i < info.allVideos.length; i++){
+      let videoId = info.allVideos[i];
       names[i] = videoId;
       const res2 = await fetch(
       `https://youtol.de:3000/api/v1/myStats/videoStats/${token}/${videoId}`
@@ -49,7 +49,7 @@ let videoComments;
     const info2 = await res2.json();
     console.log(info2);
 
-    likes += info2.data.likeCount;
+    likes += info2.likeCount;
     }
     console.log("Namen");
     console.log(names);
@@ -63,18 +63,18 @@ let videoComments;
     const info = await res.json();
     console.log(info);
     var monthlyViews: number[] = new Array(12);
-    monthlyViews[0] = info.data.january.views;
-    monthlyViews[1] = info.data.february.views;
-    monthlyViews[2] = info.data.march.views;
-    monthlyViews[3] = info.data.april.views;
-    monthlyViews[4] = info.data.may.views;
-    monthlyViews[5] = info.data.june.views;
-    monthlyViews[6] = info.data.july.views;
-    monthlyViews[7] = info.data.august.views;
-    monthlyViews[8] = info.data.september.views;
-    monthlyViews[9] = info.data.october.views;
-    monthlyViews[10] = info.data.november.views;
-    monthlyViews[11] = info.data.december.views;
+    monthlyViews[0] = info.january.views;
+    monthlyViews[1] = info.february.views;
+    monthlyViews[2] = info.march.views;
+    monthlyViews[3] = info.april.views;
+    monthlyViews[4] = info.may.views;
+    monthlyViews[5] = info.june.views;
+    monthlyViews[6] = info.july.views;
+    monthlyViews[7] = info.august.views;
+    monthlyViews[8] = info.september.views;
+    monthlyViews[9] = info.october.views;
+    monthlyViews[10] = info.november.views;
+    monthlyViews[11] = info.december.views;
 
     console.log(monthlyViews);
     return monthlyViews;
@@ -88,20 +88,20 @@ let videoComments;
     console.log(info);
     
 var monthlyLikes: number[] = new Array(12);
-    // monthlyLikes[0] = info.data.january.likes;
-    // monthlyLikes[1] = info.data.february.likes;
+    // monthlyLikes[0] = info.january.likes;
+    // monthlyLikes[1] = info.february.likes;
     monthlyLikes[0] = 22;
     monthlyLikes[1] = 55;
-    monthlyLikes[2] = info.data.march.likes;
-    monthlyLikes[3] = info.data.april.likes;
-    monthlyLikes[4] = info.data.may.likes;
-    monthlyLikes[5] = info.data.june.likes;
-    monthlyLikes[6] = info.data.july.likes;
-    monthlyLikes[7] = info.data.august.likes;
-    monthlyLikes[8] = info.data.september.likes;
-    monthlyLikes[9] = info.data.october.likes;
-    monthlyLikes[10] = info.data.november.likes;
-    monthlyLikes[11] = info.data.december.likes;
+    monthlyLikes[2] = info.march.likes;
+    monthlyLikes[3] = info.april.likes;
+    monthlyLikes[4] = info.may.likes;
+    monthlyLikes[5] = info.june.likes;
+    monthlyLikes[6] = info.july.likes;
+    monthlyLikes[7] = info.august.likes;
+    monthlyLikes[8] = info.september.likes;
+    monthlyLikes[9] = info.october.likes;
+    monthlyLikes[10] = info.november.likes;
+    monthlyLikes[11] = info.december.likes;
 
     console.log(monthlyLikes);
     return monthlyLikes;
@@ -115,10 +115,10 @@ var monthlyLikes: number[] = new Array(12);
     console.log("INFOS")
     console.log(info);
 
-    videoViews = info.data.viewCount;
-    videoLikes = info.data.likeCount;
-    videoDislikes = info.data.dislikeCount;
-    videoComments = info.data.commentCount;
+    videoViews = info.viewCount;
+    videoLikes = info.likeCount;
+    videoDislikes = info.dislikeCount;
+    videoComments = info.commentCount;
   }
 
   async function createChart() {
@@ -229,7 +229,7 @@ var monthlyLikes: number[] = new Array(12);
 
 <main>
   <h1> Overview </h1>
-  <!-- <div>{token}</div> -->
+   <div>{token}</div>
   <div class="grid-container">
     <div class="item"> {views}
       <div>Views</div>
