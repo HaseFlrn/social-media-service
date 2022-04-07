@@ -179,8 +179,7 @@ Basis-URL: https://localhost:3000/api/v1
 
 ### Allgemeine Statistiken des Channels
 
-- URL-Erweiterung: /channelInfos
-  - querie(required): token={OAuthToken}
+- URL-Erweiterung: /channelInfos/{OAuthToken}
   
 - successful Response (Statuscode 200):
 
@@ -204,8 +203,7 @@ Basis-URL: https://localhost:3000/api/v1
 
 ### Allgemeine Statistiken des Channels
 
-- URL-Erweiterung: /channelStats
-  - querie(required): token={OAuthToken}
+- URL-Erweiterung: /channelStats/{OAuthToken}
   
 - successful Response (Statuscode 200):
 
@@ -245,9 +243,7 @@ Basis-URL: https://localhost:3000/api/v1
 
 ### Statistiken eines bestimmten Videos
 
-- URL-Erweiterung: /videoStats
-  - querie(required): token={OAuthToken}
-  - querie (required): videoId={any videoId}
+- URL-Erweiterung: /videoStats/{OAuthToken}/{videoId}
   
 - successful Response (Statuscode 200):
 
@@ -268,8 +264,7 @@ Basis-URL: https://localhost:3000/api/v1
 
 ### Playlist ID's
 
-- URL-Erweiterung: /playlistIds
-  - querie(required): token={OAuthToken}
+- URL-Erweiterung: /playlistIds/{OAuthToken}
   
 - successful Response (Statuscode 200):
 
@@ -288,9 +283,7 @@ Basis-URL: https://localhost:3000/api/v1
 
 ### Infos zu einer bestimmten Playlist
 
-- URL-Erweiterung: /playlistInfos
-  - querie(required): token={OAuthToken}
-  - querie (required): playlistId={any playlistId}
+- URL-Erweiterung: /playlistInfos/{OAuthToken}/{playlistId}
   
 - successful Response (Statuscode 200):
 
@@ -311,8 +304,7 @@ Basis-URL: https://localhost:3000/api/v1
 
 ### Statistiken des Channels pro Monat
 
-- URL-Erweiterung: /channelStatsPerMonth
-  - querie(required): token={OAuthToken}
+- URL-Erweiterung: /channelStatsPerMonth/{OAuthToken}
   
 - successful Response (Statuscode 200) für jeden Monat:
 
@@ -337,8 +329,7 @@ Basis-URL: https://localhost:3000/api/v1
 
 ### Statistiken des Channels pro Land
 
-- URL-Erweiterung: /statsPerCountry
-  - querie(required): token={OAuthToken}
+- URL-Erweiterung: /statsPerCountry/{OAuthToken}
   
 - successful Response (Statuscode 200) für jeden Monat:
 
@@ -363,8 +354,7 @@ Basis-URL: https://localhost:3000/api/v1
 
 ### Hochgeladene Videos pro Monat
 
-- URL-Erweiterung: /uploadedVideosPerMonth
-  - querie(required): token={OAuthToken}
+- URL-Erweiterung: /uploadedVideosPerMonth/{OAuthToken}
   
 - successful Response (Statuscode 200):
 
