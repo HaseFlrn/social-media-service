@@ -229,7 +229,7 @@ var monthlyLikes: number[] = new Array(12);
 
 <main>
   <h1> Overview </h1>
-   <div>{token}</div>
+   <!-- <div>{token}</div> -->
   <div class="grid-container">
     <div class="item"> {views}
       <div>Views</div>
@@ -243,15 +243,6 @@ var monthlyLikes: number[] = new Array(12);
     <div class="item"> {videos}
       <div>Videos</div>
     </div>
-  </div>
-
-  <h1>Views</h1>
-  <div class="chart">
-  <canvas id="viewChart" />
-  </div>
-  <h1>Likes</h1>
-  <div class="chart">
-  <canvas id="likesChart" />
   </div>
 
   <h1>Videos</h1>
@@ -290,6 +281,15 @@ var monthlyLikes: number[] = new Array(12);
   </div>
   <br />
 
+  <h1>Views</h1>
+  <div class="chart">
+  <canvas id="viewChart" />
+  </div>
+  <h1>Likes</h1>
+  <div class="chart">
+  <canvas id="likesChart" />
+  </div>
+
   <!-- <h1>Demography</h1>
   <div class="chart">
   <canvas id="demographyChart" />
@@ -309,6 +309,8 @@ var monthlyLikes: number[] = new Array(12);
     font-weight: 350;
   }
  .grid-container {
+   margin:auto;
+   width: 65%;
   display: grid;
   grid-template-columns: auto auto;
   grid-gap: 20px;
