@@ -1,49 +1,41 @@
 <script>
   import Card from './Card.svelte';
-  
-  let topVideos = [
-    {
-      id: 1,
-      rating: 1,
-      text: 'Top 1 Video',
-    },
-    {
-      id: 2,
-      rating: 2,
-      text: 'Top 2 Video',
-    },
-    {
-      id: 3,
-      rating: 3,
-      text: 'Top 3 Video',
-    }
-  ]
+  import {onMount} from 'svelte';
+  import {userToken} from './stores.js';
 
-  console.log(topVideos)
+  let token;
+  userToken.subscribe(value => {
+		token = value;
+	});
 
-  function handleClick() {
-    x = document.getElementById("C1");
-    if (x.style.display === "none"){
-      x.style.display = "block";
-    } else {
-      x.style.display = "none";
-    }
+  let subscribedChannels = [];
+  let subscriber = 0;
+
+  async function getSubscribers() {
+    const res = await fetch(
+      `https://youtol.de:3000/api/v1/mySubs/subs?token=${token}`
+        );
+    const info = await res.json();
+    console.log(info);
+    subscriber = info.count;
+    subscribedChannels = info.channels;
   }
+
+  onMount(() => {
+    getSubscribers();
+  });
 
 </script>
 
 <main>
   <h1>My Subscriptions</h1>
-
   <div class="column side">
-  <h2>Subscribed Channels</h2>
-  <button class="button" on:click|once={handleClick}>
-    Channel 1
-  </button>
-  <button class="button" on:click|once={handleClick}>
-    Channel 2
-  </button>
-</div>
+    {#each subscribedChannels as item}
+    <button class="button">
+      {item.snippet.title}
+    </button>
+    {/each}
+  </div>
 
   <div class="column middle">
     <div id="C1" class="container">
@@ -108,6 +100,7 @@
   }
 
   .button {
+    width: 50%;
     display: block;
     transition-duration: 0.4s;
     padding: 14px 40px;
@@ -138,6 +131,8 @@
   border-radius: 10px;
   font-size: 30px;
   }
+
+
 
   
 </style>
