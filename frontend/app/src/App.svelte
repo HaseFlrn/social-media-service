@@ -23,7 +23,7 @@
     <Link to="/mystats">My Statistics</Link>
     <Link to="/mysubs">My Youtube Subscribers</Link>
     <!-- <Link to="/trends">YoutubeTrends</Link> -->
-    <Link to="/dashboard">Dashboard</Link>
+    <Link to="/youtube">Dashboard</Link>
   </nav>
   </div>
   <div>
@@ -31,7 +31,7 @@
     <Route path="/mystats" component={MyStats} />
     <Route path="/mysubs" component={MySubscriptions} />
     <!-- <Route path="/trends" component={Trends} /> -->
-    <Route path="/dashboard" component={Dashboard} />
+    <Route path="/youtube" component={Dashboard} />
     <Route path="/*"><NotFound /></Route>
     <Route path="/"><Home /></Route>
   </div>
