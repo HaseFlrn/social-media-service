@@ -223,8 +223,7 @@ Basis-URL: https://localhost:3000/api/v1
 
 ### Video ID's
 
-- URL-Erweiterung: /videoIds
-  - querie(required): token={OAuthToken}
+- URL-Erweiterung: /videoIds/{OAuthToken}
   
 - successful Response (Statuscode 200):
 
