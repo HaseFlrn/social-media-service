@@ -216,16 +216,6 @@ export default class subController {
     }
   }
 
-  static async getChannelVideoStats() {
-
-  }
-
-  static async getVideoStatistics() {
-
-  }
-
-
-
   static isAlpha2Region(region: string): boolean {
     countries.forEach( element => {
       if(element["alpha-2"] == region) {
@@ -298,16 +288,6 @@ export default class subController {
       return res.body = error;
     }
   }
-
-  // deno-lint-ignore no-explicit-any no-unused-vars
-  static async getChannelTopVideos( ctx: any ) {
-    
-  }
-
-
-  //---------------------------------------------------
-  //--------Subscriped Channel Information-------------
-  //---------------------------------------------------
 }
 
 

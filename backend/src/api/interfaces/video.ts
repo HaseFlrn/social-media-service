@@ -23,6 +23,41 @@ export interface IStatsVideo {
   }
 }
 
+export interface ITopVideo {
+  videoId: string,
+  channelId: string,
+  snippet: {
+    title: string,
+    thumbnails: {
+      default: {
+        url: string,
+        width: number,
+        height: number
+      },
+      medium: {
+        url: string,
+        width: number,
+        height: number
+      },
+      high: {
+        url: string,
+        width: number,
+        height: number
+      },
+    }
+  }
+  stats: {
+    views: number,
+    likes: number,
+    comments: number,
+  }    
+}
+
+export interface ITopVideoResult {
+  count: number,
+  videos: ITopVideo[]
+}
+
 export interface IReqVideo {
   videoId: string,
   channelId: string,
