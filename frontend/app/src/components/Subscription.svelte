@@ -7,101 +7,102 @@
 		token = value;
 	});
 
-  
-  let subscribedChannels = [];
+  let myChannelData = {};
   let subscribedChannelsData = [];
-  let channelId;
-  let myChannelId;
-  let myViews;
 
   async function getSubscribers() {
+    // get all channels
     const res = await fetch(
       `https://youtol.de:3000/api/v1/mySubs/subs?token=${token}`
-        );
-    const data = await res.json();
-    console.log(data);
-    subscribedChannels = data.channels;
-    
-    for (let i = 0; i < subscribedChannels.length; i++) {
-      const channel = subscribedChannels[i];
-      channelId = channel.snippet.resourceId.channelId;
-
-      const res2 = await fetch(`https://youtol.de:3000/api/v1/mySubs/stats/basic?token=${token}&channelId=${channelId}`);
-      const data2 = await res2.json();
-      subscribedChannelsData.push(data2);
-      console.log(subscribedChannelsData);
-    }
-    
-
-  }
-
-
-  async function getViews() {
-    const channel = subscribedChannels[1];
-    myChannelId = channel.snippet.channelId;
-    console.log(myChannelId);
-    const res = await fetch(`https://youtol.de:3000/api/v1/mySubs/stats/basic?token=${token}&channelId=${myChannelId}`);
-    const data = await res.json();
-    console.log(data);
-    myViews = data.viewCnt;
-  }
-
-
-  let myTitle;
-
-  async function getChannelInfo() {
-    const res = await fetch(
-      `https://youtol.de:3000/api/v1/general/channelInfos/${token}`
     );
     const data = await res.json();
-    console.log(data);
-    myTitle = data.channelTitle;
-
-  }
-
-  function openMyChannel(){
-    if(document.getElementById("myChannel").style.display == "none"){
-      document.getElementById("myChannel").style.display = "block";
-    }else{
-      document.getElementById("myChannel").style.display == "none";
-    }
-  }
-
+    console.log("my subscribers data", data);
+    const subscribedChannels = data.channels;
   
+    for (let i = 0; i < subscribedChannels.length; i++) {
+      const channel = subscribedChannels[i];
+      const channelId = channel.snippet.resourceId.channelId;
+
+      // get basics
+      const res = await fetch(`https://youtol.de:3000/api/v1/mySubs/stats/basic?token=${token}&channelId=${channelId}`);
+      const data = await res.json();
+      
+      const channelData = {
+        _visible: false,
+        title: channel.snippet.title,
+        viewCnt: data.viewCnt,
+        subscriberCnt: data.subscriberCnt,
+        videoCnt: data.videoCnt,
+      };
+      
+      subscribedChannelsData = [... subscribedChannelsData, channelData];
+    }
     
-  onMount(() => {
-    getChannelInfo();
-    getViews();
-    getSubscribers();
+  }
+
+
+  async function getMyStats() {
+
+    var data1, data2;
+
+    await Promise.all([
+      fetch(
+        `https://youtol.de:3000/api/v1/general/channelInfos/${token}`
+      ).then(async res => data1 = await res.json()),
+      fetch(
+        `https://youtol.de:3000/api/v1/myStats/channelStats/${token}`
+      ).then(async res => data2 = await res.json())
+    ]);
+  
+    myChannelData = {
+      _visible: false,
+      title: data1.channelTitle,
+      subscriber: data2.subscriberCount,
+      views: data2.viewCount,
+      videos: data2.videoCount,
+    };
+  }  
+    
+  onMount(async () => {
+    // all subscribed channels
+    await getSubscribers();
+    // my channel
+    await getMyStats();
   });
 
 </script>
 
 <main>
-  <div>{token}</div>
   <div class="column side">
     <h1>My Channel</h1>
-    <button class="button" on:click={openMyChannel()}>
-      <h4>{myTitle}</h4>
+    <button class="button" on:click={() => myChannelData._visible = !myChannelData._visible}>
+      <h4>{myChannelData.title}</h4>
     </button>
+
+    <h1>Subscribed Channels</h1>
+    {#each subscribedChannelsData as channelData}
+    <button class="button {channelData._visible ? 'focusKlasse' : ''}" on:click={() => channelData._visible = !channelData._visible}>
+      <h4>{channelData.title}</h4>
+    </button>
+    {/each}
   </div>
 
   <div class="column middle">
     <h1>My Stats</h1>
-    <div id="myChannel" class="container" style="display:none;">
-      <h2>{myTitle}</h2>
+    <div class="container" style="display: {myChannelData._visible ? 'block' : 'none'}">
+      <h2>{myChannelData.title}</h2>
       <div class="container-flex">
         <div class="grid-container">
-          <div class="item"> {myViews}
+          <div class="item"> {myChannelData.views}
             <div>Views</div>
           </div>
           <div class="item"> XXX
             <div>Likes</div>
           </div>
-          <div class="item"> XXX
+          <div class="item"> {myChannelData.subscriber}
             <div>Subscribers</div>
           </div>  
-          <div class="item"> XXX
+          <div class="item"> {myChannelData.videos}
             <div>Videos</div>
           </div>
         </div>
@@ -110,39 +111,29 @@
   </div>
 
 
-  
-  <div class="column side">
-    <h1>Subscribed Channels</h1>
-    {#each subscribedChannels as channel}
-    <button class="button">
-      <h4>{channel.snippet.title}</h4>
-    </button>
-    {/each}
-  </div>
-
   <div class="column middle">
     <h1>My Subscriptions</h1>
-    {#each subscribedChannels as channel}
-    <div class="container">
-        <h2>{channel.snippet.title}</h2>
+    {#each subscribedChannelsData as channelData}
+      <div class="container" style="display: {channelData._visible ? 'block' : 'none'}">
+        <h2>{channelData.title}</h2>
         <div class="container-flex">
           <div class="grid-container">
-            <div class="item"> XXX
+            <div class="item"> {channelData.viewCnt}
               <div>Views</div>
             </div>
             <div class="item"> XXX
               <div>Likes</div>
             </div>
-            <div class="item"> XXX
+            <div class="item"> {channelData.subscriberCnt}
               <div>Subscribers</div>
             </div>  
-            <div class="item"> XXX
+            <div class="item"> {channelData.videoCnt}
               <div>Videos</div>
             </div>
           </div>
         </div>
       </div>
-      {/each}
+    {/each}
   </div>
 
 </main>
@@ -197,7 +188,7 @@
     color: white;
   }
 
-  .button:active {
+  .button:focus {
     background-color: #eb7d00;
     color: white;
   }
