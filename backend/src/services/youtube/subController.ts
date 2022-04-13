@@ -300,7 +300,7 @@ export default class subController {
   }
 
   // deno-lint-ignore no-explicit-any no-unused-vars
-  static async getChannelTopVideos( ctx: any) {
+  static async getChannelTopVideos( ctx: any ) {
     
   }
 
