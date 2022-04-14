@@ -19,19 +19,19 @@
   <div class="navbar">
   <nav>
     <Link to="/">Home</Link>
-    <Link to="/youtube">Youtube</Link>
-    <Link to="/mystats">YoutubeStats</Link>
-    <Link to="/mysubs">YoutubeSubs</Link>
-    <Link to="/trends">YoutubeTrends</Link>
-    <Link to="/dashboard">YoutubeDashboard</Link>
+    <!-- <Link to="/youtube">Youtube</Link> -->
+    <Link to="/mystats">My Statistics</Link>
+    <Link to="/mysubs">My Youtube Subscribers</Link>
+    <!-- <Link to="/trends">YoutubeTrends</Link> -->
+    <Link to="/youtube">Dashboard</Link>
   </nav>
   </div>
   <div>
     <Route path="/youtube" component={Youtube} />
     <Route path="/mystats" component={MyStats} />
     <Route path="/mysubs" component={MySubscriptions} />
-    <Route path="/trends" component={Trends} />
-    <Route path="/dashboard" component={Dashboard} />
+    <!-- <Route path="/trends" component={Trends} /> -->
+    <Route path="/youtube" component={Dashboard} />
     <Route path="/*"><NotFound /></Route>
     <Route path="/"><Home /></Route>
   </div>
@@ -41,7 +41,7 @@
   .navbar {
     font-size: 200%;
     font-weight: 300;
-    border: 2px solid black;
+    border: 1px solid black;
     border-radius: 10px;
     text-align: center;
     margin:auto;

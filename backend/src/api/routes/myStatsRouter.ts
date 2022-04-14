@@ -8,21 +8,13 @@ router
   .get("/", ({response}: {response: any}) => {
     response.body = "This is myStatsRouter.ts";
   })
-  // Channel Quantities
   .get("/channelStats/:token", myStats.getChannelStats)
-  // Video ID's
   .get("/videoIds/:token", myStats.getVideoIds)
-  // Video Stats
   .get("/videoStats/:token/:videoId", myStats.getVideoStats)
-  // Playlist ID's
   .get("/playlistIds/:token", myStats.getPlaylistIds)
-  // Playlist Infos
   .get("/playlistInfos/:token/:playlistId", myStats.getPlaylistInfos)
-  // Channel Stats per Month in current Year
   .get("/channelStatsPerMonth/:token", myStats.getChannelStatsPerMonth)
-  // Channel Stats per Country
   .get("/statsPerCountry/:token", myStats.getStatsPerCountry)
-  // Uploaded Videos Per Month
   .get("/uploadedVideosPerMonth/:token", myStats.getUploadedVideosPerMonth)
 //.get("/PATH", (req,res) => {function})
 

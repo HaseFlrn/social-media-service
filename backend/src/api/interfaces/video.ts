@@ -11,6 +11,53 @@ export interface IVideo {
   publishTime: string
 }
 
+export interface IStatsVideo {
+  kind: string,
+  etag: string,
+  id: string,
+  statistics: { 
+    viewCount: string,
+    likeCount: string,
+    favoriteCount: string,
+    commentCount: string
+  }
+}
+
+export interface ITopVideo {
+  videoId: string,
+  channelId: string,
+  snippet: {
+    title: string,
+    thumbnails: {
+      default: {
+        url: string,
+        width: number,
+        height: number
+      },
+      medium: {
+        url: string,
+        width: number,
+        height: number
+      },
+      high: {
+        url: string,
+        width: number,
+        height: number
+      },
+    }
+  }
+  stats: {
+    views: number,
+    likes: number,
+    comments: number,
+  }    
+}
+
+export interface ITopVideoResult {
+  count: number,
+  videos: ITopVideo[]
+}
+
 export interface IReqVideo {
   videoId: string,
   channelId: string,

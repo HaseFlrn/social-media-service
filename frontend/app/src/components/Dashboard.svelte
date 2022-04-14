@@ -14,11 +14,6 @@
       <h2><a style="color: #eb7d00" href="/mysubs">My Subscriptions</a></h2>
       <iframe width= 100% height= 400 src="/mysubs" title="my subs" />
     </Box>
-
-    <Box>
-      <h2><a style="color: #eb7d00" href="/trends">Trends</a></h2>
-      <iframe width= 100% height= 400 src="/trends" title="trends" />
-    </Box>
   </div>
 
 </main>

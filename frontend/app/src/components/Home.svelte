@@ -3,7 +3,7 @@
 
 <div class="box">
   <slot>
-    <img  src="/images/YouToolBlank.png" alt="Youtool Logo" width="600px">
+    <img  src="/images/YouToolBlank.png" alt="Youtool Logo" class="image">
   </slot>
   <br />
   <slot>
@@ -32,7 +32,7 @@
   
   .box {
     margin: auto;
-    margin-top: 200px;
+    margin-top: 100px;
     width: 30%;
     border: 1px solid grey;
     border-radius: 10px;
@@ -40,7 +40,6 @@
     text-align: center;
     background-color: white;
   }
-
 
   .box > p {
     margin-top: 50px;

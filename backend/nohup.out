@@ -1,0 +1,9 @@
+[0m[32mDownload[0m https://deno.land/x/oauth2_client@v0.2.1/mod.ts
+[0m[32mDownload[0m https://deno.land/x/oauth2_client@v0.2.1/src/authorization_code_grant.ts
+[0m[32mDownload[0m https://deno.land/x/oauth2_client@v0.2.1/src/errors.ts
+[0m[32mDownload[0m https://deno.land/x/oauth2_client@v0.2.1/src/oauth2_client.ts
+[0m[32mDownload[0m https://deno.land/x/oauth2_client@v0.2.1/src/refresh_token_grant.ts
+[0m[32mDownload[0m https://deno.land/x/oauth2_client@v0.2.1/src/types.ts
+[0m[32mDownload[0m https://deno.land/x/oauth2_client@v0.2.1/src/grant_base.ts
+[2J[1;1H[0m[38;5;12mWatcher[0m Process started.
+[0m[32mCheck[0m file:///root/social-media-service/backend/server.ts

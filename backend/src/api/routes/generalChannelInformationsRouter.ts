@@ -1,5 +1,5 @@
 import { Router } from "../../../deps.ts";
-import general from "../../services/youtube/general.ts";
+import generalChannelInformations from "../../services/youtube/generalChannelInformations.ts";
 
 
 const router = new Router();
@@ -8,7 +8,7 @@ router
   .get("/", ({response}) => {
     response.body = "This is generalRouter.ts";
   })
-  .get("/channelInfos/:token", general.getChannelInfos)
+  .get("/channelInfos/:token", generalChannelInformations.getChannelInfos)
 //.get("/PATH", (req,res) => {function})
 
 export default router;
