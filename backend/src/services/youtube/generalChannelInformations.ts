@@ -23,7 +23,7 @@ export default class generalChannelInformations {
       const data = await response.json();
       let finalResult: IGeneralStats = {} as IGeneralStats;
 
-      if (data.items[0]) {
+      if ("items" in data && Array.isArray(data.items) && data.items.length != 0) {
         finalResult = {
           channelTitle: data.items[0].snippet.title,
           channelDescription: data.items[0].snippet.description,

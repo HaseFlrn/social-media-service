@@ -32,7 +32,7 @@ export default class myStats {
             const data = await response.json();
             let finalResult: IChannelStats = {} as IChannelStats;
 
-            if (data.items) {
+            if ("items" in data && Array.isArray(data.items) && data.items.length != 0) {
                 finalResult = {
                     videoCount: +data.items[0].statistics.videoCount,
                     subscriberCount: +data.items[0].statistics.subscriberCount,
@@ -74,7 +74,7 @@ export default class myStats {
             const data = await response.json();
             let finalResult: IVideoIds = {} as IVideoIds;
 
-            if (data.items) {
+            if ("items" in data && Array.isArray(data.items) && data.items.length != 0) {
                 finalResult = {
                     latestVideo: data.items[0].contentDetails.upload.videoId,
                     allVideos: [],
@@ -124,7 +124,7 @@ export default class myStats {
             const data = await response.json();
             let finalResult: IVideoStats = {} as IVideoStats;
 
-            if (data.items[0]) {
+            if ("items" in data && Array.isArray(data.items) && data.items.length != 0) {
                 finalResult = {
                     viewCount: +data.items[0].statistics.viewCount,
                     likeCount: +data.items[0].statistics.likeCount,
@@ -167,7 +167,7 @@ export default class myStats {
             const data = await response.json();
             let finalResult: IPlaylistIds = {} as IPlaylistIds;
 
-            if (data.items.length != 0) {
+            if ("items" in data && Array.isArray(data.items) && data.items.length != 0) {
                 finalResult = {
                     latestPlaylist: data.items[0].id,
                     allplaylist: [],
@@ -218,7 +218,7 @@ export default class myStats {
             const data = await response.json();
             let finalResult: IPlaylistInfos = {} as IPlaylistInfos;
 
-            if (data.items[0]) {
+            if ("items" in data && Array.isArray(data.items) && data.items.length != 0) {
                 finalResult = {
                     playlistTitle: data.items[0].snippet.title,
                     playlistDescription: data.items[0].snippet.description,
@@ -342,7 +342,7 @@ export default class myStats {
             const response = await fetch(url);
             const data = await response.json();
 
-            if (data.rows) {
+            if ("items" in data && Array.isArray(data.items)) {
                 for (let i = 0; i < data.rows.length; i++) {
                     let tempCountryStats: ICountryStats = {} as ICountryStats;
                     tempCountryStats = {
@@ -395,7 +395,7 @@ export default class myStats {
 
             let finalResult: IUploadesVideosPermonth = {} as IUploadesVideosPermonth;
 
-            if (data.items) {
+            if ("items" in data && Array.isArray(data.items)) {
                 for (let i = 0; i < data.items.length; i++) {
                     //get publishedAt from Video
                     const publishedAt = data.items[i].snippet.publishedAt;
