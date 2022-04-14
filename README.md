@@ -1,20 +1,28 @@
-﻿# social-media-service
+﻿# Social Media Service
+
+Ein Tool zur statistischen Auswertung von verschiedenen sozialen Medien.
 
 Dieses Projekt wurde im Zweck der Vorlesung "Web-Programmierung" erstellt.
 
-Starte Backend mit dem Befehl:
-`deno run --allow-read --allow-net --allow-env --lock=bin/start.lock.json --lock-write server.ts`
-im [Backend-Ordner](./backend/).
+## Start Project Locally
+Starte Backend mit dem folgenden Befehl im [Backend-Ordner](./backend/):
 
-Starte Frontend mit dem Befehl:
-`snel serve`
+```sh
+deno run --allow-read --allow-net --allow-env --lock=bin/start.lock.json --lock-write server.ts
+```
+
+
+Starte Frontend mit folgenden Befehl im [Frontend/App-Ordner](./frontend/app/):
+```sh
+snel serve
+```
+
 oder
-`trex run start`
-im [Frontend/App-Ordner](./frontend/app/).
+```sh
+trex run start
+```
 
-## Inhalt
 
-Ein Tool zur statistischen Auswertung von verschiedenen sozialen Medien.
 
 ### Instagram
 
