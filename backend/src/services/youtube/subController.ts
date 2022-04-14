@@ -112,7 +112,7 @@ export default class subController {
       res.status = 200;
       return res.body = returnData;
     } catch (err) {
-      console.log("1 an error occurreddd\n" + err);
+      console.log("an error occurreddd\n" + err);
       res.status = 502;
       error = { err: "Bad Gateway" };
       return res.body = error;
@@ -235,7 +235,7 @@ export default class subController {
       res.status = 200;
       return res.body = finalResult;
     } catch (err) {
-      console.log("3 an error occurreddd\n" + err);
+      console.log("an error occurreddd\n" + err);
       res.status = 502;
       error = { err: "Bad Gateway" };
       return res.body = error;
@@ -313,7 +313,7 @@ export default class subController {
       res.status = 200;
       return res.body = chartVideos;
     } catch (err) {
-      console.log("4 an error occurreddd\n" + err);
+      console.log("an error occurreddd\n" + err);
       res.status = 502;
       error = { err: "Bad Gateway" };
       return res.body = error;

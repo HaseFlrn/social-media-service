@@ -46,7 +46,7 @@ export default class myStats {
                 return res.body = finalResult;
             }
         } catch (err) {
-            console.log("an error occurreddd\n" + err);
+            console.log("1 an error occurreddd\n" + err);
             res.status = 502;
             error = { err: 'Bad Gateway' };
             return res.body = error;
@@ -91,7 +91,7 @@ export default class myStats {
                 return res.body = finalResult;
             }
         } catch (err) {
-            console.log("an error occurreddd\n" + err);
+            console.log("2 an error occurreddd\n" + err);
             res.status = 502;
             error = { err: 'Bad Gateway' };
             return res.body = error;
@@ -139,7 +139,7 @@ export default class myStats {
                 return res.body = finalResult;
             }
         } catch (err) {
-            console.log("an error occurreddd\n" + err);
+            console.log("3 an error occurreddd\n" + err);
             res.status = 502;
             error = { err: 'Bad Gateway' };
             return res.body = error;
@@ -184,7 +184,7 @@ export default class myStats {
                 return res.body = finalResult;
             }
         } catch (err) {
-            console.log("an error occurreddd\n" + err);
+            console.log("4 an error occurreddd\n" + err);
             res.status = 502;
             error = { err: 'Bad Gateway' };
             return res.body = error;
@@ -233,7 +233,7 @@ export default class myStats {
                 return res.body = finalResult;
             }
         } catch (err) {
-            console.log("an error occurreddd\n" + err);
+            console.log("5 an error occurreddd\n" + err);
             res.status = 502;
             error = { err: 'Bad Gateway' };
             return res.body = error;
@@ -306,7 +306,7 @@ export default class myStats {
             res.status = 200;
             return res.body = finalResult;
         } catch (err) {
-            console.log("an error occurreddd\n" + err);
+            console.log("6 an error occurreddd\n" + err);
             res.status = 502;
             error = { err: 'Bad Gateway' };
             return res.body = error;
@@ -363,7 +363,7 @@ export default class myStats {
                 return res.body = finalResult;
             }
         } catch (err) {
-            console.log("an error occurreddd\n" + err);
+            console.log("7 an error occurreddd\n" + err);
             res.status = 502;
             error = { err: 'Bad Gateway' };
             return res.body = error;
@@ -431,7 +431,7 @@ export default class myStats {
                 return res.body = finalResult;
             }
         } catch (err) {
-            console.log("an error occurreddd\n" + err);
+            console.log("8 an error occurreddd\n" + err);
             res.status = 502;
             error = { err: 'Bad Gateway' };
             return res.body = error;
