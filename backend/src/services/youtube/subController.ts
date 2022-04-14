@@ -119,7 +119,6 @@ export default class subController {
     }
   }
 
-  // deno-lint-ignore no-explicit-any
   static async getChannelAdvStats(
     ctx: any,
   ): Promise<IError | IChannelAdvStats> {
