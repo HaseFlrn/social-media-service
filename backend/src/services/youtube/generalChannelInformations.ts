@@ -37,7 +37,7 @@ export default class generalChannelInformations {
         return res.body = finalResult;
       }
     } catch (err) {
-      console.log("an error occurreddd\n" + err);
+      console.log("1.1 an error occurreddd\n" + err);
       res.status = 502;
       error = { err: 'Bad Gateway' };
       return res.body = error;
