@@ -49,7 +49,7 @@ export default class subController {
         );
         const data = await response.json();
 
-        if ("items" in data && data.items.isArray()) {
+        if ("items" in data && Array.isArray(data.items)) {
           finalResult = {
             count: finalResult.count + data.items.length,
             channels: finalResult.channels.concat(data.items),
